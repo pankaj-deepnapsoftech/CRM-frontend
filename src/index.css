@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+*{
+  font-family: "Nunito", sans-serif;
+}
+
+#root{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.subscription-font{
+    font-family: "Rubik", sans-serif;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+.hero{
+    position: relative;
+    background-attachment: fixed;
+}
+
+/* .hero::after{
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 50%;
+    background-position: center;
+    width: 53%;
+    z-index: -1;
+    background-image: url('./assets/pattern.png');
+    opacity: 0.1;
+} */
+
+.features{
+    width: 100%;
+    height: 50rem;
+    position: relative;
+    overflow: hidden;
+    border-bottom-left-radius: 27%;
+    border-bottom-right-radius: 27%;
+}
+
+.features::before{
+    content: '';
+    width: 100%;
+    height: 30rem;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #54545459;
+    /* border-bottom-right-radius: 43%;
+    border-bottom-left-radius: 43%; */
+    scale: 1.3;
+    z-index: 1;
+    filter: blur(48px);
+}
+
+.features::after{
+    content: '';
+    width: 100%;
+    height: 30rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* background-color: #28264ad4; */
+    background-color: #975c27;
+    border-bottom-right-radius: 43%;
+    border-bottom-left-radius: 43%;
+    scale: 1.3;
+    z-index: 1;
+    filter: blur(220px);
+}
+
+.features-1{
+    position: relative;
+    background-image: url('./assets/wave1.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.features-2{
+    position: relative;
+    background-image: url('./assets/wave2.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.features-3{
+    position: relative;
+    background-image: url('./assets/wave3.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+.features-4{
+    position: relative;
+    background-image: url('./assets/wave4.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+/* .features-1::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-image: url('./assets/contactusbg.svg');
+    background-repeat: no-repeat;
+    height: inherit;
+    width: 100%;
+} */
+
+.contact{
+    background-image: url('./assets/contactusbg.svg');
+    background-repeat: no-repeat;
+    background-size: 320%;
+}
+
+.pricing{
+    position: relative;
+    overflow: hidden;
+}
+
+.pricing::after{
+    content: '';
+    position: absolute;
+    bottom: -143px;
+    left: 0;
+    height: 264px;
+    width: inherit;
+    background-color: #e0e0e0;
+    z-index: -1;
+}
+
+.pricing::before{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 332px;
+    width: 1500px;
+    background-color: #e0e0e0;
+    z-index: -1;
+    transform: rotate(-11deg);
+}
+
+.best-plan{
+    position: relative;
+}
+
+.best-plan::after{
+    content: 'Best Plan';
+    position: absolute;
+    top: 30px;
+    left: -40px;
+    background-color: white;
+    height: 36px;
+    color: #428d1b;
+    width: 198px;
+    transform: rotate(-39deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.economical-plan, .trial-plan{
+    position: relative;
+}
+
+.economical-plan::after , .trial-plan::after{
+    content: 'Economical Plan';
+    position: absolute;
+    top: 30px;
+    left: -40px;
+    background-color: white;
+    height: 36px;
+    color: #ff4c4c;
+    width: 198px;
+    transform: rotate(-39deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.trial-plan::after{
+    content: 'Trial Plan';
+    color: rgb(156, 163, 175)
+
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities{
+  .no-scrollbar::-webkit-scrollbar{
+    display: none;
+  }
+  .no-scrollbar{
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+}
