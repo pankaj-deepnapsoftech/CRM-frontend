@@ -293,7 +293,7 @@ const Leads = () => {
       }
 
       setData(data.leads);
-      console.log(data.leads);
+    
 
       setFilteredData(data.leads);
       setLoading(false);
@@ -358,7 +358,7 @@ const Leads = () => {
         toast.error("CSV file not selected");
         return;
       }
-      console.log(csvRef.current.files[0]);
+
       const formData = new FormData();
       formData.append("excel", csvRef.current.files[0]);
 
@@ -383,7 +383,7 @@ const Leads = () => {
       toast.success(data.message);
     } catch (error) {
       toast.error(error.message);
-      console.log(error);
+
     } finally {
       setBulkUploading(false);
     }
@@ -1173,7 +1173,7 @@ const Leads = () => {
                                           )}
                                         >
                                           {row.original?.leadCategory}
-                                          {console.log(row.original?.leadCategory)}
+                              
                                         </Badge>
                                       )}
                                   </Td>

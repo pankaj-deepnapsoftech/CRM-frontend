@@ -384,6 +384,7 @@ const Admins = () => {
 
                       <Tbody {...getTableBodyProps()}>
                         {page.map((row) => {
+                       
                           prepareRow(row);
                           return (
                             <Tr

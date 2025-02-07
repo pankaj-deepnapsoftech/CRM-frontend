@@ -407,7 +407,7 @@ const Companies = () => {
               )}
               {!loading && filteredData.length > 0 && (
                 <div>
-                  <TableContainer maxHeight="600px"  overflowY="auto">
+                  <TableContainer maxHeight="600px" overflowY="auto">
                     <Table variant="simple" {...getTableProps()}>
                       <Thead className="bg-blue-400 text-white text-lg font-semibold">
                         {headerGroups.map((hg) => {
@@ -497,7 +497,9 @@ const Companies = () => {
                                         </span>
                                       )}
                                     {cell.column.id === "creator" && (
-                                      <span>{row.original.creator.name}</span>
+                                      <span className="text-blue-500 text-semibold">
+                                        {row.original.creator.name}
+                                      </span>
                                     )}
                                   </Td>
                                 );

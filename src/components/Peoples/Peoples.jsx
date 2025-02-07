@@ -452,6 +452,7 @@ const Peoples = () => {
 
                       <Tbody {...getTableBodyProps()}>
                         {page.map((row) => {
+
                           prepareRow(row);
 
                           return (
@@ -475,16 +476,13 @@ const Peoples = () => {
                   `}
                                     {...cell.getCellProps()}
                                   >
-                                    {cell.column.id !== "created_on" &&
-                                      cell.render("Cell")}
-                                    {cell.column.id === "created_on" &&
-                                      row.original?.createdAt && (
-                                        <span>
-                                          {moment(
-                                            row.original?.createdAt
-                                          ).format("DD/MM/YYYY")}
-                                        </span>
-                                      )}
+                                    {cell.column.id === "creator" ? (
+                    <span className="text-blue-500 text-semibold">{row.original.creator}</span>
+                  ) : cell.column.id === "created_on" && row.original?.createdAt ? (
+                    <span>{moment(row.original?.createdAt).format("DD/MM/YYYY")}</span>
+                  ) : (
+                    cell.render("Cell")
+                  )}
                                   </Td>
                                 );
                               })}

@@ -137,8 +137,7 @@ const LeadEditDrawer = ({
     }
   };
 
-  useEffect(() => console.log(category), [category]);
-
+ 
   const editLeadHandler = async (e) => {
     e.preventDefault();
     if (statusId?.value === "Assigned" && assigned?.value === "") {
