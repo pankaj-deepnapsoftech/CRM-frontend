@@ -26,27 +26,29 @@ const LeadsDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
       });
       const data = await response.json();
 
+      console.log(data);
+
       if (!data.success) {
         throw new Error(data.message);
       }
       setDetails({
-        name: data.lead.name,
-        type: data.lead.leadtype,
+        name: data.lead?.name,
+        type: data.lead?.leadtype,
         company: data.lead?.company ? data.lead?.company?.companyname : "",
         people: data.lead?.people
           ? data.lead?.people?.firstname +
             " " +
             (data.lead?.people?.lastname || "")
           : "",
-        status: data.lead.status,
-        source: data.lead.source,
+        status: data.lead?.status,
+        source: data.lead?.source,
         phone: data.lead?.company
-          ? data.lead.company.phone
-          : data.lead.people.phone,
+          ? data.lead?.company?.phone
+          : data.lead?.people?.phone,
         email: data.lead?.company
-          ? data.lead.company.email
-          : data.lead.people.email,
-        notes: data.lead?.notes ? data.lead.notes : "",
+          ? data.lead?.company?.email
+          : data.lead?.people?.email,
+        notes: data.lead?.notes ? data.lead?.notes : "",
         products: data.lead?.products,
         assignedName: data.lead?.assigned?.name || "N/A",
         assignedPhone: data.lead?.assigned?.phone || "N/A",
@@ -55,6 +57,7 @@ const LeadsDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
         followupReason: data.lead?.followup_reason,
         prcQt: data.lead?.prc_qt || "N/A",
         location: data.lead?.location || "N/A",
+        leadCategory: data.lead?.leadCategory,
       });
 
       setIsLoading(false);
@@ -102,7 +105,9 @@ const LeadsDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
             {details.company && (
               <div className="font-bold text-lg text-gray-700">
                 <p>Corporate</p>
-                <p className="font-normal text-indigo-800">{details?.company}</p>
+                <p className="font-normal text-indigo-800">
+                  {details?.company}
+                </p>
               </div>
             )}
 
@@ -118,9 +123,24 @@ const LeadsDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
             <div className="font-bold text-lg text-gray-700">
               <p>Status</p>
               <Badge colorScheme="orange">
-              {details?.status || "Not Available"}
+                {details?.status || "Not Available"}
               </Badge>
-             
+            </div>
+
+            {/* category Field */}
+            <div className="font-bold text-lg text-gray-700">
+              <p>Lead Category</p>
+              <Badge
+                colorScheme={
+                  details?.leadCategory === "Hot"
+                    ? "red"
+                    : details?.leadCategory === "Cold"
+                    ? "blue"
+                    : "orange"
+                }
+              >
+                {details?.leadCategory || "Not Available"}
+              </Badge>
             </div>
 
             {/* Source Field */}
@@ -239,7 +259,9 @@ const LeadsDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
             {details?.location !== "N/A" && (
               <div className="font-bold text-lg text-gray-700">
                 <p>Location</p>
-                <p className="font-normal text-indigo-800">{details?.location}</p>
+                <p className="font-normal text-indigo-800">
+                  {details?.location}
+                </p>
               </div>
             )}
           </div>

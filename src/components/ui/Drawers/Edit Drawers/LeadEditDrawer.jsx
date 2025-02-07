@@ -44,6 +44,7 @@ const LeadEditDrawer = ({
 
   const [followupDate, setFollowupDate] = useState();
   const [followupReason, setFollowupReason] = useState();
+  const [category, setCategory] = useState(null);
 
   const notificationCtx = useContext(notificationContext);
 
@@ -136,9 +137,10 @@ const LeadEditDrawer = ({
     }
   };
 
+  useEffect(() => console.log(category), [category]);
+
   const editLeadHandler = async (e) => {
     e.preventDefault();
-
     if (statusId?.value === "Assigned" && assigned?.value === "") {
       toast.error("Employee not assigned");
       return;
@@ -166,6 +168,7 @@ const LeadEditDrawer = ({
         assigned: assigned?.value,
         prc_qt: prcQt,
         location: location,
+        leadCategory: category.value,
       });
     } else if (
       statusId?.value === "Follow Up" &&
@@ -182,6 +185,7 @@ const LeadEditDrawer = ({
         followup_reason: followupReason,
         prc_qt: prcQt,
         location: location,
+        leadCategory: category.value,
       });
     } else {
       body = JSON.stringify({
@@ -192,6 +196,7 @@ const LeadEditDrawer = ({
         assigned: undefined,
         prc_qt: prcQt,
         location: location,
+        leadCategory: category.value,
       });
     }
 
@@ -260,7 +265,10 @@ const LeadEditDrawer = ({
       setFollowupReason(data.lead?.followup_reason);
       setPrcQt(data.lead?.prc_qt);
       setLocation(data.lead?.location);
-
+      const selectedCategory = Leadoptions.find(
+        (option) => option.value === data.lead?.leadCategory
+      );
+      setCategory(selectedCategory || null); // If not found, set to null or default
       setIsLoading(false);
       toast.success(data.message);
     } catch (err) {
@@ -288,6 +296,12 @@ const LeadEditDrawer = ({
     fetchLeadDetails();
     getAllEmployees();
   }, []);
+
+  const [Leadoptions] = useState(() => [
+    { value: "Hot", label: "Hot" },
+    { value: "Warm", label: "Warm" },
+    { value: "Cold", label: "Cold" },
+  ]);
 
   return (
     <div
@@ -426,11 +440,23 @@ const LeadEditDrawer = ({
               />
             </FormControl>
 
+            <FormControl className="mt-2 mb-5">
+              <FormLabel fontWeight="bold" className="text-[#4B5563]">
+                Lead Category
+              </FormLabel>
+              <Select
+                value={category}
+                onChange={(e) => setCategory(e)} // e is the selected option object
+                placeholder="Select a lead status"
+                options={Leadoptions}
+              />
+            </FormControl>
+
             {/* Submit Button */}
             <Button
               type="submit"
               className="mt-1 w-full py-3 text-white font-bold rounded-lg"
-             colorScheme="blue"
+              colorScheme="blue"
             >
               Submit
             </Button>

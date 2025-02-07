@@ -90,6 +90,8 @@ const LeadsDrawer = ({
 
   const [followupReason, setFollowupReason] = useState();
 
+  const [category, setCategory] = useState("");
+
   const navigate = useNavigate();
 
   const getAllCompanies = async () => {
@@ -222,6 +224,7 @@ const LeadsDrawer = ({
         assigned: assigned?.value,
         prc_qt: prcQt,
         location: location,
+        leadCategory: category.value,
       });
     } else if (
       statusId?.value === "Follow Up" &&
@@ -241,6 +244,7 @@ const LeadsDrawer = ({
         followup_reason: followupReason,
         prc_qt: prcQt,
         location: location,
+        leadCategory: category.value,
       });
     } else {
       body = JSON.stringify({
@@ -253,6 +257,7 @@ const LeadsDrawer = ({
         notes,
         prc_qt: prcQt,
         location: location,
+        leadCategory: category.value,
       });
     }
 
@@ -336,12 +341,20 @@ const LeadsDrawer = ({
     setProductOptionsList(options);
   }, [products]);
 
+  const [Leadoptions] = useState(() => [
+    { value: "Hot", label: "Hot" },
+    { value: "Warm", label: "Warm" },
+    { value: "Cold", label: "Cold" },
+  ]);
+
   useEffect(() => {
     setShowSelectPeoples(typeId?.label === "Individual" ? true : false);
     setShowSelectCompanies(typeId?.label === "Corporate" ? true : false);
     setPeopleId();
     setCompanyId();
   }, [typeId]);
+
+
 
   return (
     <div
@@ -546,6 +559,19 @@ const LeadsDrawer = ({
               onChange={(e) => setLocation(e.target.value)}
               className="rounded mt-2 border p-3 focus:ring-2 focus:ring-blue-400"
             />
+          </FormControl>
+
+          {/* condition */}
+          <FormControl className="mt-2 mb-5">
+            <FormLabel fontWeight="bold" className="text-[#4B5563]">
+              Lead Category
+            </FormLabel>
+            <Select
+              value={category}
+              onChange={(e) => setCategory(e)}
+              placeholder="Select a lead status"
+              options={Leadoptions}
+            ></Select>
           </FormControl>
 
           {/* Submit Button */}

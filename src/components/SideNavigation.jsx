@@ -1,5 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { MdMenu, MdClose, MdSupportAgent, MdKeyboardArrowDown } from "react-icons/md";
+import {
+  MdMenu,
+  MdClose,
+  MdSupportAgent,
+  MdKeyboardArrowDown,
+  MdOutlineMarkEmailRead,
+} from "react-icons/md";
 import {
   MdOutlineSpeed,
   MdHeadphones,
@@ -557,6 +563,29 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
                 <FaLock size="12" color="#b1b1b1" />
               </span>
             )}
+          </li>
+        </NavLink>
+
+        <NavLink
+          to="emails"
+          className={({ isActive }) =>
+            isActive ? "text-[#1640d6]" : "text-black"
+          }
+          onClick={() => {
+            isMenuOpen && setIsMenuOpen(false);
+          }}
+        >
+          <li className="flex gap-x-2 pl-3 pr-9 py-3 rounded-lg hover:bg-[#e6efff] hover:text-[#1640d6] text-[15px]">
+            <span>
+              <MdOutlineMarkEmailRead  />
+            </span>
+            <span>Email Database</span>
+            {/*             
+            {!checkAccess(auth, "website configuration")?.isAllowed && (
+              <span className="mt-1">
+                <FaLock size="12" color="#b1b1b1" />
+              </span>
+            )} */}
           </li>
         </NavLink>
 

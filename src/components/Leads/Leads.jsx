@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Checkbox,
   HStack,
@@ -126,6 +127,10 @@ const columns = [
   {
     Header: "PRC QT",
     accessor: "prc_qt",
+  },
+  {
+    Header: "Lead Category",
+    accessor: "leadCategory",
   },
 ];
 
@@ -288,6 +293,8 @@ const Leads = () => {
       }
 
       setData(data.leads);
+      console.log(data.leads);
+
       setFilteredData(data.leads);
       setLoading(false);
     } catch (err) {
@@ -377,7 +384,6 @@ const Leads = () => {
     } catch (error) {
       toast.error(error.message);
       console.log(error);
-      
     } finally {
       setBulkUploading(false);
     }
@@ -548,6 +554,7 @@ const Leads = () => {
           d?.source?.toLowerCase().includes(searchKey.toLowerCase()) ||
           d?.status?.toLowerCase().includes(searchKey.toLowerCase()) ||
           d?.assigned?.toLowerCase().includes(searchKey.toLowerCase()) ||
+          d?.leadCategory?.toLowerCase().includes(searchKey.toLowerCase()) ||
           d?.phone?.includes(searchKey) ||
           d?.followup_reason?.toLowerCase()?.includes(searchKey) ||
           d?.creator?.toLowerCase()?.includes(searchKey) ||
@@ -579,6 +586,19 @@ const Leads = () => {
     setIsAllSelected(false);
     setBulkSMSMobiles([]);
   }, [pageIndex]);
+
+  function getCategoryColor(category) {
+    switch (category?.toLowerCase()) {
+      case "hot":
+        return "red"; // Chakra UI "red" color scheme
+      case "warm":
+        return "orange"; // Chakra UI "orange" color scheme
+      case "cold":
+        return "blue"; // Chakra UI "blue" color scheme
+      default:
+        return "gray"; // Default to gray if no category is provided
+    }
+  }
 
   return (
     <>
@@ -688,8 +708,8 @@ const Leads = () => {
                   paddingY={{ base: "2px", md: "3px" }}
                   width={{ base: "100%", md: 130 }}
                   onClick={selectAllHandler}
-                  color="#ffffff" 
-                  backgroundColor="#1640d6"                  
+                  color="#ffffff"
+                  backgroundColor="#1640d6"
                   borderColor="#1640d6"
                 >
                   {isAllSelected ? "Unselect All" : "Select All"}
@@ -840,98 +860,98 @@ const Leads = () => {
 
             <div>
               <HStack className="">
-              {showBulkAssignDrawerIsOpened && (
-                <ClickMenu
-                  top={0}
-                  right={0}
-                  closeContextMenuHandler={() =>
-                    dispatch(closeShowBulkAssignDrawer())
-                  }
-                >
-                  <BulkAssignDrawer
-                    leads={selected}
-                    fetchAllLeads={fetchAllLeads}
-                    fetchLeadSummary={fetchLeadSummary}
-                    closeDrawerHandler={() =>
+                {showBulkAssignDrawerIsOpened && (
+                  <ClickMenu
+                    top={0}
+                    right={0}
+                    closeContextMenuHandler={() =>
                       dispatch(closeShowBulkAssignDrawer())
                     }
-                    data={[]}
-                  />
-                </ClickMenu>
-              )}
+                  >
+                    <BulkAssignDrawer
+                      leads={selected}
+                      fetchAllLeads={fetchAllLeads}
+                      fetchLeadSummary={fetchLeadSummary}
+                      closeDrawerHandler={() =>
+                        dispatch(closeShowBulkAssignDrawer())
+                      }
+                      data={[]}
+                    />
+                  </ClickMenu>
+                )}
 
-              {sendSMSDrawerIsOpened && (
-                <ClickMenu
-                  top={0}
-                  right={0}
-                  closeContextMenuHandler={() => {
-                    dispatch(closeSendSMSDrawer());
-                    setBulkSMSMobiles([]);
-                  }}
-                >
-                  <SMSDrawer
-                    fetchAllLeads={fetchAllLeads}
-                    closeDrawerHandler={() => {
+                {sendSMSDrawerIsOpened && (
+                  <ClickMenu
+                    top={0}
+                    right={0}
+                    closeContextMenuHandler={() => {
                       dispatch(closeSendSMSDrawer());
                       setBulkSMSMobiles([]);
                     }}
-                    mobiles={bulkSMSMobiles}
-                  />
-                </ClickMenu>
-              )}
+                  >
+                    <SMSDrawer
+                      fetchAllLeads={fetchAllLeads}
+                      closeDrawerHandler={() => {
+                        dispatch(closeSendSMSDrawer());
+                        setBulkSMSMobiles([]);
+                      }}
+                      mobiles={bulkSMSMobiles}
+                    />
+                  </ClickMenu>
+                )}
 
-              {addLeadsDrawerIsOpened && (
-                <ClickMenu
-                  top={0}
-                  right={0}
-                  closeContextMenuHandler={() =>
-                    dispatch(closeAddLeadsDrawer())
-                  }
-                >
-                  <LeadsDrawer
-                    fetchLeadSummary={fetchLeadSummary}
-                    fetchAllLeads={fetchAllLeads}
-                    closeDrawerHandler={() => dispatch(closeAddLeadsDrawer())}
-                  />
-                </ClickMenu>
-              )}
+                {addLeadsDrawerIsOpened && (
+                  <ClickMenu
+                    top={0}
+                    right={0}
+                    closeContextMenuHandler={() =>
+                      dispatch(closeAddLeadsDrawer())
+                    }
+                  >
+                    <LeadsDrawer
+                      fetchLeadSummary={fetchLeadSummary}
+                      fetchAllLeads={fetchAllLeads}
+                      closeDrawerHandler={() => dispatch(closeAddLeadsDrawer())}
+                    />
+                  </ClickMenu>
+                )}
 
-              {editLeadsDrawerIsOpened && (
-                <ClickMenu
-                  top={0}
-                  right={0}
-                  closeContextMenuHandler={() =>
-                    dispatch(closeEditLeadsDrawer())
-                  }
-                >
-                  <LeadEditDrawer
-                    fetchLeadSummary={fetchLeadSummary}
-                    dataId={dataId}
-                    fetchAllLeads={fetchAllLeads}
-                    closeDrawerHandler={() => dispatch(closeEditLeadsDrawer())}
-                  />
-                </ClickMenu>
-              )}
+                {editLeadsDrawerIsOpened && (
+                  <ClickMenu
+                    top={0}
+                    right={0}
+                    closeContextMenuHandler={() =>
+                      dispatch(closeEditLeadsDrawer())
+                    }
+                  >
+                    <LeadEditDrawer
+                      fetchLeadSummary={fetchLeadSummary}
+                      dataId={dataId}
+                      fetchAllLeads={fetchAllLeads}
+                      closeDrawerHandler={() =>
+                        dispatch(closeEditLeadsDrawer())
+                      }
+                    />
+                  </ClickMenu>
+                )}
 
-              {showDetailsLeadsDrawerIsOpened && (
-                <ClickMenu
-                  top={0}
-                  right={0}
-                  closeContextMenuHandler={() =>
-                    dispatch(closeShowDetailsLeadsDrawer())
-                  }
-                >
-                  <LeadsDetailsDrawer
-                    dataId={dataId}
-                    closeDrawerHandler={() =>
+                {showDetailsLeadsDrawerIsOpened && (
+                  <ClickMenu
+                    top={0}
+                    right={0}
+                    closeContextMenuHandler={() =>
                       dispatch(closeShowDetailsLeadsDrawer())
                     }
-                  />
-                </ClickMenu>
-              )}
-
+                  >
+                    <LeadsDetailsDrawer
+                      dataId={dataId}
+                      closeDrawerHandler={() =>
+                        dispatch(closeShowDetailsLeadsDrawer())
+                      }
+                    />
+                  </ClickMenu>
+                )}
               </HStack>
-             
 
               {loading && (
                 <div>
@@ -948,7 +968,6 @@ const Leads = () => {
                 <div>
                   <TableContainer maxHeight="600px" className="overflow-y-auto">
                     <Table
-                   
                       {...getTableProps()}
                       borderWidth="1px"
                       borderColor="#e0e0e0"
@@ -968,8 +987,12 @@ const Leads = () => {
                               {hg.headers.map((column) => {
                                 return (
                                   <Th
-                                 
-                                  className={`${column.id === "name" ? "sticky top-0 left-[-2px] " : ""}`}
+                                    bg="blue.400"
+                                    className={`${
+                                      column.id === "name"
+                                        ? "sticky top-0 left-[-2px] "
+                                        : ""
+                                    }`}
                                     {...column.getHeaderProps(
                                       column.getSortByToggleProps()
                                     )}
@@ -994,7 +1017,6 @@ const Leads = () => {
                                 );
                               })}
                               <Th
-
                                 textTransform="capitalize"
                                 fontSize="15px"
                                 fontWeight="700"
@@ -1037,6 +1059,7 @@ const Leads = () => {
                                       cell.column.id !== "followup_date" &&
                                       cell.column.id !== "followup_reason" &&
                                       cell.column.id !== "created_on" &&
+                                      cell.column.id !== "leadCategory" &&
                                       cell.render("Cell")}
 
                                     {cell.column.id === "select" && (
@@ -1141,6 +1164,18 @@ const Leads = () => {
                                           "Not Assigned"}
                                       </span>
                                     )}
+
+                                    {cell.column.id === "leadCategory" && (
+                                        <Badge
+                                          className="text-sm rounded-md px-3 py-1"
+                                          colorScheme={getCategoryColor(
+                                            row.original?.leadCategory
+                                          )}
+                                        >
+                                          {row.original?.leadCategory}
+                                          {console.log(row.original?.leadCategory)}
+                                        </Badge>
+                                      )}
                                   </Td>
                                 );
                               })}
@@ -1148,19 +1183,19 @@ const Leads = () => {
                               {/* Actions */}
                               <Td className="flex gap-x-2">
                                 <MdOutlineVisibility
-                                  className="hover:scale-110 transition-transform"
+                                  className=" text-blue-500 hover:scale-110 transition-transform"
                                   size={20}
                                   onClick={() =>
                                     showDetailsHandler(row.original?._id)
                                   }
                                 />
                                 <MdEdit
-                                  className="hover:scale-110 transition-transform"
+                                  className=" text-yellow-500 hover:scale-110 transition-transform"
                                   size={20}
                                   onClick={() => editHandler(row.original?._id)}
                                 />
                                 <MdDeleteOutline
-                                  className="hover:scale-110 transition-transform"
+                                  className="text-red-500 hover:scale-110 transition-transform"
                                   size={20}
                                   onClick={() => {
                                     setLeadDeleteId(row.original?._id);

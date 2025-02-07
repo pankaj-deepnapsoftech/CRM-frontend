@@ -603,26 +603,26 @@ const Offers = () => {
                             })}
                             <Td className="flex gap-x-3 justify-center items-center py-2">
                               <MdDownload
-                                className="text-blue-600 hover:text-blue-800 hover:scale-110 transition-all duration-200"
+                                className="text-blue-600  hover:scale-110 transition-all duration-200"
                                 size={20}
                                 onClick={() =>
                                   downloadHandler(row.original?._id)
                                 }
                               />
                               <MdOutlineVisibility
-                                className="text-green-600 hover:text-green-800 hover:scale-110 transition-all duration-200"
+                                className="text-green-600  hover:scale-110 transition-all duration-200"
                                 size={20}
                                 onClick={() =>
                                   showDetailsHandler(row.original?._id)
                                 }
                               />
                               <MdEdit
-                                className="text-yellow-600 hover:text-yellow-800 hover:scale-110 transition-all duration-200"
+                                className="text-yellow-600  hover:scale-110 transition-all duration-200"
                                 size={20}
                                 onClick={() => editHandler(row.original?._id)}
                               />
                               <MdDeleteOutline
-                                className="text-red-600 hover:text-red-800 hover:scale-110 transition-all duration-200"
+                                className="text-red-600  hover:scale-110 transition-all duration-200"
                                 size={20}
                                 onClick={() => {
                                   setOfferDeleteId(row.original?._id);
