@@ -287,12 +287,12 @@ const Invoices = () => {
               .join("")
               ?.includes(searchKey.replaceAll("/", ""))) ||
           d?.expiredate?.toLowerCase().includes(searchKey.toLowerCase()) ||
-          d?.total.toString().includes(searchKey.toLowerCase()) ||
-          d?.subtotal.toString().includes(searchKey.toLowerCase()) ||
+          d?.total?.toString().includes(searchKey.toLowerCase()) ||
+          d?.subtotal?.toString().includes(searchKey.toLowerCase()) ||
           d?.status?.toLowerCase().includes(searchKey.toLowerCase()) ||
           d?.paymentstatus?.toLowerCase().includes(searchKey.toLowerCase()) ||
           (d?.customer?.people
-            ? (d.customer.people.firstname + " " + d.customer.people.lastname)
+            ? (d?.customer?.people?.firstname + " " + d?.customer?.people?.lastname)
                 .toLowerCase()
                 .includes(searchKey.toLowerCase())
             : d.customer.company.companyname
@@ -485,25 +485,25 @@ const Invoices = () => {
                       {headerGroups.map((hg) => {
                         return (
                           <Tr {...hg.getHeaderGroupProps()}>
-                            {hg.headers.map((column) => {
+                            {hg?.headers?.map((column) => {
                               return (
                                 <Th
                                   className={`text-sm font-semibold text-left py-3 px-4 
                     ${
-                      column.id === "customer"
+                      column?.id === "customer"
                         ? "sticky top-0 left-[-2px] bg-blue-400"
                         : ""
                     } 
                     border-b-2 border-gray-200`}
-                                  {...column.getHeaderProps(
-                                    column.getSortByToggleProps()
+                                  {...column?.getHeaderProps(
+                                    column?.getSortByToggleProps()
                                   )}
                                 >
                                   <div className="flex items-center text-white">
-                                    {column.render("Header")}
-                                    {column.isSorted && (
+                                    {column?.render("Header")}
+                                    {column?.isSorted && (
                                       <span className="ml-2">
-                                        {column.isSortedDesc ? (
+                                        {column?.isSortedDesc ? (
                                           <FaCaretDown />
                                         ) : (
                                           <FaCaretUp />
@@ -527,111 +527,111 @@ const Invoices = () => {
                         return (
                           <Tr
                             className="relative hover:bg-gray-200 cursor-pointer transition-all duration-300 ease-in-out"
-                            {...row.getRowProps()}
+                            {...row?.getRowProps()}
                           >
-                            {row.cells.map((cell) => {
+                            {row?.cells?.map((cell) => {
                               return (
                                 <Td
                                   className={`py-3 px-4 ${
-                                    cell.column.id === "customer"
+                                    cell?.column?.id === "customer"
                                       ? "sticky top-0 left-[-2px] bg-[#f9fafc]"
                                       : ""
                                   }`}
                                   fontWeight="600"
                                   {...cell.getCellProps()}
                                 >
-                                  {cell.column.id !== "number" &&
-                                    cell.column.id !== "startdate" &&
-                                    cell.column.id !== "status" &&
-                                    cell.column.id !== "customer" &&
-                                    cell.column.id !== "total" &&
-                                    cell.column.id !== "subtotal" &&
-                                    cell.column.id !== "expiredate" &&
-                                    cell.column.id !== "paymentstatus" &&
-                                    cell.column.id !== "creator" &&
-                                    cell.column.id !== "created_on" &&
+                                  {cell?.column?.id !== "number" &&
+                                    cell?.column?.id !== "startdate" &&
+                                    cell?.column?.id !== "status" &&
+                                    cell?.column?.id !== "customer" &&
+                                    cell?.column?.id !== "total" &&
+                                    cell?.column?.id !== "subtotal" &&
+                                    cell?.column?.id !== "expiredate" &&
+                                    cell?.column?.id !== "paymentstatus" &&
+                                    cell?.column?.id !== "creator" &&
+                                    cell?.column?.id !== "created_on" &&
                                     cell.render("Cell")}
-                                  {cell.column.id === "total" && (
+                                  {cell?.column?.id === "total" && (
                                     <span>&#8377;{row.original.total}</span>
                                   )}
-                                  {cell.column.id === "subtotal" && (
+                                  {cell?.column?.id === "subtotal" && (
                                     <span>&#8377;{row.original.subtotal}</span>
                                   )}
-                                  {cell.column.id === "creator" && (
+                                  {cell?.column?.id === "creator" && (
                                     <span>{row.original.creator.name}</span>
                                   )}
-                                  {cell.column.id === "created_on" && (
+                                  {cell?.column?.id === "created_on" && (
                                     <span>
                                       {moment(row.original.createdAt).format(
                                         "DD/MM/YYYY"
                                       )}
                                     </span>
                                   )}
-                                  {cell.column.id === "customer" && (
+                                  {cell?.column?.id === "customer" && (
                                     <span>
-                                      {row.original.customer?.company
-                                        ? row.original.customer.company
+                                      {row?.original?.customer?.company
+                                        ? row?.original?.customer?.company
                                             .companyname
-                                        : row.original.customer.people
+                                        : row?.original?.customer?.people
                                             .firstname +
                                           " " +
-                                          (row.original.customer.people
+                                          (row?.original?.customer?.people
                                             .lastname || "")}
                                     </span>
                                   )}
-                                  {cell.column.id === "number" && (
+                                  {cell?.column?.id === "number" && (
                                     <span>{ind + 1}</span>
                                   )}
-                                  {cell.column.id === "startdate" && (
+                                  {cell?.column?.id === "startdate" && (
                                     <span>
-                                      {moment(row.original.startdate).format(
+                                      {moment(row?.original?.startdate).format(
                                         "DD/MM/YYYY"
                                       )}
                                     </span>
                                   )}
-                                  {cell.column.id === "expiredate" && (
+                                  {cell?.column?.id === "expiredate" && (
                                     <span>
-                                      {moment(row.original.expiredate).format(
+                                      {moment(row?.original?.expiredate).format(
                                         "DD/MM/YYYY"
                                       )}
                                     </span>
                                   )}
-                                  {cell.column.id === "status" && (
+                                  {cell?.column?.id === "status" && (
                                     <span
                                       className="text-sm rounded-md px-3 py-1"
                                       style={{
                                         backgroundColor: `${
                                           statusStyles[
-                                            row.original.status.toLowerCase()
+                                            row?.original?.status.toLowerCase()
                                           ].bg
                                         }`,
                                         color: `${
                                           statusStyles[
-                                            row.original.status.toLowerCase()
+                                            row?.original?.status.toLowerCase()
                                           ].text
                                         }`,
                                       }}
                                     >
-                                      {row.original.status}
+                                      {row?.original?.status}
                                     </span>
                                   )}
-                                  {cell.column.id === "paymentstatus" && (
+                                  {cell?.column?.id === "paymentstatus" && (
                                     <span
                                       className="text-sm rounded-md px-3 py-1"
                                       style={{
                                         backgroundColor: `${
                                           paymentStatusStyles[
-                                            row.original.paymentstatus.toLowerCase()
+                                            row?.original?.paymentstatus.toLowerCase()
                                           ].bg
                                         }`,
                                         color: `${
                                           paymentStatusStyles[
-                                            row.original.paymentstatus.toLowerCase()
+                                            row?.original?.paymentstatus.toLowerCase()
                                           ].text
                                         }`,
                                       }}
                                     >
-                                      {row.original.paymentstatus}
+                                      {row?.original?.paymentstatus}
                                     </span>
                                   )}
                                 </Td>
@@ -642,26 +642,26 @@ const Invoices = () => {
                                 className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
                                 size={20}
                                 onClick={() =>
-                                  downloadHandler(row.original?._id)
+                                  downloadHandler(row?.original?._id)
                                 }
                               />
                               <MdOutlineVisibility
                                 className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
                                 size={20}
                                 onClick={() =>
-                                  showDetailsHandler(row.original?._id)
+                                  showDetailsHandler(row?.original?._id)
                                 }
                               />
                               <MdEdit
                                 className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
                                 size={20}
-                                onClick={() => editHandler(row.original?._id)}
+                                onClick={() => editHandler(row?.original?._id)}
                               />
                               <MdPayment
                                 className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
                                 size={20}
                                 onClick={() =>
-                                  paymentHandler(row.original?._id)
+                                  paymentHandler(row?.original?._id)
                                 }
                               />
                               {/* Uncomment below for delete functionality */}

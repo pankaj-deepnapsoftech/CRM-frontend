@@ -194,14 +194,14 @@ const Payments = () => {
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.message);
+        throw new Error(data?.message);
       }
-      setData(data.payments);
-      setFilteredData(data.payments);
+      setData(data?.payments);
+      setFilteredData(data?.payments);
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      toast.error(err.message);
+      toast.error(err?.message);
     }
   };
 
@@ -220,14 +220,14 @@ const Payments = () => {
 
       const data = await response.json();
 
-      if (!data.success) {
-        throw new Error(data.message);
+      if (!data?.success) {
+        throw new Error(data?.message);
       }
 
       fetchAllPayments();
-      toast.success(data.message);
+      toast.success(data?.message);
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err?.message);
     }
   };
 
@@ -254,7 +254,7 @@ const Payments = () => {
       }),
     })
       .then((response) => {
-        const filename = response.headers
+        const filename = response?.headers
           .get("content-disposition")
           .split("filename=")[1]
           .replace(/"/g, "");
@@ -283,15 +283,15 @@ const Payments = () => {
     if (searchKey.trim() !== "") {
       const searchedData = data.filter((d) => {
         return (
-          (d?.invoice.customer?.people
+          (d?.invoice?.customer?.people
             ? (
-                d.invoice.customer.people.firstname +
+                d?.invoice?.customer?.people?.firstname +
                 " " +
-                d.invoice.customer.people.lastname
+                d?.invoice?.customer?.people?.lastname
               )
                 .toLowerCase()
                 .includes(searchKey.toLowerCase())
-            : d.invoice.customer.company.companyname
+            : d?.invoice?.customer?.company?.companyname
                 .toLowerCase()
                 .includes(searchKey.toLowerCase())) ||
           d?.mode?.toLowerCase().includes(searchKey.toLowerCase()) ||
@@ -473,25 +473,25 @@ const Payments = () => {
                         {headerGroups.map((hg) => {
                           return (
                             <Tr {...hg.getHeaderGroupProps()}>
-                              {hg.headers.map((column) => {
+                              {hg?.headers?.map((column) => {
                                 return (
                                   <Th
                                     className={`text-sm font-semibold text-left py-3 px-4
                     ${
-                      column.id === "customer"
+                      column?.id === "customer"
                         ? "sticky top-0 left-[-2px] bg-blue-400"
                         : ""
                     }
                     border-b-2 border-gray-200`}
-                                    {...column.getHeaderProps(
-                                      column.getSortByToggleProps()
+                                    {...column?.getHeaderProps(
+                                      column?.getSortByToggleProps()
                                     )}
                                   >
                                     <div className="flex items-center text-white">
-                                      {column.render("Header")}
-                                      {column.isSorted && (
+                                      {column?.render("Header")}
+                                      {column?.isSorted && (
                                         <span className="ml-2">
-                                          {column.isSortedDesc ? (
+                                          {column?.isSortedDesc ? (
                                             <FaCaretDown />
                                           ) : (
                                             <FaCaretUp />
@@ -515,59 +515,59 @@ const Payments = () => {
                           return (
                             <Tr
                               className="relative hover:bg-gray-100 hover:cursor-pointer text-base transition-all duration-300 ease-in-out"
-                              {...row.getRowProps()}
+                              {...row?.getRowProps()}
                             >
-                              {row.cells.map((cell) => {
+                              {row?.cells?.map((cell) => {
                                 return (
                                   <Td
                                     className={`py-3 px-4 ${
-                                      cell.column.id === "customer"
+                                      cell?.column?.id === "customer"
                                         ? "sticky top-0 left-[-2px] "
                                         : ""
                                     }`}
                                     fontWeight="600"
-                                    {...cell.getCellProps()}
+                                    {...cell?.getCellProps()}
                                   >
-                                    {cell.column.id !== "number" &&
-                                      cell.column.id !== "createdAt" &&
-                                      cell.column.id !== "amount" &&
-                                      cell.column.id !== "customer" &&
-                                      cell.column.id !== "creator" &&
-                                      cell.column.id !== "created_on" &&
+                                    {cell?.column?.id !== "number" &&
+                                      cell?.column?.id !== "createdAt" &&
+                                      cell?.column?.id !== "amount" &&
+                                      cell?.column?.id !== "customer" &&
+                                      cell?.column?.id !== "creator" &&
+                                      cell?.column?.id !== "created_on" &&
                                       cell.render("Cell")}
 
-                                    {cell.column.id === "customer" && (
+                                    {cell?.column?.id === "customer" && (
                                       <span>
-                                        {row.original.invoice.customer?.people
-                                          ? row.original.invoice.customer.people
+                                        {row?.original?.invoice?.customer?.people
+                                          ? row?.original?.invoice?.customer?.people
                                               .firstname +
                                             " " +
-                                            (row.original.invoice.customer
-                                              .people.lastname || "")
-                                          : row.original.invoice.customer
-                                              .company.companyname}
+                                            (row?.original?.invoice?.customer
+                                              ?.people.lastname || "")
+                                          : row?.original?.invoice?.customer
+                                              ?.company?.companyname}
                                       </span>
                                     )}
 
-                                    {cell.column.id === "number" && (
+                                    {cell?.column?.id === "number" && (
                                       <span>{ind + 1}</span>
                                     )}
-                                    {cell.column.id === "creator" && (
-                                      <span>{row.original.creator.name}</span>
+                                    {cell?.column?.id === "creator" && (
+                                      <span>{row?.original?.creator?.name}</span>
                                     )}
-                                    {cell.column.id === "created_on" && (
+                                    {cell?.column?.id === "created_on" && (
                                       <span>
-                                        {moment(row.original.createdAt).format(
+                                        {moment(row?.original?.createdAt).format(
                                           "DD/MM/YYYY"
                                         )}
                                       </span>
                                     )}
-                                    {cell.column.id === "amount" && (
-                                      <span>&#8377;{row.original.amount}</span>
+                                    {cell?.column?.id === "amount" && (
+                                      <span>&#8377;{row?.original?.amount}</span>
                                     )}
-                                    {cell.column.id === "date" && (
+                                    {cell?.column?.id === "date" && (
                                       <span>
-                                        {moment(row.original.createdAt).format(
+                                        {moment(row?.original?.createdAt).format(
                                           "DD/MM/YYYY"
                                         )}
                                       </span>
@@ -580,20 +580,20 @@ const Payments = () => {
                                   className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
                                   size={20}
                                   onClick={() =>
-                                    downloadHandler(row.original?._id)
+                                    downloadHandler(row?.original?._id)
                                   }
                                 />
                                 <MdOutlineVisibility
                                   className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
                                   size={20}
                                   onClick={() =>
-                                    showDetailsHandler(row.original?._id)
+                                    showDetailsHandler(row?.original?._id)
                                   }
                                 />
                                 <MdEdit
                                   className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
                                   size={20}
-                                  onClick={() => editHandler(row.original?._id)}
+                                  onClick={() => editHandler(row?.original?._id)}
                                 />
                                 {/* Removed delete icon for now */}
                               </Td>
