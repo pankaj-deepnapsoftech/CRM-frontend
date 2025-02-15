@@ -39,6 +39,7 @@ import ExcelDetailsDrawer from "../ui/Drawers/Details Drawers/ExcelDetailsDrawer
 import ExcelDrawer from "../ui/Drawers/Add Drawers/ExcelDrawer";
 import { FcDatabase } from "react-icons/fc";
 import { Input } from "@chakra-ui/react";
+import Marquee  from "react-fast-marquee"
 
 import {
   AlertDialog,
@@ -85,6 +86,7 @@ const Renewals = () => {
   const [dataId, setDataId] = useState();
   const [loading, setLoading] = useState(true);
   const [searchKey, setSearchKey] = useState("");
+  const [dateWise,setDateWise] = useState([])
 
   const [peopleDeleteId, setPeopleDeleteId] = useState();
 
@@ -159,8 +161,25 @@ const Renewals = () => {
     }
   };
 
+
+  const fetchAllDateWiseData = async () => {
+    try {
+      const response = await fetch(baseURL + "renewal/date-wise", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${cookies?.access_token}`,
+        }})
+        const data = await response.json()
+        setDateWise(data?.data ? data?.data : [])
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     fetchAllPeople();
+    fetchAllDateWiseData()
   }, []);
 
   const addPeoplesHandler = () => {
@@ -419,6 +438,11 @@ const Renewals = () => {
               )}
               {!loading && filteredData.length > 0 && (
                 <div>
+                <Marquee speed={70} pauseOnHover >
+                  {dateWise?.map((item,i)=>(
+                    <p key={i} >{item.contractType}</p>
+                  ))}
+                </Marquee>
                   <TableContainer maxHeight="600px" overflowY="auto">
                     <Table variant="simple" {...getTableProps()}>
                       <Thead className="bg-blue-400 text-white text-lg font-semibold">
