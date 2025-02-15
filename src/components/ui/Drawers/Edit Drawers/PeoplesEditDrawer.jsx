@@ -220,7 +220,7 @@ const PeoplesEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
             <Button
               type="submit"
               className="mt-1 w-full py-3 text-white font-bold rounded-lg"
-             colorScheme="blue"
+              colorScheme="blue"
             >
               Submit
             </Button>

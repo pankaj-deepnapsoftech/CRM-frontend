@@ -11,117 +11,131 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import Loading from "../../Loading";
 
+const contractOptions = [
+  { value: "LIFE INSURANCE", label: "LIFE INSURANCE" },
+  { value: "HEALTH INSURANCE", label: "HEALTH INSURANCE" },
+  { value: "PERSONAL LOAN", label: "PERSONAL LOAN" },
+  { value: "BUSINESS LOAN", label: "BUSINESS LOAN" },
+  { value: "CC LIMIT", label: "CC LIMIT" },
+  { value: "other", label: "Other" },
+];
+
+const modeOptions = [
+  { value: "YLY", label: "YLY" },
+  { value: "HLY", label: "HLY" },
+  { value: "QLY", label: "QLY" },
+  { value: "MLY", label: "MLY" },
+  { value: "other", label: "Other" },
+];
+
 const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
   const [cookies] = useCookies();
-  const [companies, setCompanies] = useState([]);
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [companyId, setCompanyId] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [custumerName, setCustumerName] = useState("");
+  const [phnNumber, setPhnNumber] = useState("");
+  const [contractType, setContractType] = useState("");
+  const [otherContractType, setOtherContractType] = useState("");
+  const [contractNumber, setContractNumber] = useState("");
+  const [productName, setProductName] = useState("");
+  const [doc, setDoc] = useState(null);
+  const [term, setTerm] = useState(null);
+  const [mode, setMode] = useState("");
+  const [otherMode, setOtherMode] = useState("");
+  const [contractAttachment, setContractAttachment] = useState(null);
+  const [renewalDate, setRenewalDate] = useState("");
+  const [lastRenewalDate, setLastRenewalDate] = useState("");
+  const [renewalTimes, setRenewalTimes] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const editPeopleHandler = async (e) => {
-    e.preventDefault();
-
-    if (phone.length > 10) {
-      toast.error("Phone no. field must be 10 digits long");
-      return;
-    }
-
-    try {
-      const baseURL = process.env.REACT_APP_BACKEND_URL;
-
-      const response = await fetch(baseURL + "people/edit-people", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${cookies?.access_token}`,
-        },
-        body: JSON.stringify({
-          peopleId: id,
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          companycompany: companyId,
-          phone: phone,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(data.message);
-      }
-
-      closeDrawerHandler();
-      toast.success(data.message);
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
 
   const fetchPeopleDetails = async () => {
     setIsLoading(true);
     try {
-      const baseUrl = process.env.REACT_APP_BACKEND_URL;
-      const response = await fetch(baseUrl + "people/person-details", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies?.access_token}`,
-        },
-        body: JSON.stringify({
-          peopleId: id,
-        }),
-      });
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(data.message);
-      }
-
-      setFirstname(data.person?.firstname);
-      setLastname(data.person?.lastname);
-      setCompanyId(data.person?.company);
-      setPhone(data.person?.phone);
-      setEmail(data.person?.email);
-
-      setIsLoading(false);
-      toast.success(data.message);
-    } catch (err) {
-      setIsLoading(false);
-      toast.error(err.message);
-    }
-  };
-
-  const getAllCompanies = async () => {
-    try {
       const baseURL = process.env.REACT_APP_BACKEND_URL;
-
-      const response = await fetch(baseURL + "company/all-companies", {
-        method: "POST",
-        headers: {
-          authorization: `Bearer ${cookies?.access_token}`,
-        },
+      const response = await fetch(`${baseURL}renewal/record/${id}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${cookies?.access_token}` },
       });
-
       const data = await response.json();
+      if (!data.success) throw new Error(data.message);
 
-      if (!data.success) {
-        throw new Error(data.message);
+      const personData = data.data;
+      setCustumerName(personData.custumerName);
+      setPhnNumber(personData.phnNumber);
+      setContractNumber(personData.contractNumber);
+      setProductName(personData.productName);
+      setRenewalDate(personData.renewalDate?.split("T")[0] || "");
+      setLastRenewalDate(personData.lastRenewalDate?.split("T")[0] || "");
+      setRenewalTimes(personData.renewalTimes);
+
+      const isContractOther = !contractOptions.some(
+        (opt) => opt.value === personData.contractType
+      );
+      if (isContractOther) {
+        setContractType("other");
+        setOtherContractType(personData.contractType);
+      } else {
+        setContractType(personData.contractType);
       }
 
-      setCompanies(data.companies);
+      const isModeOther = !modeOptions.some(
+        (opt) => opt.value === personData.mode
+      );
+      if (isModeOther) {
+        setMode("other");
+        setOtherMode(personData.mode);
+      } else {
+        setMode(personData.mode);
+      }
     } catch (err) {
-      toast(err.message);
+      toast.error(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPeopleDetails();
-    getAllCompanies();
-  }, []);
+    if (id) fetchPeopleDetails();
+  }, [id]);
+
+  const editPeopleHandler = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const baseURL = process.env.REACT_APP_BACKEND_URL;
+      const formData = new FormData();
+      formData.append("custumerName", custumerName);
+      formData.append("phnNumber", phnNumber);
+      formData.append(
+        "contractType",
+        contractType === "other" ? otherContractType : contractType
+      );
+      formData.append("contractNumber", contractNumber);
+      formData.append("productName", productName);
+      formData.append("mode", mode === "other" ? otherMode : mode);
+      formData.append("renewalDate", renewalDate);
+      formData.append("lastRenewalDate", lastRenewalDate);
+      formData.append("renewalTimes", renewalTimes);
+      if (doc) formData.append("doc", doc);
+      if (term) formData.append("term", term);
+      if (contractAttachment)
+        formData.append("contractAttachment", contractAttachment);
+
+      const response = await fetch(`${baseURL}renewal/update-record/${id}`, {
+        method: "PUT",
+        headers: { authorization: `Bearer ${cookies?.access_token}` },
+        body: formData,
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message);
+
+      console.log(data);
+      toast.success("Record updated successfully!");
+      closeDrawerHandler();
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div
@@ -133,94 +147,148 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
     >
       <h1 className="px-4 flex gap-x-2 items-center text-xl py-3 border-b">
         <BiX onClick={closeDrawerHandler} size="26px" />
-        Individuals
+        Renewal
       </h1>
 
       <div className="mt-8 px-5">
         <h2 className="text-2xl font-bold py-5 text-center mb-6 border-y bg-blue-200 rounded-lg shadow-md">
-          Edit Individual
+          Edit Renewal
         </h2>
 
-        {isLoading && <Loading />}
-        {!isLoading && (
+        {isLoading ? (
+          <Loading />
+        ) : (
           <form onSubmit={editPeopleHandler} className="space-y-5">
-            <FormControl className="mt-3 mb-5" isRequired>
-              <FormLabel fontWeight="bold" className="text-[#4B5563]">
-                First Name
-              </FormLabel>
+            <FormControl isRequired>
+              <FormLabel>Customer Name</FormLabel>
               <Input
-                value={firstname}
-                onChange={(e) => setFirstname(e.target.value)}
+                value={custumerName}
+                onChange={(e) => setCustumerName(e.target.value)}
                 type="text"
-                placeholder="First Name"
-                className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </FormControl>
 
-            <FormControl className="mt-3 mb-5" isRequired>
-              <FormLabel fontWeight="bold" className="text-[#4B5563]">
-                Last Name
-              </FormLabel>
+            <FormControl isRequired>
+              <FormLabel>Phone Number</FormLabel>
               <Input
-                value={lastname}
-                onChange={(e) => setLastname(e.target.value)}
-                type="text"
-                placeholder="Last Name"
-                className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </FormControl>
-
-            {/* Uncomment and adjust as needed */}
-            {/* 
-      <FormControl className="mt-3 mb-5">
-        <FormLabel fontWeight="bold" className="text-[#4B5563]">
-          Corporate
-        </FormLabel>
-        <Select
-          value={companyId}
-          onChange={(e) => setCompanyId(e.target.value)}
-          placeholder="Select Corporate"
-          className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        >
-          {companies.map((company) => (
-            <option key={company._id} value={company._id}>
-              {company.companyname}
-            </option>
-          ))}
-        </Select>
-      </FormControl>
-      */}
-
-            <FormControl className="mt-3 mb-5">
-              <FormLabel fontWeight="bold" className="text-[#4B5563]">
-                Phone
-              </FormLabel>
-              <Input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                value={phnNumber}
+                onChange={(e) => setPhnNumber(e.target.value)}
                 type="number"
-                placeholder="Phone"
-                className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400 no-scrollbar"
               />
             </FormControl>
 
-            <FormControl className="mt-3 mb-5">
-              <FormLabel fontWeight="bold" className="text-[#4B5563]">
-                Email
-              </FormLabel>
+            <FormControl isRequired>
+              <FormLabel>Contract Type</FormLabel>
+              <Select
+                value={contractType}
+                onChange={(e) => setContractType(e.target.value)}
+              >
+                {contractOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
+              {contractType === "other" && (
+                <Input
+                  placeholder="Enter other type"
+                  value={otherContractType}
+                  onChange={(e) => setOtherContractType(e.target.value)}
+                  mt={2}
+                />
+              )}
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Contract Number</FormLabel>
               <Input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder="Email"
-                className="border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                value={contractNumber}
+                onChange={(e) => setContractNumber(e.target.value)}
+                type="text"
               />
             </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Product Name</FormLabel>
+              <Input
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                type="text"
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Doc</FormLabel>
+              <Input onChange={(e) => setDoc(e.target.files[0])} type="file" />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Term</FormLabel>
+              <Input onChange={(e) => setTerm(e.target.files[0])} type="file" />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Mode</FormLabel>
+              <Select
+                options={modeOptions}
+                onChange={(e) => setMode(e.target.value)}
+              >
+                {modeOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
+              {mode === "other" && (
+                <Input
+                  placeholder="Enter other mode"
+                  onChange={(e) => modeOptions(e.target.value)}
+                />
+              )}
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Contract Attachment</FormLabel>
+              <Input
+                onChange={(e) => setContractAttachment(e.target.files[0])}
+                type="file"
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Renewal Date</FormLabel>
+              <Input
+                value={renewalDate}
+                onChange={(e) => setRenewalDate(e.target.value)}
+                type="date"
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Last Renewal Date</FormLabel>
+              <Input
+                value={lastRenewalDate}
+                onChange={(e) => setLastRenewalDate(e.target.value)}
+                type="date"
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Renewal Times</FormLabel>
+              <Input
+                value={renewalTimes}
+                onChange={(e) => setRenewalTimes(e.target.value)}
+                type="number"
+              />
+            </FormControl>
+
+            {/* Add other form fields similarly */}
 
             <Button
               type="submit"
               className="mt-1 w-full py-3 text-white font-bold rounded-lg"
               colorScheme="blue"
+              isLoading={isLoading}
             >
               Submit
             </Button>
