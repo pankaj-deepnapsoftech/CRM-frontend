@@ -34,9 +34,9 @@ import {
 } from "@chakra-ui/react";
 import { usePagination, useSortBy, useTable } from "react-table";
 import ClickMenu from "../ui/ClickMenu";
-import PeoplesEditDrawer from "../ui/Drawers/Edit Drawers/PeoplesEditDrawer";
-import PeoplesDetailsDrawer from "../ui/Drawers/Details Drawers/PeoplesDetailsDrawer";
-import PeoplesDrawer from "../ui/Drawers/Add Drawers/PeoplesDrawer";
+import ExcelEditDrawer from "../ui/Drawers/Edit Drawers/ExcelEditDrawer";
+import ExcelDetailsDrawer from "../ui/Drawers/Details Drawers/ExcelDetailsDrawer";
+import ExcelDrawer from "../ui/Drawers/Add Drawers/ExcelDrawer";
 import { FcDatabase } from "react-icons/fc";
 import { Input } from "@chakra-ui/react";
 
@@ -53,183 +53,32 @@ import { checkAccess } from "../../utils/checkAccess";
 
 const columns = [
   {
-    Header: "Created By",
-    accessor: "creator",
+    Header: "Custumer Name",
+    accessor: "custumerName",
   },
   {
-    Header: "Created On",
-    accessor: "created_on",
+    Header: "Type of contract",
+    accessor: "contractType",
   },
   {
-    Header: "First Name",
-    accessor: "firstname",
+    Header: "Contract Number",
+    accessor: "contractNumber",
   },
   {
-    Header: "Last Name",
-    accessor: "lastname",
+    Header: "Product Name",
+    accessor: "productName",
   },
   {
     Header: "Phone",
-    accessor: "phone",
+    accessor: "phnNumber",
   },
   {
-    Header: "Email",
-    accessor: "email",
-  },
-  {
-    Header: "Verification",
-    accessor: "verified",
-    Cell: ({ row }) => {
-      const { isOpen, onOpen, onClose } = useDisclosure();
-      const cancelRef = useRef();
-      const [cookies] = useCookies();
-      const baseURL = process.env.REACT_APP_BACKEND_URL;
-
-      const personId = row.original._id; // Get the person's ID
-      const [otp, setOtp] = useState(""); // Store OTP input
-      const [isVerified, setIsVerified] = useState(row.original.verify); // Track verification status
-
-      // Resend OTP
-      const reSendVerificationOtp = async () => {
-        try {
-          if (!personId) return console.log("No person ID found.");
-
-          const response = await fetch(
-            `${baseURL}people/resend-otp/${personId}`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                authorization: `Bearer ${cookies?.access_token}`,
-              },
-            }
-          );
-
-          const otpResponse = await response.json();
-          console.log(`OTP resent to person with ID ${personId}`, otpResponse);
-
-          // Show toast for resend OTP
-          toast.success("OTP has been resent successfully!");
-        } catch (error) {
-          console.error("Error resending OTP:", error);
-          toast.error("Failed to resend OTP. Please try again.");
-        }
-      };
-
-      // Verify OTP
-      const verifyOtp = async () => {
-        try {
-          if (!personId || !otp) {
-            toast.warning("Please enter OTP before verifying.");
-            return;
-          }
-
-          const numericOtp = Number(otp); // Convert OTP to a number
-
-          if (isNaN(numericOtp)) {
-            toast.warning("Invalid OTP format. Please enter a valid number.");
-            return;
-          }
-
-          const response = await fetch(
-            `${baseURL}people/verify-people/${personId}`,
-            {
-              method: "PATCH",
-              headers: {
-                "Content-Type": "application/json",
-                authorization: `Bearer ${cookies?.access_token}`,
-              },
-              body: JSON.stringify({ otp: numericOtp }), // Send OTP as number
-            }
-          );
-
-          const verifyResponse = await response.json();
-          console.log(`Verification result for ${personId}:`, verifyResponse);
-
-          if (verifyResponse.success) {
-            toast.success("OTP verified successfully!"); // Show success toast
-            setIsVerified(true); // Update UI state
-            onClose(); // Close modal
-          } else {
-            toast.error(
-              verifyResponse.message || "Invalid OTP. Please try again."
-            ); // Show error toast
-          }
-        } catch (error) {
-          console.error("Error verifying OTP:", error);
-          toast.error("Something went wrong. Please try again."); // Show error toast
-        }
-      };
-
-      return (
-        <>
-          {isVerified ? (
-            <span className="px-2 py-1 text-sm font-semibold text-green-800 bg-green-100 rounded-full">
-              Verified
-            </span>
-          ) : (
-            <>
-              <Button size="sm" colorScheme="blue" onClick={onOpen}>
-                Verify
-              </Button>
-
-              {/* Verification Popup */}
-              <AlertDialog
-                isOpen={isOpen}
-                leastDestructiveRef={cancelRef}
-                onClose={onClose}
-              >
-                <AlertDialogOverlay>
-                  <AlertDialogContent className="p-6 rounded-lg shadow-lg">
-                    <AlertDialogHeader className="text-xl font-semibold text-center">
-                      Confirm Verification
-                    </AlertDialogHeader>
-
-                    <AlertDialogBody className="text-center space-y-4">
-                      <p className="text-gray-600">
-                        A one-time password has been sent to your email
-                      </p>
-                      <Input
-                        className="text-center border border-gray-300 rounded-md py-2 px-4 w-3/4 mx-auto"
-                        placeholder="Enter OTP"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                      />
-                      <div className="flex justify-center gap-4">
-                        <Button onClick={verifyOtp} colorScheme="blue">
-                          Verify OTP
-                        </Button>
-                        <Button
-                          onClick={reSendVerificationOtp}
-                          variant="outline"
-                          colorScheme="gray"
-                        >
-                          Resend OTP
-                        </Button>
-                      </div>
-                    </AlertDialogBody>
-
-                    <AlertDialogFooter className="flex justify-end gap-3">
-                      <Button
-                        ref={cancelRef}
-                        onClick={onClose}
-                        variant="outline"
-                      >
-                        Cancel
-                      </Button>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialogOverlay>
-              </AlertDialog>
-            </>
-          )}
-        </>
-      );
-    },
+    Header: "RenewalDate",
+    accessor: "renewalDate",
   },
 ];
 
-const Peoples = () => {
+const Renewals = () => {
   const [cookies] = useCookies();
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -269,18 +118,20 @@ const Peoples = () => {
 
   const baseURL = process.env.REACT_APP_BACKEND_URL;
 
-  const [peopleIds, setPeopleIds] = useState([]); // State to store all people IDs
-
   // Fetch all people and store their IDs
+  // State to store only IDs of all people
+  const [peopleIds, setPeopleIds] = useState([]);
+
   const fetchAllPeople = async () => {
     setSearchKey("");
     setData([]);
     setFilteredData([]);
+    setPeopleIds([]); // Reset IDs before fetching new data
     setLoading(true);
 
     try {
-      const response = await fetch(baseURL + "people/all-persons", {
-        method: "POST",
+      const response = await fetch(baseURL + "renewal/all-records", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${cookies?.access_token}`,
@@ -288,18 +139,18 @@ const Peoples = () => {
       });
 
       const data = await response.json();
-      console.log(data.people);
+      console.log("API Response:", data);
 
       if (!data.success) {
         throw new Error(data.message);
       }
 
-      setData(data.people);
-      setFilteredData(data.people);
+      setData(data.data || []); // Ensure it's always an array
+      setFilteredData(data.data || []);
 
-      // Extract IDs and store them in state
-      const ids = data.people.map((person) => person._id);
-      setPeopleIds(ids);
+      // Extract IDs and store them separately
+      const extractedIds = data.data?.map((person) => person._id) || [];
+      setPeopleIds(extractedIds);
 
       setLoading(false);
     } catch (err) {
@@ -308,31 +159,9 @@ const Peoples = () => {
     }
   };
 
-  // Send OTP to all people
-  const sendVerificationOtp = async () => {
-    try {
-      if (peopleIds.length === 0) {
-        console.log("No people IDs found.");
-        return;
-      }
-
-      // Send OTP request for each person
-      for (const id of peopleIds) {
-        const response = await fetch(`${baseURL}people/verify-people/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${cookies?.access_token}`,
-          },
-        });
-
-        const otpResponse = await response.json();
-        console.log(`OTP sent to person with ID ${id}:`, otpResponse);
-      }
-    } catch (error) {
-      console.error("Error sending OTPs:", error);
-    }
-  };
+  useEffect(() => {
+    fetchAllPeople();
+  }, []);
 
   const addPeoplesHandler = () => {
     dispatch(openAddPeoplesDrawer());
@@ -350,30 +179,43 @@ const Peoples = () => {
 
   const deleteHandler = async () => {
     if (!peopleDeleteId) {
+      toast.error("No ID provided for deletion.");
       return;
     }
 
     try {
-      const response = await fetch(baseURL + "people/delete-people", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${cookies?.access_token}`,
-        },
-        body: JSON.stringify({
-          peopleId: peopleDeleteId,
-        }),
-      });
+      const response = await fetch(
+        `${baseURL}renewal/delete-record/${peopleDeleteId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${cookies?.access_token}`,
+          },
+        }
+      );
 
-      const data = await response.json();
+      // ✅ Log the response before parsing
+      const text = await response.text();
+      console.log("Raw API Response:", text);
+
+      // ✅ Try parsing JSON safely
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        throw new Error("API did not return valid JSON. Check console logs.");
+      }
 
       if (!data.success) {
         throw new Error(data.message);
       }
-      onClose();
-      fetchAllPeople();
+
       toast.success(data.message);
+      onClose();
+      fetchAllPeople(); // Refresh data after deletion
     } catch (err) {
+      console.error("Delete Error:", err);
       toast.error(err.message);
     }
   };
@@ -381,12 +223,6 @@ const Peoples = () => {
   const confirmDeleteHandler = async () => {
     onOpen();
   };
-
-  useEffect(() => {
-    if (isAllowed) {
-      fetchAllPeople();
-    }
-  }, []);
 
   useEffect(() => {
     if (searchKey.trim() !== "") {
@@ -449,8 +285,7 @@ const Peoples = () => {
 
                   <AlertDialogBody>
                     Are you sure, deleting a Individual will also delete it from
-                    Customer section, its Leads, Offers, Proforma Invoices,
-                    Invoices and Payments?
+                    all sections
                   </AlertDialogBody>
 
                   <AlertDialogFooter>
@@ -472,7 +307,7 @@ const Peoples = () => {
                 {/* <span className="mr-2">
                   <MdArrowBack />
                 </span> */}
-                Individual List
+                Renewal List
               </div>
 
               <div className="mt-2 md:mt-0 flex flex-wrap gap-y-1 gap-x-2 w-full md:w-fit">
@@ -506,7 +341,7 @@ const Peoples = () => {
                   color="white"
                   backgroundColor="#1640d6"
                 >
-                  Add New Individual
+                  Add Renewal
                 </Button>
                 <Select
                   onChange={(e) => setPageSize(e.target.value)}
@@ -530,7 +365,7 @@ const Peoples = () => {
                     dispatch(closeAddPeoplesDrawer())
                   }
                 >
-                  <PeoplesDrawer
+                  <ExcelDrawer
                     closeDrawerHandler={() => dispatch(closeAddPeoplesDrawer())}
                     fetchAllPeople={fetchAllPeople}
                   />
@@ -545,7 +380,7 @@ const Peoples = () => {
                     dispatch(closeEditPeoplesDrawer())
                   }
                 >
-                  <PeoplesEditDrawer
+                  <ExcelEditDrawer
                     dataId={dataId}
                     closeDrawerHandler={() => {
                       dispatch(closeEditPeoplesDrawer());
@@ -563,7 +398,7 @@ const Peoples = () => {
                     dispatch(closeShowDetailsPeoplesDrawer())
                   }
                 >
-                  <PeoplesDetailsDrawer
+                  <ExcelDetailsDrawer
                     dataId={dataId}
                     closeDrawerHandler={() =>
                       dispatch(closeShowDetailsPeoplesDrawer())
@@ -739,4 +574,4 @@ const Peoples = () => {
   );
 };
 
-export default Peoples;
+export default Renewals;

@@ -42,6 +42,7 @@ import PaymentSuccess from "./subscription/pages/PaymentSuccess";
 import PrivacyPolicy from "./subscription/pages/PrivacyPolicy";
 import TermsAndConditions from "./subscription/pages/TermsAndConditions";
 import EmailData from "./components/Emails/EmailData";
+import Renewal from "./components/Renewal/Renewal";
 
 function App() {
   const [showAuthenticationMenu, setShowAuthenticationMenu] = useState(false);
@@ -93,6 +94,7 @@ function App() {
             <Route path="expenses-category" element={<ExpenseCategory />} />
             <Route path="report" element={<Reports />} />
             <Route path="emails" element={<EmailData />} />
+            <Route  path="renewals" element={<Renewal/>}/>
             <Route
               path="website-configuration"
               element={<WebsiteConfiguration />}

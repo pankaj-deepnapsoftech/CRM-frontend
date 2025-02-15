@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import { IoSettingsSharp } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
 import { checkAccess } from "../utils/checkAccess";
+import { MdAutorenew } from "react-icons/md";
 import { useState } from "react";
 
 const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
@@ -545,28 +546,6 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
           </NavLink> */}
 
         <NavLink
-          to="website-configuration"
-          className={({ isActive }) =>
-            isActive ? "text-[#1640d6]" : "text-black"
-          }
-          onClick={() => {
-            isMenuOpen && setIsMenuOpen(false);
-          }}
-        >
-          <li className="flex gap-x-2 pl-3 pr-9 py-3 rounded-lg hover:bg-[#e6efff] hover:text-[#1640d6] text-[15px]">
-            <span>
-              <GrConfigure />
-            </span>
-            <span>CRM Configuration</span>
-            {!checkAccess(auth, "website configuration")?.isAllowed && (
-              <span className="mt-1">
-                <FaLock size="12" color="#b1b1b1" />
-              </span>
-            )}
-          </li>
-        </NavLink>
-
-        <NavLink
           to="emails"
           className={({ isActive }) =>
             isActive ? "text-[#1640d6]" : "text-black"
@@ -577,7 +556,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
         >
           <li className="flex gap-x-2 pl-3 pr-9 py-3 rounded-lg hover:bg-[#e6efff] hover:text-[#1640d6] text-[15px]">
             <span>
-              <MdOutlineMarkEmailRead  />
+              <MdOutlineMarkEmailRead />
             </span>
             <span>Email Database</span>
             {/*             
@@ -586,6 +565,28 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
                 <FaLock size="12" color="#b1b1b1" />
               </span>
             )} */}
+          </li>
+        </NavLink>
+        <NavLink
+          to="renewals"
+          className={({ isActive }) =>
+            isActive ? "text-[#1640d6]" : "text-black"
+          }
+          onClick={() => {
+            isMenuOpen && setIsMenuOpen(false);
+          }}
+        >
+          <li className="flex gap-x-2 pl-3 pr-9 py-3 rounded-lg hover:bg-[#e6efff] hover:text-[#1640d6] text-[15px]">
+            <span>
+              <MdAutorenew/>
+            </span>
+            <span>Renewals</span>
+                        
+            {!checkAccess(auth, "website configuration")?.isAllowed && (
+              <span className="mt-1">
+                <FaLock size="12" color="#b1b1b1" />
+              </span>
+            )}
           </li>
         </NavLink>
 
@@ -603,6 +604,28 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
               <IoSettingsSharp />
             </span>
             <span>Settings</span>
+            {!checkAccess(auth, "website configuration")?.isAllowed && (
+              <span className="mt-1">
+                <FaLock size="12" color="#b1b1b1" />
+              </span>
+            )}
+          </li>
+        </NavLink>
+
+        <NavLink
+          to="website-configuration"
+          className={({ isActive }) =>
+            isActive ? "text-[#1640d6]" : "text-black"
+          }
+          onClick={() => {
+            isMenuOpen && setIsMenuOpen(false);
+          }}
+        >
+          <li className="flex gap-x-2 pl-3 pr-9 py-3 rounded-lg hover:bg-[#e6efff] hover:text-[#1640d6] text-[15px]">
+            <span>
+              <GrConfigure />
+            </span>
+            <span>CRM Configuration</span>
             {!checkAccess(auth, "website configuration")?.isAllowed && (
               <span className="mt-1">
                 <FaLock size="12" color="#b1b1b1" />
