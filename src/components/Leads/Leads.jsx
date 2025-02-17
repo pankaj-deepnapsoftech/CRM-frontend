@@ -155,6 +155,8 @@ const Leads = () => {
 
   const [leadDeleteId, setLeadDeleteId] = useState();
   const [deleteAll, setDeleteAll] = useState(false);
+  const [dataInfo,setDataInfo] = useState([])
+  console.log(dataInfo)
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
@@ -596,6 +598,15 @@ const Leads = () => {
         return "blue"; // Chakra UI "blue" color scheme
       default:
         return "gray"; // Default to gray if no category is provided
+    }
+  }
+
+  const handleSelection = (e,id) => {
+    if(e.target.checked){
+      setDataInfo([...dataInfo,id])
+    }else{
+      const filter = dataInfo.filter((item)=> item !== id);
+      setDataInfo(filter)
     }
   }
 
@@ -1077,11 +1088,11 @@ const Leads = () => {
                                         value={cell.row.original._id}
                                         name="select"
                                         type="checkbox"
-                                        onChange={(e) =>
+                                        onChange={(e) =>{
                                           selectOneHandler(
                                             e,
                                             cell.row.original.phone
-                                          )
+                                          );handleSelection(e,e.target.value)}
                                         }
                                       />
                                     )}
