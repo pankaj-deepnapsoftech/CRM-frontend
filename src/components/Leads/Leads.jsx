@@ -629,7 +629,7 @@ const Leads = () => {
         throw new Error(data.message || "Something went wrong");
       }
   
-      setData(data);
+      fetchAllLeads()
       toast.success("Data added successfully!");
     } catch (err) {
       console.error("Error:", err);
