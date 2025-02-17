@@ -27,6 +27,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { FaLock } from "react-icons/fa";
 import { checkAccess } from "../utils/checkAccess";
 import { MdAutorenew } from "react-icons/md";
+import { FaDatabase } from "react-icons/fa6";
 import { useState } from "react";
 
 const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
@@ -578,10 +579,32 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
         >
           <li className="flex gap-x-2 pl-3 pr-9 py-3 rounded-lg hover:bg-[#e6efff] hover:text-[#1640d6] text-[15px]">
             <span>
-              <MdAutorenew/>
+              <MdAutorenew />
             </span>
             <span>Renewals</span>
-                        
+
+            {!checkAccess(auth, "website configuration")?.isAllowed && (
+              <span className="mt-1">
+                <FaLock size="12" color="#b1b1b1" />
+              </span>
+            )}
+          </li>
+        </NavLink>
+        <NavLink
+          to="data/bank"
+          className={({ isActive }) =>
+            isActive ? "text-[#1640d6]" : "text-black"
+          }
+          onClick={() => {
+            isMenuOpen && setIsMenuOpen(false);
+          }}
+        >
+          <li className="flex gap-x-2 pl-3 pr-9 py-3 rounded-lg hover:bg-[#e6efff] hover:text-[#1640d6] text-[15px]">
+            <span>
+              <FaDatabase />
+            </span>
+            <span>Data Bank</span>
+
             {!checkAccess(auth, "website configuration")?.isAllowed && (
               <span className="mt-1">
                 <FaLock size="12" color="#b1b1b1" />

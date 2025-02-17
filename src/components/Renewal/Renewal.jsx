@@ -39,7 +39,7 @@ import ExcelDetailsDrawer from "../ui/Drawers/Details Drawers/ExcelDetailsDrawer
 import ExcelDrawer from "../ui/Drawers/Add Drawers/ExcelDrawer";
 import { FcDatabase } from "react-icons/fc";
 import { Input } from "@chakra-ui/react";
-import Marquee  from "react-fast-marquee"
+import Marquee from "react-fast-marquee";
 
 import {
   AlertDialog,
@@ -86,7 +86,7 @@ const Renewals = () => {
   const [dataId, setDataId] = useState();
   const [loading, setLoading] = useState(true);
   const [searchKey, setSearchKey] = useState("");
-  const [dateWise,setDateWise] = useState([])
+  const [dateWise, setDateWise] = useState([]);
 
   const [peopleDeleteId, setPeopleDeleteId] = useState();
 
@@ -161,7 +161,6 @@ const Renewals = () => {
     }
   };
 
-
   const fetchAllDateWiseData = async () => {
     try {
       const response = await fetch(baseURL + "renewal/date-wise", {
@@ -169,17 +168,18 @@ const Renewals = () => {
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${cookies?.access_token}`,
-        }})
-        const data = await response.json()
-        setDateWise(data?.data ? data?.data : [])
+        },
+      });
+      const data = await response.json();
+      setDateWise(data?.data ? data?.data : []);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     fetchAllPeople();
-    fetchAllDateWiseData()
+    fetchAllDateWiseData();
   }, []);
 
   const addPeoplesHandler = () => {
@@ -438,11 +438,26 @@ const Renewals = () => {
               )}
               {!loading && filteredData.length > 0 && (
                 <div>
-                <Marquee speed={70} pauseOnHover >
-                  {dateWise?.map((item,i)=>(
-                    <p key={i} >{item.contractType}</p>
-                  ))}
-                </Marquee>
+                  <div className="p-4">
+                    <div className="bg-white  shadow-lg rounded-lg p-4 border border-gray-300">
+                      <h2 className="text-lg font-semibold mb-2">
+                        Upcoming Renewals
+                      </h2>
+                      <Marquee speed={70} pauseOnHover>
+                        {dateWise?.map((item, i) => (
+                          <div
+                            key={i}
+                            className="bg-blue-100  text-blue-800 px-4 py-2 m-2 rounded-lg shadow-md"
+                          >
+                            <p className="whitespace-pre-line text-center">
+                              📅 Due {item.lastRenewalDate.split("T")[0]} /{" "}
+                              {item.contractType} / {item.productName}
+                            </p>
+                          </div>
+                        ))}
+                      </Marquee>
+                    </div>
+                  </div>
                   <TableContainer maxHeight="600px" overflowY="auto">
                     <Table variant="simple" {...getTableProps()}>
                       <Thead className="bg-blue-400 text-white text-lg font-semibold">

@@ -293,7 +293,6 @@ const Leads = () => {
       }
 
       setData(data.leads);
-    
 
       setFilteredData(data.leads);
       setLoading(false);
@@ -383,7 +382,6 @@ const Leads = () => {
       toast.success(data.message);
     } catch (error) {
       toast.error(error.message);
-
     } finally {
       setBulkUploading(false);
     }
@@ -427,6 +425,7 @@ const Leads = () => {
     }
     const selectedRowIds = selectedRows.map((e) => e.value);
     setSelected(selectedRowIds);
+
     dispatch(openShowBulkAssignDrawer());
   };
 
@@ -702,6 +701,7 @@ const Leads = () => {
               </div>
 
               <div className="mt-2 md:mt-0 flex flex-wrap justify-center gap-y-2 gap-x-3 w-full">
+                {/*  select all handler */}
                 <Button
                   fontSize={{ base: "12px", md: "14px" }}
                   paddingX={{ base: "8px", md: "12px" }}
@@ -827,6 +827,16 @@ const Leads = () => {
                   backgroundColor="#1640d6"
                 >
                   Add New Lead
+                </Button>
+                <Button
+                  fontSize={{ base: "12px", md: "14px" }}
+                  paddingX={{ base: "8px", md: "12px" }}
+                  paddingY={{ base: "2px", md: "3px" }}
+                  width={{ base: "100%", md: 200 }}
+                  color="white"
+                  backgroundColor="#1640d6"
+                >
+                  Add in data bank
                 </Button>
                 {role === "Super Admin" && (
                   <Button
@@ -1166,16 +1176,15 @@ const Leads = () => {
                                     )}
 
                                     {cell.column.id === "leadCategory" && (
-                                        <Badge
-                                          className="text-sm rounded-md px-3 py-1"
-                                          colorScheme={getCategoryColor(
-                                            row.original?.leadCategory
-                                          )}
-                                        >
-                                          {row.original?.leadCategory}
-                              
-                                        </Badge>
-                                      )}
+                                      <Badge
+                                        className="text-sm rounded-md px-3 py-1"
+                                        colorScheme={getCategoryColor(
+                                          row.original?.leadCategory
+                                        )}
+                                      >
+                                        {row.original?.leadCategory}
+                                      </Badge>
+                                    )}
                                   </Td>
                                 );
                               })}

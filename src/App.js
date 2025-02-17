@@ -43,6 +43,7 @@ import PrivacyPolicy from "./subscription/pages/PrivacyPolicy";
 import TermsAndConditions from "./subscription/pages/TermsAndConditions";
 import EmailData from "./components/Emails/EmailData";
 import Renewal from "./components/Renewal/Renewal";
+import DataBank from "./components/DataBank/DataBank";
 
 function App() {
   const [showAuthenticationMenu, setShowAuthenticationMenu] = useState(false);
@@ -50,12 +51,35 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-
-      {/* SUBSCRIPTION WEBSITE ROUTES */}
+        {/* SUBSCRIPTION WEBSITE ROUTES */}
         <Routes>
-          <Route path="/" element={<Layout showAuthenticationMenu={showAuthenticationMenu}  setShowAuthenticationMenu={setShowAuthenticationMenu}/>}>
-            <Route index element={<Home showAuthenticationMenu={showAuthenticationMenu} setShowAuthenticationMenu={setShowAuthenticationMenu} />}/>
-            <Route path="/pricing" element={<Pricing showAuthenticationMenu={showAuthenticationMenu} setShowAuthenticationMenu={setShowAuthenticationMenu}/>}/>
+          <Route
+            path="/"
+            element={
+              <Layout
+                showAuthenticationMenu={showAuthenticationMenu}
+                setShowAuthenticationMenu={setShowAuthenticationMenu}
+              />
+            }
+          >
+            <Route
+              index
+              element={
+                <Home
+                  showAuthenticationMenu={showAuthenticationMenu}
+                  setShowAuthenticationMenu={setShowAuthenticationMenu}
+                />
+              }
+            />
+            <Route
+              path="/pricing"
+              element={
+                <Pricing
+                  showAuthenticationMenu={showAuthenticationMenu}
+                  setShowAuthenticationMenu={setShowAuthenticationMenu}
+                />
+              }
+            />
             <Route path="/contact" element={<Contact />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/payment-failed" element={<PaymentFailed />} />
@@ -63,9 +87,6 @@ function App() {
             <Route path="/policy" element={<PrivacyPolicy />} />
             <Route path="/terms" element={<TermsAndConditions />} />
           </Route>
-
-
-
 
           {/* CRM WEBSITE ROUTES */}
           <Route path="/login" element={<Login />} />
@@ -94,7 +115,8 @@ function App() {
             <Route path="expenses-category" element={<ExpenseCategory />} />
             <Route path="report" element={<Reports />} />
             <Route path="emails" element={<EmailData />} />
-            <Route  path="renewals" element={<Renewal/>}/>
+            <Route path="renewals" element={<Renewal />} />
+            <Route path="data/bank" element={<DataBank />} />
             <Route
               path="website-configuration"
               element={<WebsiteConfiguration />}
