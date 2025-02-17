@@ -164,6 +164,7 @@ const DataBank = () => {
   const csvRef = useRef();
 
   const [bulkSMSMobiles, setBulkSMSMobiles] = useState([]);
+  const [selcetedData,setSelectedData] = useState([])
 
   const {
     getTableProps,
@@ -383,6 +384,47 @@ const DataBank = () => {
         return "gray"; // Default to gray if no category is provided
     }
   }
+
+  const HandleSelectData = (e) => {
+    const isChecked = e.target.checked;
+    const id = e.target.value;
+    if(isChecked){
+      setSelectedData([...selcetedData,id])
+    }else{
+      const filter = selcetedData.filter((item)=> item !== id)
+      setSelectedData(filter)
+    }
+  }
+
+  const RemovetoDataBank = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(baseURL + "lead/data/bank", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${cookies?.access_token}`,
+        },
+        credentials: "include", // Correct placement
+        body: JSON.stringify({ dataInfo:selcetedData,dataBank:false }), // Correct placement
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong");
+      }
+
+      fetchAllLeads();
+      toast.success("Data added successfully!");
+    } catch (err) {
+      console.error("Error:", err);
+      toast.error(err.message || "Failed to add data");
+    } finally {
+      setLoading(false); // Ensures `setLoading(false)` runs regardless of success or failure
+    }
+  };
+
 
   return (
     <>
@@ -617,6 +659,7 @@ const DataBank = () => {
                                         value={cell.row.original._id}
                                         name="select"
                                         type="checkbox"
+                                        onChange={HandleSelectData}
                                       />
                                     )}
 

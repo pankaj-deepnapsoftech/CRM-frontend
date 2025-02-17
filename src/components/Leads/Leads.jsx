@@ -621,7 +621,7 @@ const Leads = () => {
           authorization: `Bearer ${cookies?.access_token}`,
         },
         credentials: "include", // Correct placement
-        body: JSON.stringify({ dataInfo }), // Correct placement
+        body: JSON.stringify({ dataInfo,dataBank:true }), // Correct placement
       });
 
       const data = await response.json();
