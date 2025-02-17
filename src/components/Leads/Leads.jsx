@@ -63,7 +63,7 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
-import { Link, useLocation } from "react-router-dom";
+import { json, Link, useLocation } from "react-router-dom";
 import { PieChart } from "../ui/Charts/PieChart";
 import { checkAccess } from "../../utils/checkAccess";
 
@@ -618,28 +618,27 @@ const Leads = () => {
         headers: {
           "Content-Type": "application/json",
           authorization: `Bearer ${cookies?.access_token}`,
-          body: dataInfo,
         },
+        credentials: "include",  // Correct placement
+        body: JSON.stringify({ dataInfo }), // Correct placement
       });
-
+  
       const data = await response.json();
-      console.log(data);
-      if (!data.success) {
-        throw new Error(data.message);
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Something went wrong");
       }
-
+  
       setData(data);
-
-      setLoading(false);
+      toast.success("Data added successfully!");
     } catch (err) {
-      setLoading(false);
-      const data = await err.json();
-      console.log(data);
-
-      toast.error(err.message);
+      console.error("Error:", err);
+      toast.error(err.message || "Failed to add data");
+    } finally {
+      setLoading(false);  // Ensures `setLoading(false)` runs regardless of success or failure
     }
   };
-
+  
   return (
     <>
       {!isAllowed && (
