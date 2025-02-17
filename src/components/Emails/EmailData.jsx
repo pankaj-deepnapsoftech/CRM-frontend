@@ -8,6 +8,16 @@ import {
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Textarea,
+  Input,
+} from "@chakra-ui/react";
+import {
   closeAddPeoplesDrawer,
   closeEditPeoplesDrawer,
   closeShowDetailsPeoplesDrawer,
@@ -85,6 +95,8 @@ const EmailData = () => {
   const [dataId, setDataId] = useState();
   const [loading, setLoading] = useState(true);
   const [searchKey, setSearchKey] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
 
   const [peopleDeleteId, setPeopleDeleteId] = useState();
 
@@ -114,6 +126,12 @@ const EmailData = () => {
   const { isAllowed, msg } = checkAccess(auth, "people");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isBulkEmailModalOpen,
+    onOpen: openBulkEmailModal,
+    onClose: closeBulkEmailModal,
+  } = useDisclosure();
+
   const cancelRef = useRef();
 
   const baseURL = process.env.REACT_APP_BACKEND_URL;
@@ -189,10 +207,6 @@ const EmailData = () => {
     }
   };
 
-  const confirmDeleteHandler = async () => {
-    onOpen();
-  };
-
   useEffect(() => {
     if (isAllowed) {
       fetchAllPeople();
@@ -223,6 +237,29 @@ const EmailData = () => {
     }
   }, [searchKey]);
 
+  const sendBulkEmail = async () => {
+    try {
+      const response = await fetch(baseURL + "people/send-bulk-mail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies?.access_token}`,
+        },
+        body: JSON.stringify({ subject, message }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to send emails");
+      }
+
+      toast.success(result.message);
+      onClose(); // Close the modal on success
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   return (
     <>
       {!isAllowed && (
@@ -246,6 +283,35 @@ const EmailData = () => {
           className="border-[1px] px-2 py-8 md:px-9 rounded"
           style={{ boxShadow: "0 0 20px 3px #96beee26" }}
         >
+          <Modal isOpen={isBulkEmailModalOpen} onClose={closeBulkEmailModal}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Send Bulk Email</ModalHeader>
+              <ModalBody>
+                <Input
+                  placeholder="Enter Subject"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  mb={4}
+                />
+                <Textarea
+                  placeholder="Enter Email Message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={5}
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button onClick={closeBulkEmailModal} mr={3}>
+                  Cancel
+                </Button>
+                <Button colorScheme="blue" onClick={sendBulkEmail}>
+                  Send Email
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
           <>
             <AlertDialog
               isOpen={isOpen}
@@ -308,6 +374,8 @@ const EmailData = () => {
                 >
                   Refresh
                 </Button>
+
+                <Button onClick={openBulkEmailModal}>Bulk Email</Button>
 
                 <Select
                   onChange={(e) => setPageSize(e.target.value)}
