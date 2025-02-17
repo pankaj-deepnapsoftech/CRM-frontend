@@ -155,8 +155,8 @@ const Leads = () => {
 
   const [leadDeleteId, setLeadDeleteId] = useState();
   const [deleteAll, setDeleteAll] = useState(false);
-  const [dataInfo,setDataInfo] = useState([])
-  console.log(dataInfo)
+  const [dataInfo, setDataInfo] = useState([]);
+  console.log(dataInfo);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
@@ -601,14 +601,44 @@ const Leads = () => {
     }
   }
 
-  const handleSelection = (e,id) => {
-    if(e.target.checked){
-      setDataInfo([...dataInfo,id])
-    }else{
-      const filter = dataInfo.filter((item)=> item !== id);
-      setDataInfo(filter)
+  const handleSelection = (e, id) => {
+    if (e.target.checked) {
+      setDataInfo([...dataInfo, id]);
+    } else {
+      const filter = dataInfo.filter((item) => item !== id);
+      setDataInfo(filter);
     }
-  }
+  };
+
+  const addtoDataBank = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(baseURL + "lead/data/bank", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${cookies?.access_token}`,
+          body: dataInfo,
+        },
+      });
+
+      const data = await response.json();
+      console.log(data);
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+
+      setData(data);
+
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      const data = await err.json();
+      console.log(data);
+
+      toast.error(err.message);
+    }
+  };
 
   return (
     <>
@@ -846,8 +876,9 @@ const Leads = () => {
                   width={{ base: "100%", md: 200 }}
                   color="white"
                   backgroundColor="#1640d6"
+                  onClick={addtoDataBank}
                 >
-                  Add in data bank
+                  Add to data bank
                 </Button>
                 {role === "Super Admin" && (
                   <Button
@@ -1088,12 +1119,13 @@ const Leads = () => {
                                         value={cell.row.original._id}
                                         name="select"
                                         type="checkbox"
-                                        onChange={(e) =>{
+                                        onChange={(e) => {
                                           selectOneHandler(
                                             e,
                                             cell.row.original.phone
-                                          );handleSelection(e,e.target.value)}
-                                        }
+                                          );
+                                          handleSelection(e, e.target.value);
+                                        }}
                                       />
                                     )}
 
