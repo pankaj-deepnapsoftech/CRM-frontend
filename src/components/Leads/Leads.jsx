@@ -156,7 +156,6 @@ const Leads = () => {
   const [leadDeleteId, setLeadDeleteId] = useState();
   const [deleteAll, setDeleteAll] = useState(false);
   const [dataInfo, setDataInfo] = useState([]);
-  console.log(dataInfo);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
@@ -294,7 +293,9 @@ const Leads = () => {
         throw new Error(data.message);
       }
 
-      setData(data.leads);
+      const newData = data.leads.filter((item)=> item.dataBank !== true)
+
+      setData(newData);
 
       setFilteredData(data.leads);
       setLoading(false);
@@ -1084,8 +1085,7 @@ const Leads = () => {
                       <Tbody {...getTableBodyProps()}>
                         {page.map((row) => {
                           prepareRow(row);
-
-                          return (
+                          return  (
                             <Tr
                               className="relative hover:bg-gray-100 cursor-pointer text-base lg:text-base"
                               {...row.getRowProps()}
