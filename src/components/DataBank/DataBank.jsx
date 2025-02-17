@@ -294,9 +294,11 @@ const DataBank = () => {
         throw new Error(data.message);
       }
 
-      setData(data.leads);
-
-      setFilteredData(data.leads);
+      // Filter leads where dataBank is true
+      const filteredLeads = data.leads.filter((lead) => lead.dataBank === true);
+      console.log(filteredLeads);
+      setData(filteredLeads);
+      setFilteredData(filteredLeads);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -318,6 +320,7 @@ const DataBank = () => {
       });
 
       const data = await response.json();
+      console.log(data.leads);
 
       if (!data.success) {
         throw new Error(data.message);
@@ -381,15 +384,6 @@ const DataBank = () => {
     }
   }
 
-  const handleSelection = (e, id) => {
-    if (e.target.checked) {
-      setDataInfo([...dataInfo, id]);
-    } else {
-      const filter = dataInfo.filter((item) => item !== id);
-      setDataInfo(filter);
-    }
-  };
-
   return (
     <>
       {!isAllowed && (
@@ -423,22 +417,7 @@ const DataBank = () => {
                 <div>Data Bank List</div>
               </div>
 
-              <div className="mt-2 md:mt-0 flex flex-wrap justify-center gap-y-2 gap-x-3 w-full">
-                {role === "Super Admin" && (
-                  <Button
-                    fontSize={{ base: "12px", md: "14px" }}
-                    paddingX={{ base: "8px", md: "12px" }}
-                    paddingY={{ base: "2px", md: "3px" }}
-                    width={{ base: "100%", md: "auto" }}
-                    onClick={() => {
-                      setDeleteAll(true);
-                    }}
-                    color="white"
-                    backgroundColor="#e34949"
-                  >
-                    <MdDelete size={28} />
-                  </Button>
-                )}
+              <div className="mt-2 md:mt-0 flex flex-wrap justify-end gap-y-2 gap-x-3 w-full">
                 <Select
                   onChange={(e) => setPageSize(e.target.value)}
                   width="80px"
@@ -611,16 +590,6 @@ const DataBank = () => {
                                   </Th>
                                 );
                               })}
-                              <Th
-                                textTransform="capitalize"
-                                fontSize="15px"
-                                fontWeight="700"
-                                color="white"
-                                borderLeft="1px solid #e0e0e0"
-                                borderRight="1px solid #e0e0e0"
-                              >
-                                Actions
-                              </Th>
                             </Tr>
                           );
                         })}
@@ -767,22 +736,6 @@ const DataBank = () => {
                                   </Td>
                                 );
                               })}
-
-                              {/* Actions */}
-                              <Td className="flex gap-x-2">
-                                <MdOutlineVisibility
-                                  className=" text-blue-500 hover:scale-110 transition-transform"
-                                  size={20}
-                                />
-                                <MdEdit
-                                  className=" text-yellow-500 hover:scale-110 transition-transform"
-                                  size={20}
-                                />
-                                <MdDeleteOutline
-                                  className="text-red-500 hover:scale-110 transition-transform"
-                                  size={20}
-                                />
-                              </Td>
                             </Tr>
                           );
                         })}
