@@ -293,7 +293,7 @@ const Leads = () => {
         throw new Error(data.message);
       }
 
-      const newData = data.leads.filter((item)=> item.dataBank !== true)
+      const newData = data.leads.filter((item) => item.dataBank !== true);
 
       setData(newData);
 
@@ -620,26 +620,26 @@ const Leads = () => {
           "Content-Type": "application/json",
           authorization: `Bearer ${cookies?.access_token}`,
         },
-        credentials: "include",  // Correct placement
+        credentials: "include", // Correct placement
         body: JSON.stringify({ dataInfo }), // Correct placement
       });
-  
+
       const data = await response.json();
-  
+
       if (!response.ok) {
         throw new Error(data.message || "Something went wrong");
       }
-  
-      fetchAllLeads()
+
+      fetchAllLeads();
       toast.success("Data added successfully!");
     } catch (err) {
       console.error("Error:", err);
       toast.error(err.message || "Failed to add data");
     } finally {
-      setLoading(false);  // Ensures `setLoading(false)` runs regardless of success or failure
+      setLoading(false); // Ensures `setLoading(false)` runs regardless of success or failure
     }
   };
-  
+
   return (
     <>
       {!isAllowed && (
@@ -741,7 +741,7 @@ const Leads = () => {
                 </div>
               </div>
 
-              <div className="mt-2 md:mt-0 flex flex-wrap justify-center gap-y-2 gap-x-3 w-full">
+              <div className="mt-2 md:mt-0 flex flex-wrap justify-start gap-y-2 gap-x-3 w-full">
                 {/*  select all handler */}
                 <Button
                   fontSize={{ base: "12px", md: "14px" }}
@@ -1085,7 +1085,7 @@ const Leads = () => {
                       <Tbody {...getTableBodyProps()}>
                         {page.map((row) => {
                           prepareRow(row);
-                          return  (
+                          return (
                             <Tr
                               className="relative hover:bg-gray-100 cursor-pointer text-base lg:text-base"
                               {...row.getRowProps()}

@@ -414,21 +414,7 @@ const DataBank = () => {
                 {/* <span className="mr-2">
                     <MdArrowBack />
                   </span> */}
-                <div>Data Bank List</div>
-              </div>
-
-              <div className="mt-2 md:mt-0 flex flex-wrap justify-end gap-y-2 gap-x-3 w-full">
-                <Select
-                  onChange={(e) => setPageSize(e.target.value)}
-                  width="80px"
-                  className="mt-2 md:mt-0"
-                >
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                  <option value={100}>100</option>
-                  <option value={100000}>All</option>
-                </Select>
+                <h1 className="font-extrabold">Data Bank List</h1>
               </div>
             </div>
 
