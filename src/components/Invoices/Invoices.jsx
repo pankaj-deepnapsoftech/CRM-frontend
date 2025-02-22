@@ -573,10 +573,10 @@ const Invoices = () => {
                                         ? row?.original?.customer?.company
                                             .companyname
                                         : row?.original?.customer?.people
-                                            .firstname +
+                                            ?.firstname +
                                           " " +
                                           (row?.original?.customer?.people
-                                            .lastname || "")}
+                                            ?.lastname || "")}
                                     </span>
                                   )}
                                   {cell?.column?.id === "number" && (

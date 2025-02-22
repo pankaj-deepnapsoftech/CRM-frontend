@@ -76,6 +76,7 @@ const columns = [
     Header: "",
     accessor: "select",
   },
+
   {
     Header: "Created By",
     accessor: "creator",
@@ -164,7 +165,7 @@ const DataBank = () => {
   const csvRef = useRef();
 
   const [bulkSMSMobiles, setBulkSMSMobiles] = useState([]);
-  const [selcetedData,setSelectedData] = useState([])
+  const [selcetedData, setSelectedData] = useState([]);
 
   const {
     getTableProps,
@@ -388,13 +389,13 @@ const DataBank = () => {
   const HandleSelectData = (e) => {
     const isChecked = e.target.checked;
     const id = e.target.value;
-    if(isChecked){
-      setSelectedData([...selcetedData,id])
-    }else{
-      const filter = selcetedData.filter((item)=> item !== id)
-      setSelectedData(filter)
+    if (isChecked) {
+      setSelectedData([...selcetedData, id]);
+    } else {
+      const filter = selcetedData.filter((item) => item !== id);
+      setSelectedData(filter);
     }
-  }
+  };
 
   const RemovetoDataBank = async () => {
     setLoading(true);
@@ -406,7 +407,7 @@ const DataBank = () => {
           authorization: `Bearer ${cookies?.access_token}`,
         },
         credentials: "include", // Correct placement
-        body: JSON.stringify({ dataInfo:selcetedData,dataBank:false }), // Correct placement
+        body: JSON.stringify({ dataInfo: selcetedData, dataBank: false }), // Correct placement
       });
 
       const data = await response.json();
@@ -424,7 +425,6 @@ const DataBank = () => {
       setLoading(false); // Ensures `setLoading(false)` runs regardless of success or failure
     }
   };
-
 
   return (
     <>
@@ -457,6 +457,7 @@ const DataBank = () => {
                     <MdArrowBack />
                   </span> */}
                 <h1 className="font-extrabold">Data Bank List</h1>
+                <Button onClick={RemovetoDataBank}>Move to lead</Button>
               </div>
             </div>
 

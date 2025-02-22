@@ -92,11 +92,7 @@ const Dashboard = () => {
   const [totalOffers, setTotalOffers] = useState(0);
   const [totalUnpaidInvoices, setTotalUnpaidInvoices] = useState(0);
 
-  const [newSupport, setNewSupport] = useState(0);
-  const [underProcessSupport, setUnderProcessSupport] = useState(0);
-  const [assignedSupport, setAssignedSupport] = useState(0);
-  const [completedSupport, setCompletedSupport] = useState(0);
-
+  
   const progressStyles = {
     draft: {
       bg: "#6a6a6a",
@@ -288,10 +284,6 @@ const Dashboard = () => {
         throw new Error(data.message);
       }
 
-      setNewSupport(data.support["new"]);
-      setAssignedSupport(data.support["assigned"]);
-      setCompletedSupport(data.support["completed"]);
-      setUnderProcessSupport(data.support["under process"]);
     } catch (err) {
       toast.error(err.message);
     }
@@ -426,21 +418,13 @@ const Dashboard = () => {
     setTotalInvoices(0);
     setTotalOffers(0);
     setTotalProformaInvoices(0);
-    setTotalLeads(0);
-    setNewSupport(0);
-    setUnderProcessSupport(0);
-    setAssignedSupport(0);
-    setCompletedSupport(0);
+    setTotalLeads(0);   
     setFollowupLeads(0);
     setCancelledLeads(0);
     setCompletedLeads(0);
     setTotalOffer(0);
     setTotalUnpaidInvoiceAmount(0);
-    setTotalOfferAmount(0);
-    setNewSupport(0);
-    setUnderProcessSupport(0);
-    setAssignedSupport(0);
-    setCompletedSupport(0);
+    setTotalOfferAmount(0);    
     setProducts(0);
     setTotalEmployees(0);
     setTotalPeople(0);
@@ -530,7 +514,7 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* {(isSubscribed && role !== "Super Admin") || !allowedroutes.includes("dashboard") && ( */}
+     
       {!isAllowed && (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold text-[#ff6f6f] flex gap-x-2">
           {/* {!isSubscribed ? 'Subscribe to unlock!' : 'You do not have access to this route. Contact your Super Admin for further action.'} */}
@@ -548,7 +532,7 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* {((isSubscribed && role === "Super Admin") || allowedroutes.includes("dashboard")) && ( */}
+   
       {isAllowed && (
         <div>
           <div className="flex flex-wrap gap-x-2 justify-between">
@@ -732,12 +716,6 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <List2
-            newQueries={newSupport}
-            underProcess={underProcessSupport}
-            assigned={assignedSupport}
-            completed={completedSupport}
-          />
 
        
         </div>

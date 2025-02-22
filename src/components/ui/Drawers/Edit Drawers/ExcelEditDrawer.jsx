@@ -4,6 +4,8 @@ import {
   FormLabel,
   Input,
   Select,
+  Box,
+  Text,
 } from "@chakra-ui/react";
 import { BiX } from "react-icons/bi";
 import { toast } from "react-toastify";
@@ -45,6 +47,8 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
   const [lastRenewalDate, setLastRenewalDate] = useState("");
   const [renewalTimes, setRenewalTimes] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [years, setYears] = useState(0);
+  const [months, setMonths] = useState(0);
 
   const fetchPeopleDetails = async () => {
     setIsLoading(true);
@@ -65,6 +69,9 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
       setRenewalDate(personData.renewalDate?.split("T")[0] || "");
       setLastRenewalDate(personData.lastRenewalDate?.split("T")[0] || "");
       setRenewalTimes(personData.renewalTimes);
+      setYears(personData.years);
+      setMonths(personData.months);
+      setDoc(personData.doc);
 
       const isContractOther = !contractOptions.some(
         (opt) => opt.value === personData.contractType
@@ -114,8 +121,10 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
       formData.append("renewalDate", renewalDate);
       formData.append("lastRenewalDate", lastRenewalDate);
       formData.append("renewalTimes", renewalTimes);
-      if (doc) formData.append("doc", doc);
-      if (term) formData.append("term", term);
+      formData.append("years", years);
+      formData.append("months", months);
+      formData.append("doc", doc);
+
       if (contractAttachment)
         formData.append("contractAttachment", contractAttachment);
 
@@ -218,14 +227,37 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
             </FormControl>
 
             <FormControl>
-              <FormLabel>Doc</FormLabel>
-              <Input onChange={(e) => setDoc(e.target.files[0])} type="file" />
+              <FormLabel>DOC</FormLabel>
+              <Input
+                type="date"
+                value={doc}
+                onChange={(e) => setDoc(e.target.value)}
+              />
             </FormControl>
 
-            <FormControl>
-              <FormLabel>Term</FormLabel>
-              <Input onChange={(e) => setTerm(e.target.files[0])} type="file" />
-            </FormControl>
+            <Box>
+              <FormControl>
+                <FormLabel>Tenure</FormLabel>
+                <Box display="flex" gap={2}>
+                  <Input
+                    type="number"
+                    placeholder="Years"
+                    value={years}
+                    onChange={(e) => setYears(e.target.value)}
+                  />
+                  <Input
+                    type="number"
+                    placeholder="Months"
+                    value={months}
+                    onChange={(e) => setMonths(e.target.value)}
+                  />
+                </Box>
+              </FormControl>
+
+              <Text mt={2} fontSize="lg" fontWeight="bold">
+                {years || "0"} years {months || "0"} months
+              </Text>
+            </Box>
 
             <FormControl>
               <FormLabel>Mode</FormLabel>
@@ -239,12 +271,6 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
                   </option>
                 ))}
               </Select>
-              {mode === "other" && (
-                <Input
-                  placeholder="Enter other mode"
-                  onChange={(e) => modeOptions(e.target.value)}
-                />
-              )}
             </FormControl>
 
             <FormControl>

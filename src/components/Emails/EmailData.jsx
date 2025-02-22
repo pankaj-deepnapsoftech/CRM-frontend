@@ -254,7 +254,7 @@ const EmailData = () => {
       }
 
       toast.success(result.message);
-      onClose(); // Close the modal on success
+      closeBulkEmailModal();
     } catch (error) {
       toast.error(error.message);
     }

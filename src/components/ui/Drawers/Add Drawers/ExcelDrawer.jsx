@@ -1,4 +1,14 @@
-import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  HStack,
+  NumberInput,
+  NumberInputField,
+  Box,
+  Text,
+} from "@chakra-ui/react";
 import { BiX } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -20,7 +30,6 @@ const modeOptions = [
   { value: "HLY", label: "HLY" },
   { value: "QLY", label: "QLY" },
   { value: "MLY", label: "MLY" },
-  { value: "other", label: "Other" },
 ];
 
 const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
@@ -39,6 +48,8 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
   const [renewalDate, setRenewalDate] = useState("");
   const [lastRenewalDate, setLastRenewalDate] = useState("");
   const [renewalTimes, setRenewalTimes] = useState("");
+  const [years, setYears] = useState(0);
+  const [months, setMonths] = useState(0);
 
   const addPeopleHandler = async (e) => {
     e.preventDefault();
@@ -54,12 +65,14 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
       formData.append("contractNumber", contractNumber);
       formData.append("productName", productName);
       formData.append("doc", doc);
-      formData.append("term", term);
+      // formData.append("term", term);
       formData.append("mode", mode === "other" ? otherMode : mode);
       formData.append("contractAttachment", contractAttachment);
       formData.append("renewalDate", renewalDate);
       formData.append("lastRenewalDate", lastRenewalDate);
       formData.append("renewalTimes", renewalTimes);
+      formData.append("years", years);
+      formData.append("months", months);
 
       console.log(formData);
 
@@ -73,10 +86,10 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
 
       const data = await response.json();
       if (!data.success) throw new Error(data.message);
-      console.log(data);
+      console.log(data.message);
+      toast.success(data.message);
       fetchAllPeople();
       closeDrawerHandler();
-      toast.success(data.message);
     } catch (err) {
       toast.error(err.message);
     }
@@ -145,14 +158,36 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
           </FormControl>
 
           <FormControl isRequired>
-            <FormLabel>Doc</FormLabel>
-            <Input onChange={(e) => setDoc(e.target.files[0])} type="file" />
+            <FormLabel>DOC</FormLabel>
+            <Input
+              type="date"
+              value={doc}
+              onChange={(e) => setDoc(e.target.value)}
+            />
           </FormControl>
+          <Box>
+            <FormControl isRequired>
+              <FormLabel>Tenure</FormLabel>
+              <Box display="flex" gap={2}>
+                <Input
+                  type="number"
+                  placeholder="Years"
+                  value={years}
+                  onChange={(e) => setYears(e.target.value)}
+                />
+                <Input
+                  type="number"
+                  placeholder="Months"
+                  value={months}
+                  onChange={(e) => setMonths(e.target.value)}
+                />
+              </Box>
+            </FormControl>
 
-          <FormControl isRequired>
-            <FormLabel>Term</FormLabel>
-            <Input onChange={(e) => setTerm(e.target.files[0])} type="file" />
-          </FormControl>
+            <Text mt={2} fontSize="lg" fontWeight="bold">
+              {years || "0"} years {months || "0"} months
+            </Text>
+          </Box>
 
           <FormControl isRequired>
             <FormLabel>Mode</FormLabel>
@@ -160,12 +195,6 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
               options={modeOptions}
               onChange={(selected) => setMode(selected.value)}
             />
-            {mode === "other" && (
-              <Input
-                placeholder="Enter other mode"
-                onChange={(e) => setOtherMode(e.target.value)}
-              />
-            )}
           </FormControl>
 
           <FormControl isRequired>

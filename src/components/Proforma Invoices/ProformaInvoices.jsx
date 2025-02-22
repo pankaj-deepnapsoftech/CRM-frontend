@@ -588,7 +588,7 @@ const ProformaInvoices = () => {
                                           row.original.customer.people.lastname} */}
                                       {row.original.company
                                         ? row.original.company.companyname
-                                        : row.original.people.firstname +
+                                        : row.original.people?.firstname +
                                           " " +
                                           (row.original.people?.lastname || "")}
                                     </span>

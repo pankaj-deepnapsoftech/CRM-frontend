@@ -116,7 +116,7 @@ function App() {
             <Route path="report" element={<Reports />} />
             <Route path="emails" element={<EmailData />} />
             <Route path="renewals" element={<Renewal />} />
-            <Route path="data/bank" element={<DataBank />} />
+            <Route path="databank" element={<DataBank />} />
             <Route
               path="website-configuration"
               element={<WebsiteConfiguration />}

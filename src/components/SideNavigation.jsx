@@ -560,12 +560,12 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
               <MdOutlineMarkEmailRead />
             </span>
             <span>Email Database</span>
-            {/*             
+                        
             {!checkAccess(auth, "website configuration")?.isAllowed && (
               <span className="mt-1">
                 <FaLock size="12" color="#b1b1b1" />
               </span>
-            )} */}
+            )}
           </li>
         </NavLink>
         <NavLink
@@ -591,7 +591,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
           </li>
         </NavLink>
         <NavLink
-          to="data/bank"
+          to="databank"
           className={({ isActive }) =>
             isActive ? "text-[#1640d6]" : "text-black"
           }

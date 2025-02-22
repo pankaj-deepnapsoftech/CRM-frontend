@@ -21,6 +21,7 @@ import { useCookies } from "react-cookie";
 import Loading from "../ui/Loading";
 import { FaCaretDown, FaCaretUp } from "react-icons/fa";
 import moment from "moment";
+import * as XLSX from "xlsx"; // Import the xlsx library
 
 import {
   Table,
@@ -40,6 +41,7 @@ import ExcelDrawer from "../ui/Drawers/Add Drawers/ExcelDrawer";
 import { FcDatabase } from "react-icons/fc";
 import { Input } from "@chakra-ui/react";
 import Marquee from "react-fast-marquee";
+import sampleCSV from "../../assets/bulk-upload-renewal.csv";
 
 import {
   AlertDialog,
@@ -74,8 +76,8 @@ const columns = [
     accessor: "phnNumber",
   },
   {
-    Header: "RenewalDate",
-    accessor: "renewalDate",
+    Header: "Renewals Times",
+    accessor: "renewalTimes",
   },
 ];
 
@@ -87,6 +89,8 @@ const Renewals = () => {
   const [loading, setLoading] = useState(true);
   const [searchKey, setSearchKey] = useState("");
   const [dateWise, setDateWise] = useState([]);
+  const [toggleBulkUpload, setToggleBulkUpload] = useState(false);
+  const [showUploadOptions, setShowUploadOptions] = useState(false);
 
   const [peopleDeleteId, setPeopleDeleteId] = useState();
 
@@ -141,13 +145,13 @@ const Renewals = () => {
       });
 
       const data = await response.json();
-      console.log("API Response:", data);
 
       if (!data.success) {
         throw new Error(data.message);
       }
 
       setData(data.data || []); // Ensure it's always an array
+
       setFilteredData(data.data || []);
 
       // Extract IDs and store them separately
@@ -171,6 +175,7 @@ const Renewals = () => {
         },
       });
       const data = await response.json();
+      console.log("date wise:", data);
       setDateWise(data?.data ? data?.data : []);
     } catch (error) {
       console.log(error);
@@ -267,6 +272,46 @@ const Renewals = () => {
     }
   }, [searchKey]);
 
+  // Function to handle bulk download
+  const handleBulkDownload = () => {
+    // Convert JSON data to Excel
+    const ws = XLSX.utils.json_to_sheet(filteredData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Renewals");
+
+    // Generate Excel file and trigger download
+    XLSX.writeFile(wb, "Renewals.xlsx");
+  };
+
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("excel", file); // Use the "excel" field
+
+      fetch(`${baseURL}renewal/bulk-upload`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${cookies?.access_token}`,
+        },
+        body: formData, // Send the file as FormData
+      })
+        .then((response) => response.json())
+
+        .then((result) => {
+          if (result.success) {
+            toast.success("Excel data uploaded successfully!");
+            fetchAllPeople(); // Refresh the data
+          } else {
+            throw new Error(result.message);
+          }
+        })
+        .catch((error) => {
+          toast.error(`Failed to upload Excel data: ${error.message}`);
+        });
+    }
+  };
+
   return (
     <>
       {!isAllowed && (
@@ -329,7 +374,7 @@ const Renewals = () => {
                 Renewal List
               </div>
 
-              <div className="mt-2 md:mt-0 flex flex-wrap gap-y-1 gap-x-2 w-full md:w-fit">
+              <div className="mt-2 md:mt-0 flex justify-end flex-wrap gap-y-1 gap-x-2 w-full md:w-fit">
                 <textarea
                   className="rounded-[10px] w-full md:flex-1 px-2 py-2 md:px-3 md:py-2 text-sm focus:outline-[#1640d6] hover:outline:[#1640d6] border resize-none"
                   rows="1"
@@ -372,6 +417,51 @@ const Renewals = () => {
                   <option value={100}>100</option>
                   <option value={100000}>All</option>
                 </Select>
+                <Button onClick={handleBulkDownload} colorScheme="green">
+                  Bulk Download
+                </Button>
+                <div>
+                  {/* Bulk Upload CSV Button */}
+                  <input
+                    type="file"
+                    accept=".csv"
+                    onChange={handleFileUpload}
+                    style={{ display: "none" }}
+                    id="csv-upload"
+                  />
+                  <label htmlFor="csv-upload">
+                    <Button
+                      as="span"
+                      colorScheme="blue"
+                      onClick={() => setShowUploadOptions((prev) => !prev)}
+                    >
+                      Bulk Upload CSV
+                    </Button>
+                  </label>
+
+                  {/* Toggle Upload Options */}
+                  {showUploadOptions && (
+                    <div className="mt-2">
+                      {/* Download Sample CSV Button */}
+                      <a href={sampleCSV} download="sample-renewals.csv">
+                        <Button
+                          colorScheme="green"
+                          variant="outline"
+                          mr={2} // Add margin to separate buttons
+                        >
+                          Download Sample CSV
+                        </Button>
+                      </a>
+
+                      {/* Upload CSV Button */}
+                      <label htmlFor="csv-upload">
+                        <Button as="span" colorScheme="blue">
+                          Upload CSV
+                        </Button>
+                      </label>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 

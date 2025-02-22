@@ -64,7 +64,7 @@ import {
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
 import { json, Link, useLocation } from "react-router-dom";
-import { PieChart } from "../ui/Charts/PieChart";
+import { DynamicChart, PieChart } from "../ui/Charts/PieChart";
 import { checkAccess } from "../../utils/checkAccess";
 
 import sampleCSV from "../../assets/bulk-upload-sample.csv";
@@ -143,6 +143,8 @@ const Leads = () => {
   const [loading, setLoading] = useState(true);
   const [bulkUploading, setBulkUploading] = useState(false);
   const [searchKey, setSearchKey] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const [leadSummaryData, setLeadSummaryData] = useState([]);
   const [leadSummaryLabels, setLeadSummaryLabels] = useState([]);
@@ -181,6 +183,7 @@ const Leads = () => {
     {
       columns,
       data: filteredData,
+      initialState: { pageSize: 10 },
     },
     useSortBy,
     usePagination
@@ -299,52 +302,6 @@ const Leads = () => {
 
       setFilteredData(data.leads);
       setLoading(false);
-    } catch (err) {
-      setLoading(false);
-      toast.error(err.message);
-    }
-  };
-
-  const fetchLeadSummary = async () => {
-    setData([]);
-    setFilteredData([]);
-    setLoading(true);
-    try {
-      const response = await fetch(baseURL + "lead/lead-summary", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${cookies?.access_token}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(data.message);
-      }
-
-      setLeadSummaryBG([
-        "#F57D6A",
-        "#F8D76A",
-        "#54CA21",
-        "#21CAC1",
-        "#2170CA",
-        "#C439EB",
-        "#C7C7C7",
-        "#F35C9D",
-        "#55DCB8",
-      ]);
-
-      const labels = Object.keys(data.leads[0].statusCount).map((status) => {
-        return `${status} ${(
-          (data.leads[0].statusCount[status] / data.leads[0].totalCount) *
-          100
-        ).toFixed(2)}%`;
-      });
-
-      setLeadSummaryLabels(labels);
-      setLeadSummaryData(Object.values(data.leads[0].statusCount));
     } catch (err) {
       setLoading(false);
       toast.error(err.message);
@@ -533,7 +490,6 @@ const Leads = () => {
   useEffect(() => {
     if (isAllowed) {
       fetchAllLeads();
-      fetchLeadSummary();
     }
   }, []);
 
@@ -543,11 +499,114 @@ const Leads = () => {
     }
   }, []);
 
+  //lead category count
+  const calculateLeadCounts = (filteredData) => {
+    const counts = {
+      hot: 0,
+      warm: 0,
+      cold: 0,
+    };
+
+    // Count the number of leads in each category
+    filteredData.forEach((lead) => {
+      if (lead.leadCategory === "Hot") {
+        counts.hot++;
+      } else if (lead.leadCategory === "Warm") {
+        counts.warm++;
+      } else if (lead.leadCategory === "Cold") {
+        counts.cold++;
+      }
+    });
+
+    return counts;
+  };
+
+  const [leadCounts, setLeadCounts] = useState({
+    hot: 0,
+    warm: 0,
+    cold: 0,
+  });
+
+  useEffect(() => {
+    // Calculate lead counts when filteredData changes
+    const counts = calculateLeadCounts(filteredData);
+    setLeadCounts(counts);
+  }, [filteredData]);
+
+  const chartData = {
+    labels: ["Hot", "Warm", "Cold"],
+    data: [leadCounts.hot, leadCounts.warm, leadCounts.cold],
+    ChartColors: ["#F57D6A", "#F8D76A", "#54CA21"],
+  };
+
+  // filter by status
+
+  const calculateLeadStatus = (filteredData) => {
+    const counts = {
+      FollowUp: 0,
+      OnHold: 0,
+      Cancelled: 0,
+      New: 0,
+    };
+
+    filteredData.forEach((lead) => {
+      if (lead?.status === "Follow Up") {
+        counts.FollowUp++;
+      } else if (lead?.status === "On Hold") {
+        counts.OnHold++;
+      } else if (lead?.status === "Cancelled") {
+        counts.Cancelled++;
+      } else if (lead?.status === "New") {
+        counts.New++;
+      }
+    });
+
+    return counts;
+  };
+
+  const [statusCounts, setStatusCounts] = useState({
+    FollowUp: 0,
+    OnHold: 0,
+    Cancelled: 0,
+    New: 0,
+  });
+
+  useEffect(() => {
+    // Calculate lead counts when filteredData changes
+    const counts = calculateLeadStatus(filteredData);
+    setStatusCounts(counts);
+  }, [filteredData]);
+
+  const statusChartData = {
+    labels: ["Follow Up", "On Hold", "Cancelled", "New"],
+    data: [
+      statusCounts.FollowUp,
+      statusCounts.OnHold,
+      statusCounts.Cancelled,
+      statusCounts.New,
+    ],
+    ChartColors: [
+      "#F57D6A",
+      "#F8D76A",
+      "#54CA21",
+      "#21CAC1",
+      "#2170CA",
+      "#C439EB",
+      "#C7C7C7",
+      "#F35C9D",
+      "#55DCB8",
+    ],
+  };
+
   useEffect(() => {
     setBulkSMSMobiles([]);
     setIsAllSelected(false);
+
+    let searchedData = data;
+
+    // Apply search key filter
     if (searchKey.trim() !== "") {
-      const searchedData = data.filter(
+      searchedData = data.filter(
         (d) =>
           (d?.leadtype === "People"
             ? "individual".includes(searchKey.toLowerCase())
@@ -578,11 +637,22 @@ const Leads = () => {
               ?.includes(searchKey.replaceAll("/", ""))) ||
           d?.email?.toLowerCase().includes(searchKey.toLowerCase())
       );
-      setFilteredData(searchedData);
-    } else {
-      setFilteredData(data);
     }
-  }, [searchKey, data]);
+
+    if (startDate || endDate) {
+      searchedData = searchedData.filter((d) => {
+        const date = new Date(d?.createdAt);
+        const formattedDate = date.toISOString().substring(0, 10);
+
+        const isAfterStartDate = startDate ? formattedDate >= startDate : true;
+        const isBeforeEndDate = endDate ? formattedDate <= endDate : true;
+
+        return isAfterStartDate && isBeforeEndDate;
+      });
+    }
+
+    setFilteredData(searchedData);
+  }, [searchKey, data, startDate, endDate]);
 
   useEffect(() => {
     setIsAllSelected(false);
@@ -592,13 +662,13 @@ const Leads = () => {
   function getCategoryColor(category) {
     switch (category?.toLowerCase()) {
       case "hot":
-        return "red"; // Chakra UI "red" color scheme
+        return "red";
       case "warm":
-        return "orange"; // Chakra UI "orange" color scheme
+        return "orange";
       case "cold":
-        return "blue"; // Chakra UI "blue" color scheme
+        return "blue";
       default:
-        return "gray"; // Default to gray if no category is provided
+        return "gray";
     }
   }
 
@@ -620,8 +690,8 @@ const Leads = () => {
           "Content-Type": "application/json",
           authorization: `Bearer ${cookies?.access_token}`,
         },
-        credentials: "include", // Correct placement
-        body: JSON.stringify({ dataInfo,dataBank:true }), // Correct placement
+        credentials: "include",
+        body: JSON.stringify({ dataInfo, dataBank: true }),
       });
 
       const data = await response.json();
@@ -636,8 +706,14 @@ const Leads = () => {
       console.error("Error:", err);
       toast.error(err.message || "Failed to add data");
     } finally {
-      setLoading(false); // Ensures `setLoading(false)` runs regardless of success or failure
+      setLoading(false);
     }
+  };
+
+  const [selectedGraph, setSelectedGraph] = useState("dynamicChart");
+
+  const handleGraphChange = (e) => {
+    setSelectedGraph(e.target.value);
   };
 
   return (
@@ -659,10 +735,7 @@ const Leads = () => {
       )}
 
       {isAllowed && (
-        <div
-          className="border-[1px] px-2 py-8 md:px-9 rounded"
-          style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-        >
+        <div>
           <>
             <AlertDialog
               isOpen={isOpen}
@@ -897,7 +970,11 @@ const Leads = () => {
                   </Button>
                 )}
                 <Select
-                  onChange={(e) => setPageSize(e.target.value)}
+                  onChange={(e) => {
+                    const newSize = Number(e.target.value);
+                    setPageSize(newSize);
+                  }}
+                  value={pageSize} // Ensure this is controlled
                   width="80px"
                   className="mt-2 md:mt-0"
                 >
@@ -907,6 +984,23 @@ const Leads = () => {
                   <option value={100}>100</option>
                   <option value={100000}>All</option>
                 </Select>
+
+                <div className="flex items-center gap-x-3">
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="p-2 border rounded-md"
+                    placeholder="Start Date"
+                  />
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="p-2 border rounded-md"
+                    placeholder="End Date"
+                  />
+                </div>
               </div>
             </div>
 
@@ -1018,11 +1112,16 @@ const Leads = () => {
               )}
               {!loading && filteredData.length > 0 && (
                 <div>
-                  <TableContainer maxHeight="600px" className="overflow-y-auto">
+                  <TableContainer
+                    maxHeight="600px"
+                    overflowY="auto"
+                    className="shadow-lg rounded-lg bg-white"
+                  >
                     <Table
                       {...getTableProps()}
                       borderWidth="1px"
                       borderColor="#e0e0e0"
+                      className="min-w-full"
                     >
                       <Thead
                         position="sticky"
@@ -1042,7 +1141,7 @@ const Leads = () => {
                                     bg="blue.400"
                                     className={`${
                                       column.id === "name"
-                                        ? "sticky top-0 left-[-2px] "
+                                        ? "sticky top-0 left-[-2px]"
                                         : ""
                                     }`}
                                     {...column.getHeaderProps(
@@ -1095,7 +1194,7 @@ const Leads = () => {
                                   <Td
                                     className={
                                       cell.column.id === "name"
-                                        ? "sticky left-0 z-10 bg-gray-50 hover:bg-gray-100"
+                                        ? "sticky left-0 bg-gray-50 hover:bg-gray-100"
                                         : ""
                                     }
                                     fontWeight="600"
@@ -1286,16 +1385,37 @@ const Leads = () => {
           </div>
           <div className="w-full mx-auto mt-3">
             <h1 className="text-lg md:text-xl font-semibold">Leads Summary</h1>
-            {!loading && leadSummaryData.length === 0 && (
-              <div>Nothing to show!</div>
-            )}
-            {!loading && leadSummaryData.length > 0 && (
-              <div className="w-[50%] mx-auto mt-2">
-                <PieChart
-                  data={leadSummaryData}
-                  labels={leadSummaryLabels}
-                  ChartColors={leadSummaryBG}
-                />
+
+            {/* Dropdown to select graph type */}
+            <div className="mt-2">
+              <Select
+                value={selectedGraph}
+                onChange={handleGraphChange}
+                className="p-2 border border-gray-300 rounded-md"
+              >
+                <option value="dynamicChart">Lead Status</option>
+                <option value="anotherGraph">Lead Category</option>
+                {/* Add more options as needed */}
+              </Select>
+            </div>
+
+            {!loading && statusChartData && (
+              <div className="mx-auto mt-2 ">
+                {selectedGraph === "dynamicChart" && (
+                  <DynamicChart
+                    labels={statusChartData.labels}
+                    data={statusChartData.data}
+                    ChartColors={statusChartData.ChartColors}
+                  />
+                )}
+
+                {selectedGraph === "anotherGraph" && (
+                  <DynamicChart
+                    labels={chartData.labels}
+                    data={chartData.data}
+                    ChartColors={chartData.ChartColors}
+                  />
+                )}
               </div>
             )}
           </div>

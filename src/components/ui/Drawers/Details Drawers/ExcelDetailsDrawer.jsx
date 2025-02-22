@@ -26,6 +26,7 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
       });
 
       const data = await response.json();
+
       console.log("API Response:", data);
 
       if (!data.success) {
@@ -79,37 +80,44 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
             <DetailItem label="Product Name" value={details.productName} />
 
             <DetailItem label="Mode" value={details.mode} />
-            <DetailItem label="Renewal Date" value={details.renewalDate} />
+            <DetailItem
+              label="Renewal Date"
+              value={details.renewalDate.split("T")[0]}
+            />
+            <DetailItem
+              label="Tenure"
+              value={`${details.years || 0} years ${
+                details.months || 0
+              } months`}
+            />
+
             <DetailItem
               label="Last Renewal Date"
-              value={details.lastRenewalDate}
+              value={details.lastRenewalDate.split("T")[0]}
             />
             <DetailItem label="Renewal Times" value={details.renewalTimes} />
             <DetailItem
               label="Created At"
-              value={new Date(details.createdAt).toLocaleString()}
+              value={details.createdAt.split("T")[0]}
             />
 
             {/* Display Images */}
             {details.doc && (
               <div className="font-bold text-lg text-gray-700">
-                <p>Document</p>
-                <img
-                  src={details.doc}
-                  alt="Document"
-                  className="w-full h-auto rounded-lg shadow-md"
-                />
+                <DetailItem label="DOC" value={details.doc.split("T")[0]} />
               </div>
             )}
 
             {details.contractAttachment && (
               <div className="font-bold text-lg text-gray-700">
                 <p>Contract Attachment</p>
-                <img
-                  src={details.contractAttachment}
-                  alt="Contract"
-                  className="w-full h-auto rounded-lg shadow-md"
-                />
+                <a
+                  href={details?.contractAttachment}
+                  download={details?.contractAttachment}
+                  target="_blank"
+                >
+                  See Attachment
+                </a>
               </div>
             )}
             {details.term && (
