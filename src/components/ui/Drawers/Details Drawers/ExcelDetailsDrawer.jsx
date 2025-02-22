@@ -112,9 +112,10 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
               <div className="font-bold text-lg text-gray-700">
                 <p>Contract Attachment</p>
                 <a
-                  href={details?.contractAttachment}
-                  download={details?.contractAttachment}
+                  href={details.contractAttachment}
+                  download="Contract_Attachment.pdf" // Optional: specify a filename
                   target="_blank"
+                  rel="noopener noreferrer" // Recommended for security
                 >
                   See Attachment
                 </a>
