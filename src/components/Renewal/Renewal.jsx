@@ -285,11 +285,19 @@ const Renewals = () => {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
+    console.log(file);
     if (file) {
+      // Validate file type
+      if (!file.name.endsWith(".xlsx") && !file.name.endsWith(".csv")) {
+        toast.error("Invalid file type. Only .xlsx or .csv files are allowed.");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("excel", file); // Use the "excel" field
+      console.log(formData);
 
-      fetch(`${baseURL}renewal/bulk-upload`, {
+      fetch(`${baseURL}/renewal/bulk-upload`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${cookies?.access_token}`,
@@ -297,7 +305,6 @@ const Renewals = () => {
         body: formData, // Send the file as FormData
       })
         .then((response) => response.json())
-
         .then((result) => {
           if (result.success) {
             toast.success("Excel data uploaded successfully!");

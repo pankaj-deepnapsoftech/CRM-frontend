@@ -240,13 +240,13 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
                 <FormLabel>Tenure</FormLabel>
                 <Box display="flex" gap={2}>
                   <Input
-                    type="number"
+                    type="text"
                     placeholder="Years"
                     value={years}
                     onChange={(e) => setYears(e.target.value)}
                   />
                   <Input
-                    type="number"
+                    type="text"
                     placeholder="Months"
                     value={months}
                     onChange={(e) => setMonths(e.target.value)}
