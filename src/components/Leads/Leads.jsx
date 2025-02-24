@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   Badge,
   Button,
@@ -175,7 +176,6 @@ const Leads = () => {
   const csvRef = useRef();
 
   const [bulkSMSMobiles, setBulkSMSMobiles] = useState([]);
-  const [templateData, setTemplateData] = useState();
   const [templateName, setTemplateName] = useState("");
   const [languageCode, setLanguageCode] = useState("");
   const [numbers, setNumbers] = useState([]);
@@ -185,8 +185,9 @@ const Leads = () => {
     onClose: onWhatsappClose,
   } = useDisclosure();
 
-  const handleWhatsapp = (e) => {
+  const handleWhatsapp = async(e) => {
     e.preventDefault();
+
     const updatedTemplateData = {
       users: numbers,
       templateName: templateName,
@@ -195,9 +196,29 @@ const Leads = () => {
       },
     };
 
-    console.log("data for msg.....", updatedTemplateData);
+    /*
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}`,
+        { updatedTemplateData },
+        {
+          headers: {
+            "Authorization": `Bearer ${cookies?.access_token}`,
+          },
+        }
+      );
 
-    setTemplateData(updatedTemplateData);
+      console.log(res);
+      toast.success('Whatsapp message send successfully.')
+
+    } catch (error) {
+      toast.error(error);
+      console.log('error', error);
+    }
+      */
+
+    console.log(updatedTemplateData);
+
   };
 
   const {
