@@ -2,9 +2,19 @@ import {
   Badge,
   Button,
   Checkbox,
+  FormControl,
+  FormLabel,
   HStack,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Select,
+  Stack,
   Textarea,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -165,6 +175,30 @@ const Leads = () => {
   const csvRef = useRef();
 
   const [bulkSMSMobiles, setBulkSMSMobiles] = useState([]);
+  const [templateData, setTemplateData] = useState();
+  const [templateName, setTemplateName] = useState("");
+  const [languageCode, setLanguageCode] = useState("");
+  const [numbers, setNumbers] = useState([]);
+  const {
+    isOpen: isWhatsappOpen,
+    onOpen: onWhatsappOpen,
+    onClose: onWhatsappClose,
+  } = useDisclosure();
+
+  const handleWhatsapp = (e) => {
+    e.preventDefault();
+    const updatedTemplateData = {
+      users: numbers,
+      templateName: templateName,
+      language: {
+        code: languageCode,
+      },
+    };
+
+    console.log("data for msg.....", updatedTemplateData);
+
+    setTemplateData(updatedTemplateData);
+  };
 
   const {
     getTableProps,
@@ -672,12 +706,21 @@ const Leads = () => {
     }
   }
 
-  const handleSelection = (e, id) => {
+  const handleSelection = (e, id, phone, name) => {
     if (e.target.checked) {
       setDataInfo([...dataInfo, id]);
+
+      setNumbers((prevNumbers) => [
+        ...prevNumbers,
+        { phone: phone, name: name },
+      ]);
     } else {
       const filter = dataInfo.filter((item) => item !== id);
       setDataInfo(filter);
+
+      setNumbers((prevNumbers) =>
+        prevNumbers.filter((item) => item.phone !== phone)
+      );
     }
   };
 
@@ -714,6 +757,10 @@ const Leads = () => {
 
   const handleGraphChange = (e) => {
     setSelectedGraph(e.target.value);
+  };
+
+  const handleBulkWhatsapp = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -953,6 +1000,19 @@ const Leads = () => {
                 >
                   Add to data bank
                 </Button>
+
+                <Button
+                  fontSize={{ base: "12px", md: "14px" }}
+                  paddingX={{ base: "8px", md: "12px" }}
+                  paddingY={{ base: "2px", md: "3px" }}
+                  width={{ base: "100%", md: 200 }}
+                  color="white"
+                  backgroundColor="#1640d6"
+                  onClick={onWhatsappOpen}
+                >
+                  Bulk Whatsapp
+                </Button>
+
                 {role === "Super Admin" && (
                   <Button
                     fontSize={{ base: "12px", md: "14px" }}
@@ -1222,7 +1282,12 @@ const Leads = () => {
                                             e,
                                             cell.row.original.phone
                                           );
-                                          handleSelection(e, e.target.value);
+                                          handleSelection(
+                                            e,
+                                            e.target.value,
+                                            cell?.row?.original?.phone,
+                                            cell?.row?.original?.name
+                                          );
                                         }}
                                       />
                                     )}
@@ -1395,7 +1460,6 @@ const Leads = () => {
               >
                 <option value="dynamicChart">Lead Status</option>
                 <option value="anotherGraph">Lead Category</option>
-                {/* Add more options as needed */}
               </Select>
             </div>
 
@@ -1421,6 +1485,72 @@ const Leads = () => {
           </div>
         </div>
       )}
+
+      <Modal isOpen={isWhatsappOpen} onClose={onWhatsappClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>WhatsApp Contact Form</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {numbers.length === 0 ? (
+              "Please select leads"
+            ) : (
+              <form onSubmit={handleWhatsapp}>
+                <Stack spacing={4}>
+                  <FormControl isRequired>
+                    <FormLabel htmlFor="templateName">Template Name:</FormLabel>
+                    <Input
+                      type="text"
+                      id="templateName"
+                      value={templateName}
+                      onChange={(e) => setTemplateName(e.target.value)}
+                      placeholder="Enter template name"
+                      variant="outline"
+                      borderColor="teal.400"
+                      _focus={{ borderColor: "teal.500" }}
+                    />
+                  </FormControl>
+
+                  <FormControl isRequired>
+                    <FormLabel htmlFor="languageCode">
+                      Language and Locale Code (e.g., en_US):
+                    </FormLabel>
+                    <Input
+                      type="text"
+                      id="languageCode"
+                      value={languageCode}
+                      onChange={(e) => setLanguageCode(e.target.value)}
+                      placeholder="Enter language code and locale"
+                      variant="outline"
+                      borderColor="teal.400"
+                      _focus={{ borderColor: "teal.500" }}
+                    />
+                  </FormControl>
+
+                  <Button
+                    colorScheme="teal"
+                    type="submit"
+                    width="full"
+                    size="lg"
+                    mt={4}
+                    boxShadow="md"
+                    _hover={{ boxShadow: "lg" }}
+                    _focus={{ boxShadow: "outline" }}
+                  >
+                    Send
+                  </Button>
+                </Stack>
+              </form>
+            )}
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onWhatsappClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
