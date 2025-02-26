@@ -297,7 +297,7 @@ const Renewals = () => {
       formData.append("excel", file); // Use the "excel" field
       console.log(formData);
 
-      fetch(`${baseURL}/renewal/bulk-upload`, {
+      fetch(`${baseURL}renewal/bulk-upload`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${cookies?.access_token}`,

@@ -168,7 +168,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
           <Loading />
         ) : (
           <form onSubmit={editPeopleHandler} className="space-y-5">
-            <FormControl isRequired>
+            <FormControl >
               <FormLabel>Customer Name</FormLabel>
               <Input
                 value={custumerName}
@@ -177,7 +177,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               />
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl >
               <FormLabel>Phone Number</FormLabel>
               <Input
                 value={phnNumber}
@@ -186,7 +186,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               />
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl >
               <FormLabel>Contract Type</FormLabel>
               <Select
                 value={contractType}
@@ -208,7 +208,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               )}
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl >
               <FormLabel>Contract Number</FormLabel>
               <Input
                 value={contractNumber}
@@ -217,7 +217,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               />
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl >
               <FormLabel>Product Name</FormLabel>
               <Input
                 value={productName}
@@ -281,7 +281,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
             />
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl >
               <FormLabel>Renewal Date</FormLabel>
               <Input
                 value={renewalDate}
@@ -299,7 +299,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               />
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl >
               <FormLabel>Renewal Times</FormLabel>
               <Input
                 value={renewalTimes}
