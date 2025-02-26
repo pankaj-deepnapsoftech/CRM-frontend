@@ -53,8 +53,13 @@ import {
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
 import { checkAccess } from "../../utils/checkAccess";
+import axios from "axios";
 
 const columns = [
+  {
+    Header: "",
+    accessor: "select",
+  },
   {
     Header: "Custumer Name",
     accessor: "custumerName",
@@ -91,6 +96,7 @@ const Renewals = () => {
   const [dateWise, setDateWise] = useState([]);
   const [toggleBulkUpload, setToggleBulkUpload] = useState(false);
   const [showUploadOptions, setShowUploadOptions] = useState(false);
+  const [ids, setIds] = useState([]);
 
   const [peopleDeleteId, setPeopleDeleteId] = useState();
 
@@ -313,6 +319,43 @@ const Renewals = () => {
     }
   };
 
+  const handleSelect = (e)=>{
+    const { checked, value } = e.target; 
+  
+    if (checked) {
+      setIds(prevIds => [...prevIds, value]);
+    } else {
+      setIds(prevIds => prevIds.filter(id => id !== value));
+    }
+  };
+
+  const handleBulkDelete = async(e)=> {
+    e.preventDefault();
+    if(ids.length === 0){
+      toast.error("Please select renewals!");
+    }else{
+      try {
+        const response = await axios.delete(`${baseURL}renewal/delete-records`, {
+          headers: {
+            Authorization: `Bearer ${cookies?.access_token}`,
+          },
+          data: {
+            ids: ids, 
+          },
+        });
+        
+            toast.success("Data deleted Successfully :)");
+            fetchAllPeople();
+          } catch (err) {
+            // console.error("Delete Selected Error:", err);
+            toast.error(`Something went wrong: ${err}`);
+          }
+    }
+   
+
+  }
+
+ 
   return (
     <>
       {!isAllowed && (
@@ -420,6 +463,9 @@ const Renewals = () => {
                 </Select>
                 <Button onClick={handleBulkDownload} colorScheme="green">
                   Bulk Download
+                </Button>
+                <Button onClick={handleBulkDelete} colorScheme="orange">
+                  Bulk Delete
                 </Button>
                 <div>
                   {/* Bulk Upload CSV Button */}
@@ -639,6 +685,15 @@ const Renewals = () => {
                                           "DD/MM/YYYY"
                                         )}
                                       </span>
+                                    ) : cell.column.id === "select" ? (
+                                      <input
+                                        value={cell.row.original._id}
+                                        name="select"
+                                        type="checkbox"
+                                        onChange={(e) => {
+                                          handleSelect(e)
+                                        }}
+                                      />
                                     ) : (
                                       cell.render("Cell")
                                     )}

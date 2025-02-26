@@ -308,6 +308,52 @@ const Leads = () => {
     }
   };
 
+  const fetchLeadSummary = async () => {
+    setData([]);
+    setFilteredData([]);
+    setLoading(true);
+    try {
+      const response = await fetch(baseURL + "lead/lead-summary", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${cookies?.access_token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+
+      setLeadSummaryBG([
+        "#F57D6A",
+        "#F8D76A",
+        "#54CA21",
+        "#21CAC1",
+        "#2170CA",
+        "#C439EB",
+        "#C7C7C7",
+        "#F35C9D",
+        "#55DCB8",
+      ]);
+
+      const labels = Object.keys(data.leads[0].statusCount).map((status) => {
+        return `${status} ${(
+          (data.leads[0].statusCount[status] / data.leads[0].totalCount) *
+          100
+        ).toFixed(2)}%`;
+      });
+
+      setLeadSummaryLabels(labels);
+      setLeadSummaryData(Object.values(data.leads[0].statusCount));
+    } catch (err) {
+      setLoading(false);
+      toast.error(err.message);
+    }
+  };
+
   const bulkUploadHandler = async (e) => {
     e.preventDefault();
 
