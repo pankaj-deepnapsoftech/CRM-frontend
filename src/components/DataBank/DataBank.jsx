@@ -457,7 +457,7 @@ const DataBank = () => {
                     <MdArrowBack />
                   </span> */}
                 <h1 className="font-extrabold">Data Bank List</h1>
-                <Button onClick={RemovetoDataBank}>Move to lead</Button>
+                <Button onClick={RemovetoDataBank} colorScheme="blue">Move to lead</Button>
               </div>
             </div>
 
@@ -796,21 +796,7 @@ const DataBank = () => {
               )}
             </div>
           </div>
-          <div className="w-full mx-auto mt-3">
-            <h1 className="text-lg md:text-xl font-semibold">Leads Summary</h1>
-            {!loading && leadSummaryData.length === 0 && (
-              <div>Nothing to show!</div>
-            )}
-            {!loading && leadSummaryData.length > 0 && (
-              <div className="w-[50%] mx-auto mt-2">
-                <PieChart
-                  data={leadSummaryData}
-                  labels={leadSummaryLabels}
-                  ChartColors={leadSummaryBG}
-                />
-              </div>
-            )}
-          </div>
+        
         </div>
       )}
     </>
