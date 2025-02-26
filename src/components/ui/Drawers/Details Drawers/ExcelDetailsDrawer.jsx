@@ -27,7 +27,6 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
 
       const data = await response.json();
 
-      console.log("API Response:", data);
 
       if (!data.success) {
         throw new Error(data.message);
@@ -36,7 +35,6 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
       setDetails(data.data || {}); // Store the whole object in `details`
       setIsLoading(false);
     } catch (err) {
-      console.error("Fetch Error:", err);
       toast.error(err.message);
       setIsLoading(false);
     }

@@ -749,7 +749,6 @@ const Leads = () => {
       fetchAllLeads();
       toast.success("Data added successfully!");
     } catch (err) {
-      console.error("Error:", err);
       toast.error(err.message || "Failed to add data");
     } finally {
       setLoading(false);

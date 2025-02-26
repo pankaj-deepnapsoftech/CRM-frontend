@@ -151,7 +151,7 @@ const Renewals = () => {
       });
 
       const data = await response.json();
-      console.log(data);
+
 
       if (!data.success) {
         throw new Error(data.message);
@@ -182,10 +182,9 @@ const Renewals = () => {
         },
       });
       const data = await response.json();
-      console.log("date wise:", data);
       setDateWise(data?.data ? data?.data : []);
     } catch (error) {
-      console.log(error);
+      toast.error(`Something went wrong! ${error}`)
     }
   };
 
@@ -228,7 +227,6 @@ const Renewals = () => {
 
       // ✅ Log the response before parsing
       const text = await response.text();
-      console.log("Raw API Response:", text);
 
       // ✅ Try parsing JSON safely
       let data;
@@ -246,7 +244,7 @@ const Renewals = () => {
       onClose();
       fetchAllPeople(); // Refresh data after deletion
     } catch (err) {
-      console.error("Delete Error:", err);
+
       toast.error(err.message);
     }
   };
@@ -285,7 +283,7 @@ const Renewals = () => {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    console.log(file);
+
     if (file) {
       // Validate file type
       if (!file.name.endsWith(".xlsx") && !file.name.endsWith(".csv")) {
@@ -295,7 +293,7 @@ const Renewals = () => {
 
       const formData = new FormData();
       formData.append("excel", file); // Use the "excel" field
-      console.log(formData);
+
 
       fetch(`${baseURL}renewal/bulk-upload`, {
         method: "POST",

@@ -92,7 +92,7 @@ const columns = [
       // Resend OTP
       const reSendVerificationOtp = async () => {
         try {
-          if (!personId) return console.log("No person ID found.");
+
 
           const response = await fetch(
             `${baseURL}people/resend-otp/${personId}`,
@@ -106,12 +106,12 @@ const columns = [
           );
 
           const otpResponse = await response.json();
-          console.log(`OTP resent to person with ID ${personId}`, otpResponse);
+
 
           // Show toast for resend OTP
           toast.success("OTP has been resent successfully!");
         } catch (error) {
-          console.error("Error resending OTP:", error);
+
           toast.error("Failed to resend OTP. Please try again.");
         }
       };
@@ -144,7 +144,6 @@ const columns = [
           );
 
           const verifyResponse = await response.json();
-          console.log(`Verification result for ${personId}:`, verifyResponse);
 
           if (verifyResponse.success) {
             toast.success("OTP verified successfully!"); // Show success toast
@@ -156,7 +155,6 @@ const columns = [
             ); // Show error toast
           }
         } catch (error) {
-          console.error("Error verifying OTP:", error);
           toast.error("Something went wrong. Please try again."); // Show error toast
         }
       };
@@ -288,7 +286,7 @@ const Peoples = () => {
       });
 
       const data = await response.json();
-      console.log(data.people);
+
 
       if (!data.success) {
         throw new Error(data.message);
@@ -312,7 +310,6 @@ const Peoples = () => {
   const sendVerificationOtp = async () => {
     try {
       if (peopleIds.length === 0) {
-        console.log("No people IDs found.");
         return;
       }
 
@@ -327,10 +324,10 @@ const Peoples = () => {
         });
 
         const otpResponse = await response.json();
-        console.log(`OTP sent to person with ID ${id}:`, otpResponse);
+
       }
     } catch (error) {
-      console.error("Error sending OTPs:", error);
+      toast.error(`Error while sending OTPs: ${error} `)
     }
   };
 

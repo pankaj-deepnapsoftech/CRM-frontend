@@ -136,7 +136,6 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
       const data = await response.json();
       if (!data.success) throw new Error(data.message);
 
-      console.log(data);
       toast.success("Record updated successfully!");
       closeDrawerHandler();
     } catch (err) {

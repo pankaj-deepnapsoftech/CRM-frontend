@@ -157,7 +157,6 @@ const DataBank = () => {
   const [leadDeleteId, setLeadDeleteId] = useState();
   const [deleteAll, setDeleteAll] = useState(false);
   const [dataInfo, setDataInfo] = useState([]);
-  console.log(dataInfo);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
@@ -298,7 +297,6 @@ const DataBank = () => {
 
       // Filter leads where dataBank is true
       const filteredLeads = data.leads.filter((lead) => lead.dataBank === true);
-      console.log(filteredLeads);
       setData(filteredLeads);
       setFilteredData(filteredLeads);
       setLoading(false);
@@ -322,7 +320,6 @@ const DataBank = () => {
       });
 
       const data = await response.json();
-      console.log(data.leads);
 
       if (!data.success) {
         throw new Error(data.message);
@@ -419,7 +416,6 @@ const DataBank = () => {
       fetchAllLeads();
       toast.success("Data added successfully!");
     } catch (err) {
-      console.error("Error:", err);
       toast.error(err.message || "Failed to add data");
     } finally {
       setLoading(false); // Ensures `setLoading(false)` runs regardless of success or failure

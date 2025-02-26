@@ -152,7 +152,6 @@ const EmailData = () => {
 
       const data = await response.json();
 
-      console.log(data);
 
       setData(data.data);
       setFilteredData(data.data);

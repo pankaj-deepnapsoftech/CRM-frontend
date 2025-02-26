@@ -74,7 +74,6 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
       formData.append("years", years);
       formData.append("months", months);
 
-      console.log(formData);
 
       const response = await fetch(baseURL + "renewal/create-record", {
         method: "POST",
@@ -86,7 +85,6 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
 
       const data = await response.json();
       if (!data.success) throw new Error(data.message);
-      console.log(data.message);
       toast.success(data.message);
       fetchAllPeople();
       closeDrawerHandler();

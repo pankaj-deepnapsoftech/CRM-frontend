@@ -98,7 +98,6 @@ const ProductsDrawer = ({ fetchAllProducts, closeDrawerHandler }) => {
       toast.success(data.message);
     } catch (err) {
       toast.error(err.message);
-      console.log(err);
       
     }
   };

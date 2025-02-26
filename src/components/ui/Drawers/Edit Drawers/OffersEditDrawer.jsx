@@ -206,7 +206,6 @@ const OffersEditDrawer = ({ closeDrawerHandler, getAllOffers, dataId: id }) => {
       setItems(items);
       setSelectedProducts(products);
     } catch (err) {
-      console.log(err);
       toast.error(err.message);
     }
   };
