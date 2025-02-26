@@ -80,10 +80,7 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
             <DetailItem label="Product Name" value={details.productName} />
 
             <DetailItem label="Mode" value={details.mode} />
-            <DetailItem
-              label="Renewal Date"
-              value={details.renewalDate.split("T")[0]}
-            />
+            <DetailItem label="Renewal Date" value={details.renewalDate} />
             <DetailItem
               label="Tenure"
               value={`${details.years || 0} years ${
@@ -93,18 +90,15 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
 
             <DetailItem
               label="Last Renewal Date"
-              value={details.lastRenewalDate.split("T")[0]}
+              value={details.lastRenewalDate}
             />
             <DetailItem label="Renewal Times" value={details.renewalTimes} />
-            <DetailItem
-              label="Created At"
-              value={details.createdAt.split("T")[0]}
-            />
+            <DetailItem label="Created At" value={details.createdAt} />
 
             {/* Display Images */}
             {details.doc && (
               <div className="font-bold text-lg text-gray-700">
-                <DetailItem label="DOC" value={details.doc.split("T")[0]} />
+                <DetailItem label="DOC" value={details.doc} />
               </div>
             )}
 

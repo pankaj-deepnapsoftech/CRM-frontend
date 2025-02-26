@@ -145,6 +145,7 @@ const Renewals = () => {
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (!data.success) {
         throw new Error(data.message);
@@ -252,25 +253,18 @@ const Renewals = () => {
     if (searchKey.trim() !== "") {
       const searchedData = data.filter(
         (d) =>
-          d?.creator?.toLowerCase().includes(searchKey.toLowerCase()) ||
-          (d?.createdAt &&
-            new Date(d?.createdAt)
-              ?.toISOString()
-              ?.substring(0, 10)
-              ?.split("-")
-              .reverse()
-              .join("")
-              ?.includes(searchKey.replaceAll("/", ""))) ||
-          d?.firstname?.toLowerCase().includes(searchKey.toLowerCase()) ||
-          d?.lastname?.toLowerCase().includes(searchKey.toLowerCase()) ||
-          d?.phone?.includes(searchKey) ||
-          d?.email?.toLowerCase().includes(searchKey.toLowerCase())
+          d?.custumerName?.toLowerCase().includes(searchKey.toLowerCase()) ||
+          d?.contractType?.toLowerCase().includes(searchKey.toLowerCase()) ||
+          d?.contractNumber?.toLowerCase().includes(searchKey.toLowerCase()) ||
+          d?.productName?.toLowerCase().includes(searchKey.toLowerCase()) ||
+          d?.phnNumber?.includes(searchKey) ||
+          d?.renewalTimes?.toString().includes(searchKey)
       );
       setFilteredData(searchedData);
     } else {
       setFilteredData(data);
     }
-  }, [searchKey]);
+  }, [searchKey, data]);
 
   // Function to handle bulk download
   const handleBulkDownload = () => {

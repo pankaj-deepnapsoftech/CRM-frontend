@@ -276,9 +276,9 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
             <FormControl>
               <FormLabel>Contract Attachment</FormLabel>
               <Input
-                onChange={(e) => setContractAttachment(e.target.files[0])}
-                type="file"
-              />
+              onChange={(e) => setContractAttachment(e.target.files[0])}
+              type="file"
+            />
             </FormControl>
 
             <FormControl isRequired>
