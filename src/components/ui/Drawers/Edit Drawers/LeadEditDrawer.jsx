@@ -65,9 +65,13 @@ const LeadEditDrawer = ({
     { value: "Website", label: "Website" },
     { value: "Advertising", label: "Advertising" },
     { value: "Friend", label: "Friend" },
-    { value: "Professionals Network", label: "Professionals Network" },
-    { value: "Customer Referarral", label: "Customer Referarral" },
+    { value: "Professionals Network", label: "Professionals Network"},
+    { value: "Customer Referarral", label: "Customer Referarral"},
     { value: "Sales", label: "Sales" },
+    { value: "Digital Marketing", label: "Digital Marketing"},
+    { value: "Upwork", label: "Upwork" },
+    { value: "Gem", label: "Gem" },
+    { value: "Freelancer", label: "Freelancer"},
   ];
 
   const getAllCompanies = async () => {
@@ -137,7 +141,6 @@ const LeadEditDrawer = ({
     }
   };
 
- 
   const editLeadHandler = async (e) => {
     e.preventDefault();
     if (statusId?.value === "Assigned" && assigned?.value === "") {
@@ -275,6 +278,7 @@ const LeadEditDrawer = ({
       toast.error(err.message);
     }
   };
+
 
   useEffect(() => {
     let options = [];

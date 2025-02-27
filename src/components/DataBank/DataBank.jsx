@@ -165,6 +165,7 @@ const DataBank = () => {
 
   const [bulkSMSMobiles, setBulkSMSMobiles] = useState([]);
   const [selcetedData, setSelectedData] = useState([]);
+  const [leadLength, setLeadLength] = useState("");
 
   const {
     getTableProps,
@@ -422,6 +423,35 @@ const DataBank = () => {
     }
   };
 
+  const filterData = (searchKey) => {
+    if (!searchKey) {
+      setFilteredData(data); // If search key is empty, show all data
+      return;
+    }
+
+    const lowerCaseSearchKey = searchKey.toLowerCase();
+
+    const filtered = data.filter((lead) => {
+      return (
+        lead.name?.toLowerCase().includes(lowerCaseSearchKey) ||
+        lead.phone?.toLowerCase().includes(lowerCaseSearchKey) ||
+        lead.email?.toLowerCase().includes(lowerCaseSearchKey) ||
+        lead.location?.toLowerCase().includes(lowerCaseSearchKey) ||
+        lead.leadtype?.toLowerCase().includes(lowerCaseSearchKey) ||
+        lead.status?.toLowerCase().includes(lowerCaseSearchKey) ||
+        lead.source?.toLowerCase().includes(lowerCaseSearchKey) ||
+        lead.followup_reason?.toLowerCase().includes(lowerCaseSearchKey) ||
+        lead.leadCategory?.toLowerCase().includes(lowerCaseSearchKey)
+      );
+    });
+
+    setFilteredData(filtered);
+  };
+
+  useEffect(() => {
+    filterData(searchKey);
+  }, [searchKey, data]);
+
   return (
     <>
       {!isAllowed && (
@@ -453,7 +483,37 @@ const DataBank = () => {
                     <MdArrowBack />
                   </span> */}
                 <h1 className="font-extrabold">Data Bank List</h1>
-                <Button onClick={RemovetoDataBank} colorScheme="blue">Move to lead</Button>
+                <div className="mt-2 md:mt-0 flex justify-end flex-wrap gap-y-1 gap-x-2 w-full md:w-fit">
+                  <textarea
+                    className="rounded-[10px] w-full md:flex-1 px-2 py-2 md:px-3 md:py-2 text-sm focus:outline-[#1640d6] hover:outline:[#1640d6] border resize-none"
+                    rows="1"
+                    width="220px"
+                    placeholder="Search"
+                    value={searchKey}
+                    onChange={(e) => setSearchKey(e.target.value)}
+                  />
+                  <Button
+                    fontSize={{ base: "14px", md: "14px" }}
+                    paddingX={{ base: "10px", md: "12px" }}
+                    paddingY={{ base: "0", md: "3px" }}
+                    width={{ base: "-webkit-fill-available", md: 100 }}
+                    onClick={fetchAllLeads}
+                    leftIcon={<MdOutlineRefresh />}
+                    color="#1640d6"
+                    borderColor="#1640d6"
+                    variant="outline"
+                  >
+                    Refresh
+                  </Button>
+                </div>
+                <div className="flex justify-end items-end gap-3">
+                  <Button onClick={RemovetoDataBank} colorScheme="blue">
+                    Move to lead
+                  </Button>
+                  <Button colorScheme="blue">
+                    Total Data Bank list {leadLength}
+                  </Button>
+                </div>
               </div>
             </div>
 
@@ -792,7 +852,6 @@ const DataBank = () => {
               )}
             </div>
           </div>
-        
         </div>
       )}
     </>

@@ -54,6 +54,7 @@ import {
 } from "@chakra-ui/react";
 import { checkAccess } from "../../utils/checkAccess";
 import axios from "axios";
+import { HStack } from "@chakra-ui/react";
 
 const columns = [
   {
@@ -96,6 +97,8 @@ const Renewals = () => {
   const [dateWise, setDateWise] = useState([]);
   const [toggleBulkUpload, setToggleBulkUpload] = useState(false);
   const [showUploadOptions, setShowUploadOptions] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [ids, setIds] = useState([]);
 
   const [peopleDeleteId, setPeopleDeleteId] = useState();
@@ -317,43 +320,65 @@ const Renewals = () => {
     }
   };
 
-  const handleSelect = (e)=>{
-    const { checked, value } = e.target; 
-  
+  const handleSelect = (e) => {
+    const { checked, value } = e.target;
+
     if (checked) {
-      setIds(prevIds => [...prevIds, value]);
+      setIds((prevIds) => [...prevIds, value]);
     } else {
-      setIds(prevIds => prevIds.filter(id => id !== value));
+      setIds((prevIds) => prevIds.filter((id) => id !== value));
     }
   };
 
-  const handleBulkDelete = async(e)=> {
+  const handleBulkDelete = async (e) => {
     e.preventDefault();
-    if(ids.length === 0){
+    if (ids.length === 0) {
       toast.error("Please select renewals!");
-    }else{
+    } else {
       try {
-        const response = await axios.delete(`${baseURL}renewal/delete-records`, {
-          headers: {
-            Authorization: `Bearer ${cookies?.access_token}`,
-          },
-          data: {
-            ids: ids, 
-          },
-        });
-        
-            toast.success("Data deleted Successfully :)");
-            fetchAllPeople();
-          } catch (err) {
-            // console.error("Delete Selected Error:", err);
-            toast.error(`Something went wrong: ${err}`);
+        const response = await axios.delete(
+          `${baseURL}renewal/delete-records`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies?.access_token}`,
+            },
+            data: {
+              ids: ids,
+            },
           }
+        );
+
+        toast.success("Data deleted Successfully :)");
+        fetchAllPeople();
+      } catch (err) {
+        // console.error("Delete Selected Error:", err);
+        toast.error(`Something went wrong: ${err}`);
+      }
     }
-   
+  };
 
-  }
+  // filter by date
+  const filterDataByDate = (startDate, endDate) => {
+    if (!startDate || !endDate) {
+      setFilteredData(data); // If no date range is selected, show all data
+      return;
+    }
 
- 
+    const filtered = data.filter((item) => {
+      const itemDate = new Date(item.createdAt); // Replace `createdAt` with the appropriate date field
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      return itemDate >= start && itemDate <= end;
+    });
+
+    setFilteredData(filtered);
+  };
+
+  useEffect(() => {
+    filterDataByDate(startDate, endDate);
+  }, [startDate, endDate, data]);
+
   return (
     <>
       {!isAllowed && (
@@ -408,15 +433,12 @@ const Renewals = () => {
           </>
 
           <div>
-            <div className="flex flex-col items-start justify-start md:flex-row gap-y-1 md:justify-between md:items-center mb-8">
-              <div className="flex text-lg md:text-xl font-semibold items-center gap-y-1">
-                {/* <span className="mr-2">
+            <h1 className="font-extrabold text-2xl p-2">Renewal List</h1>
+            <div className="flex flex-row justify-end text-lg md:text-xl mb-4 font-semibold items-center gap-y-4">
+              {/* <span className="mr-2">
                   <MdArrowBack />
                 </span> */}
-                Renewal List
-              </div>
-
-              <div className="mt-2 md:mt-0 flex justify-end flex-wrap gap-y-1 gap-x-2 w-full md:w-fit">
+              <div className="mt-2 md:mt-0 flex justify-start flex-wrap gap-y-1 gap-x-2 w-full md:w-fit">
                 <textarea
                   className="rounded-[10px] w-full md:flex-1 px-2 py-2 md:px-3 md:py-2 text-sm focus:outline-[#1640d6] hover:outline:[#1640d6] border resize-none"
                   rows="1"
@@ -425,6 +447,7 @@ const Renewals = () => {
                   value={searchKey}
                   onChange={(e) => setSearchKey(e.target.value)}
                 />
+
                 <Button
                   fontSize={{ base: "14px", md: "14px" }}
                   paddingX={{ base: "10px", md: "12px" }}
@@ -438,6 +461,10 @@ const Renewals = () => {
                 >
                   Refresh
                 </Button>
+              </div>
+            </div>
+            <div className="flex flex-col items-start justify-start md:flex-row gap-y-1 md:justify-between md:items-center mb-8">
+              <div className="mt-2 md:mt-0 flex justify-end flex-wrap gap-y-1 gap-x-2 w-full md:w-fit">
                 <Button
                   fontSize={{ base: "14px", md: "14px" }}
                   paddingX={{ base: "10px", md: "12px" }}
@@ -465,6 +492,26 @@ const Renewals = () => {
                 <Button onClick={handleBulkDelete} colorScheme="orange">
                   Bulk Delete
                 </Button>
+
+                <HStack spacing={4}>
+                  <Input
+                    type="date"
+                    placeholder="Start Date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    size="sm"
+                    maxWidth="200px"
+                  />
+                  <Input
+                    type="date"
+                    placeholder="End Date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    size="sm"
+                    maxWidth="200px"
+                  />
+                </HStack>
+
                 <div>
                   {/* Bulk Upload CSV Button */}
                   <input
@@ -689,7 +736,7 @@ const Renewals = () => {
                                         name="select"
                                         type="checkbox"
                                         onChange={(e) => {
-                                          handleSelect(e)
+                                          handleSelect(e);
                                         }}
                                       />
                                     ) : (
