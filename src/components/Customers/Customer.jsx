@@ -170,6 +170,8 @@ const Customer = () => {
     }
   };
 
+  console.log(data);
+
   const addCustomersHandler = () => {
     dispatch(openAddCustomersDrawer());
   };

@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Button,
   Checkbox,
   HStack,
@@ -41,7 +42,13 @@ import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import Loading from "../ui/Loading";
 import { FcDatabase } from "react-icons/fc";
-import { FaCaretDown, FaCaretUp, FaFileCsv, FaSms, FaWhatsapp } from "react-icons/fa";
+import {
+  FaCaretDown,
+  FaCaretUp,
+  FaFileCsv,
+  FaSms,
+  FaWhatsapp,
+} from "react-icons/fa";
 import axios from "axios";
 import {
   Table,
@@ -298,7 +305,6 @@ const Leads = () => {
       bg: "rgb(255, 20, 147)",
       text: "#fff",
     },
-
   };
 
   const baseURL = process.env.REACT_APP_BACKEND_URL;
@@ -644,10 +650,95 @@ const Leads = () => {
     New: 0,
   });
 
+  //source graph data
+  const calculateLeadSource = (filteredData) => {
+    const counts = {
+      Linkedin: 0,
+      SocialMedia: 0,
+      Website: 0,
+      Advertising: 0,
+      Friend: 0,
+      ProfessionalsNetwork: 0,
+      CustomerReferral: 0,
+      Sales: 0,
+      DigitalMarketing: 0,
+      Upwork: 0,
+      Gem: 0,
+      Freelancer: 0,
+    };
+
+    filteredData.forEach((lead) => {
+      switch (lead?.source) {
+        case "Linkedin":
+          counts.Linkedin++;
+          break;
+        case "Social Media":
+          counts.SocialMedia++;
+          break;
+        case "Website":
+          counts.Website++;
+          break;
+        case "Advertising":
+          counts.Advertising++;
+          break;
+        case "Friend":
+          counts.Friend++;
+          break;
+        case "Professionals Network":
+          counts.ProfessionalsNetwork++;
+          break;
+        case "Customer Referral":
+          counts.CustomerReferral++;
+          break;
+        case "Sales":
+          counts.Sales++;
+          break;
+        case "Digital Marketing":
+          counts.DigitalMarketing++;
+          break;
+        case "Upwork":
+          counts.Upwork++;
+          break;
+        case "Gem":
+          counts.Gem++;
+          break;
+        case "Freelancer":
+          counts.Freelancer++;
+          break;
+        case "Linkedin":
+          counts.Linkedin++;
+          break;
+        default:
+          // Handle the case where status does not match any of the above
+          break;
+      }
+    });
+
+    return counts;
+  };
+
+  const [sourceCounts, setSourceCounts] = useState({
+    Linkedin: 0,
+    SocialMedia: 0,
+    Website: 0,
+    Advertising: 0,
+    Friend: 0,
+    ProfessionalsNetwork: 0,
+    CustomerReferral: 0,
+    Sales: 0,
+    DigitalMarketing: 0,
+    Upwork: 0,
+    Gem: 0,
+    Freelancer: 0,
+  });
+
   useEffect(() => {
     // Calculate lead counts when filteredData changes
     const counts = calculateLeadStatus(filteredData);
     setStatusCounts(counts);
+
+    const sources = calculateLeadSource(filteredData);
+    setSourceCounts(sources);
   }, [filteredData]);
 
   const statusChartData = {
@@ -668,6 +759,51 @@ const Leads = () => {
       "#C7C7C7",
       "#F35C9D",
       "#55DCB8",
+    ],
+  };
+
+  const sourceChartData = {
+    labels: [
+      "Linkedin",
+      "Social Media",
+      "Website",
+      "Advertising",
+      "Friend",
+      "Professionals Network",
+      "Customer Referral",
+      "Sales",
+      "DigitalMarketing",
+      "Upwork",
+      "Gem",
+      "Freelancer",
+    ],
+    data: [
+      sourceCounts.linkedin,
+      sourceCounts.SocialMedia,
+      sourceCounts.Website,
+      sourceCounts.Advertising,
+      sourceCounts.Friend,
+      sourceCounts.ProfessionalsNetwork,
+      sourceCounts.CustomerReferral,
+      sourceCounts.Sales,
+      sourceCounts.DigitalMarketing,
+      sourceCounts.Upwork,
+      sourceCounts.Gem,
+      sourceCounts.Freelancer,
+    ],
+    ChartColors: [
+      "#F57D6A",
+      "#F8D76A",
+      "#54CA21",
+      "#21CAC1",
+      "#2170CA",
+      "#C439EB",
+      "#C7C7C7",
+      "#F35C9D",
+      "#55DCB8",
+      "#B53471",
+      "#5758BB",
+      "#EE5A24"
     ],
   };
 
@@ -745,13 +881,10 @@ const Leads = () => {
     }
   }
 
-  const handleSelection = (e, id, phone,name) => {
+  const handleSelection = (e, id, phone, name) => {
     if (e.target.checked) {
       setDataInfo([...dataInfo, id]);
-      setSelectedUsers([
-        ...selectedUsers,
-        { phone, name }
-      ]);
+      setSelectedUsers([...selectedUsers, { phone, name }]);
     } else {
       const filter = dataInfo.filter((item) => item !== id);
       setDataInfo(filter);
@@ -792,13 +925,15 @@ const Leads = () => {
     setSelectedGraph(e.target.value);
   };
 
-  const whatsappHandler = async(e) => {
+  const whatsappHandler = async (e) => {
     e.preventDefault();
     console.log(selectedUsers);
-    setComponents((prevComponents) => [{ type: "text", text: "" }, ...prevComponents]);
+    setComponents((prevComponents) => [
+      { type: "text", text: "" },
+      ...prevComponents,
+    ]);
     setOpen(true);
-
-  }
+  };
   const handleComponentChange = (index, value) => {
     setComponents((prevComponents) =>
       prevComponents.map((component, i) =>
@@ -808,10 +943,14 @@ const Leads = () => {
   };
 
   const addComponent = () => {
-    setComponents((prevComponents) => [...prevComponents, { type: "text", text: "" }]);
+    setComponents((prevComponents) => [
+      ...prevComponents,
+      { type: "text", text: "" },
+    ]);
   };
 
-  const sendMessages = async () => {
+  const sendMessages = async (e) => {
+    e.preventDefault();
     setLoading(true);
     for (const data of selectedUsers) {
       const finalComponents = components.map((comp, index) =>
@@ -826,26 +965,25 @@ const Leads = () => {
       console.log(payload);
       try {
         const res = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}send-builk-Whatsapp/`, 
-           payload ,
-          { 
+          `${process.env.REACT_APP_BACKEND_URL}send-builk-Whatsapp/`,
+          payload,
+          {
             headers: {
-              Authorization: `Bearer ${cookies?.access_token}`, 
-            }
+              Authorization: `Bearer ${cookies?.access_token}`,
+            },
           }
         );
-        
-        console.log(res)
       } catch (error) {
-        console.log(error)
+        //console.log(error)
+        toast.error(`Error while sending message: ${error}`);
       }
     }
-
+    toast.success("whatsapp Message sent successfully.");
+    setOpen(false);
     setSelectedUsers([]);
 
     setLoading(false);
   };
-
 
   return (
     <>
@@ -1072,7 +1210,7 @@ const Leads = () => {
                   rightIcon={<IoLogoWhatsapp size={28} />}
                   backgroundColor="#1640d6"
                 >
-                 Bulk Whatsapp
+                  Bulk Whatsapp
                 </Button>
                 <Button
                   fontSize={{ base: "12px", md: "14px" }}
@@ -1365,7 +1503,12 @@ const Leads = () => {
                                             e,
                                             cell.row.original.phone
                                           );
-                                          handleSelection(e, e.target.value, cell.row.original.phone, cell.row.original.name);
+                                          handleSelection(
+                                            e,
+                                            e.target.value,
+                                            cell.row.original.phone,
+                                            cell.row.original.name
+                                          );
                                         }}
                                       />
                                     )}
@@ -1538,6 +1681,7 @@ const Leads = () => {
               >
                 <option value="dynamicChart">Lead Status</option>
                 <option value="anotherGraph">Lead Category</option>
+                <option value="sourceGraph">Lead Source</option>
                 {/* Add more options as needed */}
               </Select>
             </div>
@@ -1559,46 +1703,62 @@ const Leads = () => {
                     ChartColors={chartData.ChartColors}
                   />
                 )}
+
+                {selectedGraph === "sourceGraph" && (
+                  <DynamicChart
+                    labels={sourceChartData.labels}
+                    data={sourceChartData.data}
+                    ChartColors={sourceChartData.ChartColors}
+                  />
+                )}
               </div>
             )}
           </div>
         </div>
       )}
 
-<Modal isOpen={open} onClose={() => setOpen(false)}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Bulk WhatsApp Sender</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <Input
-            placeholder="Template Name"
-            value={templateName}
-            onChange={(e) => setTemplateName(e.target.value)}
-            mb={2}
-          />
-          <Input
-            placeholder="Template Language"
-            value={templateLang}
-            onChange={(e) => setTemplateLang(e.target.value)}
-            mb={2}
-          />
-           {components.slice(1).map((component, index) => (
+      <Modal isOpen={open} onClose={() => setOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Bulk WhatsApp Sender</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
             <Input
-              key={index + 1}
-              placeholder={`Component Text ${index + 1}`}
-              value={component.text}
-              onChange={(e) => handleComponentChange(index + 1, e.target.value)}
+              placeholder="Template Name"
+              value={templateName}
+              onChange={(e) => setTemplateName(e.target.value)}
               mb={2}
             />
-          ))}
-          <Button onClick={addComponent} mb={2}>Add Component</Button>
-          <Button onClick={sendMessages} isLoading={loading} colorScheme="blue">
-            {loading ? "Sending..." : "Send Messages"}
-          </Button>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+            <Input
+              placeholder="Template Language"
+              value={templateLang}
+              onChange={(e) => setTemplateLang(e.target.value)}
+              mb={2}
+            />
+            {components.slice(1).map((component, index) => (
+              <Input
+                key={index + 1}
+                placeholder={`Component Text ${index + 1}`}
+                value={component.text}
+                onChange={(e) =>
+                  handleComponentChange(index + 1, e.target.value)
+                }
+                mb={2}
+              />
+            ))}
+            <Box className="flex items-center justify-center gap-2">
+              <Button onClick={addComponent}>Add Component</Button>
+              <Button
+                onClick={(e) => sendMessages(e)}
+                isLoading={loading}
+                colorScheme="blue"
+              >
+                {loading ? "Sending..." : "Send Messages"}
+              </Button>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
