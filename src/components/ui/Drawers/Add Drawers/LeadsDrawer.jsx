@@ -70,6 +70,10 @@ const LeadsDrawer = ({
     { value: "Professionals Network", label: "Professionals Network" },
     { value: "Customer Referral", label: "Customer Referral" },
     { value: "Sales", label: "Sales" },
+    { value: "Digital Marketing", label: "Digital Marketing"},
+    { value: "Upwork", label: "Upwork" },
+    { value: "Gem", label: "Gem" },
+    { value: "Freelancer", label: "Freelancer"},
   ];
 
   const [typeId, setTypeId] = useState();
