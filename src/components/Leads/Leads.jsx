@@ -282,6 +282,23 @@ const Leads = () => {
       bg: "rgb(255, 20, 147)",
       text: "#fff",
     },
+    "Digital Marketing": {
+      bg: "rgb(255, 20, 147)",
+      text: "#fff",
+    },
+    Upwork: {
+      bg: "rgb(255, 20, 147)",
+      text: "#fff",
+    },
+    Gem: {
+      bg: "rgb(255, 20, 147)",
+      text: "#fff",
+    },
+    Freelancer: {
+      bg: "rgb(255, 20, 147)",
+      text: "#fff",
+    },
+
   };
 
   const baseURL = process.env.REACT_APP_BACKEND_URL;
@@ -823,6 +840,8 @@ const Leads = () => {
         console.log(error)
       }
     }
+
+    setSelectedUsers([]);
 
     setLoading(false);
   };
@@ -1420,12 +1439,12 @@ const Leads = () => {
                                         style={{
                                           backgroundColor:
                                             sourceStyles[
-                                              row.original.source.toLowerCase()
-                                            ].bg,
+                                              row?.original?.source?.toLowerCase()
+                                            ]?.bg,
                                           color:
                                             sourceStyles[
-                                              row.original.source.toLowerCase()
-                                            ].text,
+                                              row?.original?.source?.toLowerCase()
+                                            ]?.text,
                                         }}
                                       >
                                         {row.original.source}
