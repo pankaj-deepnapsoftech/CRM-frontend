@@ -193,6 +193,8 @@ const Invoices = () => {
     setLoading(false);
   };
 
+  console.log(data);
+  
   const deleteHandler = async (id) => {
     try {
       const baseUrl = process.env.REACT_APP_BACKEND_URL;
