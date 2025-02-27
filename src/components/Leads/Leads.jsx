@@ -815,7 +815,7 @@ const Leads = () => {
     setLoading(true);
     for (const data of selectedUsers) {
       const finalComponents = components.map((comp, index) =>
-        index === 0 ? { type: "text", text: data.name } : comp
+        index === 0 ? { type: "text", text: data.name } : comp.text && comp
       );
       const payload = {
         phone: data.phone.trim(),
