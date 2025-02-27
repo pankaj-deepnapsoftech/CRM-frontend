@@ -4,6 +4,12 @@ import {
   Checkbox,
   HStack,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Select,
   Textarea,
   useDisclosure,
@@ -35,8 +41,8 @@ import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 import Loading from "../ui/Loading";
 import { FcDatabase } from "react-icons/fc";
-import { FaCaretDown, FaCaretUp, FaFileCsv, FaSms } from "react-icons/fa";
-
+import { FaCaretDown, FaCaretUp, FaFileCsv, FaSms, FaWhatsapp } from "react-icons/fa";
+import axios from "axios";
 import {
   Table,
   Thead,
@@ -66,7 +72,7 @@ import {
 import { json, Link, useLocation } from "react-router-dom";
 import { DynamicChart, PieChart } from "../ui/Charts/PieChart";
 import { checkAccess } from "../../utils/checkAccess";
-
+import { IoLogoWhatsapp } from "react-icons/io";
 import sampleCSV from "../../assets/bulk-upload-sample.csv";
 import SMSDrawer from "../ui/Drawers/Add Drawers/SMSDrawer";
 import BulkAssignDrawer from "../ui/Drawers/Add Drawers/BulkAssignDrawer";
@@ -160,11 +166,15 @@ const Leads = () => {
   const [dataInfo, setDataInfo] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
-
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [toggleBulkUpload, setToggleBulkUpload] = useState(false);
   const csvRef = useRef();
 
   const [bulkSMSMobiles, setBulkSMSMobiles] = useState([]);
+  const [components, setComponents] = useState([{ type: "text", text: "" }]);
+  const [open, setOpen] = useState(false);
+  const [templateName, setTemplateName] = useState("");
+  const [templateLang, setTemplateLang] = useState("en");
 
   const {
     getTableProps,
@@ -718,9 +728,13 @@ const Leads = () => {
     }
   }
 
-  const handleSelection = (e, id) => {
+  const handleSelection = (e, id, phone,name) => {
     if (e.target.checked) {
       setDataInfo([...dataInfo, id]);
+      setSelectedUsers([
+        ...selectedUsers,
+        { phone, name }
+      ]);
     } else {
       const filter = dataInfo.filter((item) => item !== id);
       setDataInfo(filter);
@@ -760,6 +774,59 @@ const Leads = () => {
   const handleGraphChange = (e) => {
     setSelectedGraph(e.target.value);
   };
+
+  const whatsappHandler = async(e) => {
+    e.preventDefault();
+    console.log(selectedUsers);
+    setComponents((prevComponents) => [{ type: "text", text: "" }, ...prevComponents]);
+    setOpen(true);
+
+  }
+  const handleComponentChange = (index, value) => {
+    setComponents((prevComponents) =>
+      prevComponents.map((component, i) =>
+        i === index ? { ...component, text: value } : component
+      )
+    );
+  };
+
+  const addComponent = () => {
+    setComponents((prevComponents) => [...prevComponents, { type: "text", text: "" }]);
+  };
+
+  const sendMessages = async () => {
+    setLoading(true);
+    for (const data of selectedUsers) {
+      const finalComponents = components.map((comp, index) =>
+        index === 0 ? { type: "text", text: data.name } : comp
+      );
+      const payload = {
+        phone: data.phone.trim(),
+        template_name: templateName,
+        template_lang: templateLang,
+        components: finalComponents,
+      };
+      console.log(payload);
+      try {
+        const res = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}send-builk-Whatsapp/`, 
+           payload ,
+          { 
+            headers: {
+              Authorization: `Bearer ${cookies?.access_token}`, 
+            }
+          }
+        );
+        
+        console.log(res)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    setLoading(false);
+  };
+
 
   return (
     <>
@@ -976,6 +1043,18 @@ const Leads = () => {
                     </>
                   )}
                 </div>
+                <Button
+                  fontSize={{ base: "12px", md: "14px" }}
+                  paddingX={{ base: "8px", md: "12px" }}
+                  paddingY={{ base: "2px", md: "3px" }}
+                  width={{ base: "100%", md: 200 }}
+                  onClick={whatsappHandler}
+                  color="white"
+                  rightIcon={<IoLogoWhatsapp size={28} />}
+                  backgroundColor="#1640d6"
+                >
+                 Bulk Whatsapp
+                </Button>
                 <Button
                   fontSize={{ base: "12px", md: "14px" }}
                   paddingX={{ base: "8px", md: "12px" }}
@@ -1267,7 +1346,7 @@ const Leads = () => {
                                             e,
                                             cell.row.original.phone
                                           );
-                                          handleSelection(e, e.target.value);
+                                          handleSelection(e, e.target.value, cell.row.original.phone, cell.row.original.name);
                                         }}
                                       />
                                     )}
@@ -1466,6 +1545,41 @@ const Leads = () => {
           </div>
         </div>
       )}
+
+<Modal isOpen={open} onClose={() => setOpen(false)}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Bulk WhatsApp Sender</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Input
+            placeholder="Template Name"
+            value={templateName}
+            onChange={(e) => setTemplateName(e.target.value)}
+            mb={2}
+          />
+          <Input
+            placeholder="Template Language"
+            value={templateLang}
+            onChange={(e) => setTemplateLang(e.target.value)}
+            mb={2}
+          />
+           {components.slice(1).map((component, index) => (
+            <Input
+              key={index + 1}
+              placeholder={`Component Text ${index + 1}`}
+              value={component.text}
+              onChange={(e) => handleComponentChange(index + 1, e.target.value)}
+              mb={2}
+            />
+          ))}
+          <Button onClick={addComponent} mb={2}>Add Component</Button>
+          <Button onClick={sendMessages} isLoading={loading} colorScheme="blue">
+            {loading ? "Sending..." : "Send Messages"}
+          </Button>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
     </>
   );
 };
