@@ -1,4 +1,4 @@
-import { Button, Link, Select, useDisclosure } from "@chakra-ui/react";
+import { Badge, Button, Link, Select, useDisclosure } from "@chakra-ui/react";
 import {
   MdOutlineRefresh,
   MdArrowBack,
@@ -85,6 +85,10 @@ const columns = [
     Header: "Renewals Times",
     accessor: "renewalTimes",
   },
+  {
+    Header: "Status",
+    accessor: "status",
+  },
 ];
 
 const Renewals = () => {
@@ -155,7 +159,6 @@ const Renewals = () => {
 
       const data = await response.json();
 
-
       if (!data.success) {
         throw new Error(data.message);
       }
@@ -187,7 +190,7 @@ const Renewals = () => {
       const data = await response.json();
       setDateWise(data?.data ? data?.data : []);
     } catch (error) {
-      toast.error(`Something went wrong! ${error}`)
+      toast.error(`Something went wrong! ${error}`);
     }
   };
 
@@ -247,7 +250,6 @@ const Renewals = () => {
       onClose();
       fetchAllPeople(); // Refresh data after deletion
     } catch (err) {
-
       toast.error(err.message);
     }
   };
@@ -296,7 +298,6 @@ const Renewals = () => {
 
       const formData = new FormData();
       formData.append("excel", file); // Use the "excel" field
-
 
       fetch(`${baseURL}renewal/bulk-upload`, {
         method: "POST",
@@ -632,8 +633,8 @@ const Renewals = () => {
                             className="bg-blue-100  text-blue-800 px-4 py-2 m-2 rounded-lg shadow-md"
                           >
                             <p className="whitespace-pre-line text-center">
-                              📅 Due {item.lastRenewalDate.split("T")[0]} /{   " "}
-                              {item.contractType} / {item.productName} / {" "} 
+                              📅 Due {item.lastRenewalDate.split("T")[0]} /{" "}
+                              {item.contractType} / {item.productName} /{" "}
                               {item.custumerName}
                             </p>
                           </div>
@@ -740,6 +741,16 @@ const Renewals = () => {
                                           handleSelect(e);
                                         }}
                                       />
+                                    ) : cell.column.id === "status" ? (
+                                      <Badge
+                                        colorScheme={
+                                          row.original?.status === "pending"
+                                            ? "orange"
+                                            : "green"
+                                        }
+                                      >
+                                        {row.original?.status}
+                                      </Badge>
                                     ) : (
                                       cell.render("Cell")
                                     )}

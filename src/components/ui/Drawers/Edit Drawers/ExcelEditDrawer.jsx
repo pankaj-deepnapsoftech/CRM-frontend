@@ -49,6 +49,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [years, setYears] = useState(0);
   const [months, setMonths] = useState(0);
+  const [status, setStatus] = useState("");
 
   const fetchPeopleDetails = async () => {
     setIsLoading(true);
@@ -72,6 +73,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
       setYears(personData.years);
       setMonths(personData.months);
       setDoc(personData.doc);
+      setStatus(personData.status);
 
       const isContractOther = !contractOptions.some(
         (opt) => opt.value === personData.contractType
@@ -124,9 +126,12 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
       formData.append("years", years);
       formData.append("months", months);
       formData.append("doc", doc);
+      formData.append("status", status);
 
       if (contractAttachment)
         formData.append("contractAttachment", contractAttachment);
+
+     
 
       const response = await fetch(`${baseURL}renewal/update-record/${id}`, {
         method: "PUT",
@@ -144,6 +149,11 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
       setIsLoading(false);
     }
   };
+
+  const statusOption = [
+    { value: "pending", label: "Pending" },
+    { value: "renewed", label: "Renewed" },
+  ];
 
   return (
     <div
@@ -167,7 +177,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
           <Loading />
         ) : (
           <form onSubmit={editPeopleHandler} className="space-y-5">
-            <FormControl >
+            <FormControl>
               <FormLabel>Customer Name</FormLabel>
               <Input
                 value={custumerName}
@@ -176,7 +186,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               />
             </FormControl>
 
-            <FormControl >
+            <FormControl>
               <FormLabel>Phone Number</FormLabel>
               <Input
                 value={phnNumber}
@@ -185,7 +195,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               />
             </FormControl>
 
-            <FormControl >
+            <FormControl>
               <FormLabel>Contract Type</FormLabel>
               <Select
                 value={contractType}
@@ -207,7 +217,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               )}
             </FormControl>
 
-            <FormControl >
+            <FormControl>
               <FormLabel>Contract Number</FormLabel>
               <Input
                 value={contractNumber}
@@ -216,7 +226,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               />
             </FormControl>
 
-            <FormControl >
+            <FormControl>
               <FormLabel>Product Name</FormLabel>
               <Input
                 value={productName}
@@ -275,12 +285,12 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
             <FormControl>
               <FormLabel>Contract Attachment</FormLabel>
               <Input
-              onChange={(e) => setContractAttachment(e.target.files[0])}
-              type="file"
-            />
+                onChange={(e) => setContractAttachment(e.target.files[0])}
+                type="file"
+              />
             </FormControl>
 
-            <FormControl >
+            <FormControl>
               <FormLabel>Renewal Date</FormLabel>
               <Input
                 value={renewalDate}
@@ -298,13 +308,28 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
               />
             </FormControl>
 
-            <FormControl >
+            <FormControl>
               <FormLabel>Renewal Times</FormLabel>
               <Input
                 value={renewalTimes}
                 onChange={(e) => setRenewalTimes(e.target.value)}
                 type="number"
               />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel>Renewal Status</FormLabel>
+              <Select
+                value={status}
+                options={statusOption}
+                onChange={(selected) => setStatus(selected.target.value)}
+              >
+                {statusOption.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </Select>
             </FormControl>
 
             {/* Add other form fields similarly */}

@@ -32,6 +32,11 @@ const modeOptions = [
   { value: "MLY", label: "MLY" },
 ];
 
+const statusOption = [
+  {value: "pending", label: "Pending"},
+  {value: "renewed", label: "Renewed"}
+]
+
 const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
   const [cookies] = useCookies();
   const [custumerName, setCustumerName] = useState("");
@@ -50,6 +55,7 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
   const [renewalTimes, setRenewalTimes] = useState("");
   const [years, setYears] = useState(0);
   const [months, setMonths] = useState(0);
+  const [status, setStatus] = useState("");
 
   const addPeopleHandler = async (e) => {
     e.preventDefault();
@@ -73,6 +79,8 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
       formData.append("renewalTimes", renewalTimes);
       formData.append("years", years);
       formData.append("months", months);
+      formData.append("status", status);
+
 
 
       const response = await fetch(baseURL + "renewal/create-record", {
@@ -228,6 +236,21 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
               onChange={(e) => setRenewalTimes(e.target.value)}
               type="number"
             />
+          </FormControl>
+
+          <FormControl isRequired>
+            <FormLabel>Renewal Status</FormLabel>
+            <Select
+              options={statusOption}
+              onChange={(selected) => setStatus(selected.value)}
+            >
+              {statusOption.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+            </Select>
+            
           </FormControl>
 
           <Button
