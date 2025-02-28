@@ -182,6 +182,7 @@ const Leads = () => {
   const [open, setOpen] = useState(false);
   const [templateName, setTemplateName] = useState("");
   const [templateLang, setTemplateLang] = useState("en");
+  const [bulkName, setBulkName] = useState([]);
 
   const {
     getTableProps,
@@ -457,11 +458,13 @@ const Leads = () => {
     }
   };
 
-  const selectOneHandler = (e, phone) => {
+  const selectOneHandler = (e, phone, name) => {
     if (e.target.checked) {
       setBulkSMSMobiles((prev) => [...prev, phone]);
+      setBulkName((prev) => [...prev, name]);
     }
   };
+
 
   const bulkAssignHandler = async (e) => {
     const rows = document.getElementsByName("select");
@@ -811,7 +814,7 @@ const Leads = () => {
       "#55DCB8",
       "#B53471",
       "#5758BB",
-      "#EE5A24"
+      "#EE5A24",
     ],
   };
 
@@ -935,18 +938,16 @@ const Leads = () => {
 
   const whatsappHandler = async (e) => {
     e.preventDefault();
-    console.log(selectedUsers)
-   if(selectedUsers.length === 0){
-    toast.error("Please select users first!")
-   }else{
-    setComponents((prevComponents) => [
-      { type: "text", text: "" },
-      ...prevComponents,
-    ]);
-    setOpen(true);
-   }
-
-   
+    console.log(selectedUsers);
+    if (selectedUsers.length === 0) {
+      toast.error("Please select users first!");
+    } else {
+      setComponents((prevComponents) => [
+        { type: "text", text: "" },
+        ...prevComponents,
+      ]);
+      setOpen(true);
+    }
   };
   const handleComponentChange = (index, value) => {
     setComponents((prevComponents) =>
@@ -972,12 +973,12 @@ const Leads = () => {
       );
       const payload = {
         phone: data.phone.trim(),
-        name: data.name.trim(),
         template_name: templateName,
         template_lang: templateLang,
         components: finalComponents,
       };
-      console.log(payload);
+
+      //console.log(payload);
       try {
         const res = await axios.post(
           `${process.env.REACT_APP_BACKEND_URL}send-builk-Whatsapp/`,
@@ -1329,6 +1330,7 @@ const Leads = () => {
                     closeContextMenuHandler={() => {
                       dispatch(closeSendSMSDrawer());
                       setBulkSMSMobiles([]);
+                      setBulkName([]);
                     }}
                   >
                     <SMSDrawer
@@ -1336,8 +1338,10 @@ const Leads = () => {
                       closeDrawerHandler={() => {
                         dispatch(closeSendSMSDrawer());
                         setBulkSMSMobiles([]);
+                        setBulkName([]);
                       }}
                       mobiles={bulkSMSMobiles}
+                      names = {bulkName}
                     />
                   </ClickMenu>
                 )}
@@ -1516,7 +1520,8 @@ const Leads = () => {
                                         onChange={(e) => {
                                           selectOneHandler(
                                             e,
-                                            cell.row.original.phone
+                                            cell.row.original.phone,
+                                            cell.row.original.name
                                           );
                                           handleSelection(
                                             e,
@@ -1762,7 +1767,9 @@ const Leads = () => {
               />
             ))}
             <Box className="flex items-center justify-center gap-2">
-              <Button onClick={addComponent} colorScheme="orange">Add Component</Button>
+              <Button onClick={addComponent} colorScheme="orange">
+                Add Component
+              </Button>
               <Button
                 onClick={(e) => sendMessages(e)}
                 isLoading={loading}

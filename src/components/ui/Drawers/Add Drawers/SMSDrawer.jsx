@@ -4,7 +4,8 @@ import { useCookies } from "react-cookie";
 import { BiX } from "react-icons/bi";
 import { toast } from "react-toastify";
 
-const SMSDrawer = ({ fetchAllLeads, closeDrawerHandler, mobiles }) => {
+const SMSDrawer = ({ fetchAllLeads, closeDrawerHandler, mobiles, names }) => {
+
     const [templateId, setTemplateId] = useState();
     const [message, setMessage] = useState();
     const [cookies] = useCookies();
@@ -28,7 +29,8 @@ const SMSDrawer = ({ fetchAllLeads, closeDrawerHandler, mobiles }) => {
                 body: JSON.stringify({
                     mobiles,
                     templateId,
-                    message
+                    message,
+                    name: names,
                 })
             });
             const data = await response.json();
