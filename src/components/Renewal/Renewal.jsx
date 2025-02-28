@@ -55,6 +55,7 @@ import {
 import { checkAccess } from "../../utils/checkAccess";
 import axios from "axios";
 import { HStack } from "@chakra-ui/react";
+import { DynamicChart } from "../ui/Charts/PieChart";
 
 const columns = [
   {
@@ -157,26 +158,27 @@ const Renewals = () => {
         },
       });
 
-      const data = await response.json();
+      const res = await response.json();
 
-      if (!data.success) {
+      if (!res.success) {
         throw new Error(data.message);
       }
 
-      setData(data.data || []); // Ensure it's always an array
+      setData(res.data || []); // Ensure it's always an array
 
-      setFilteredData(data.data || []);
+      setFilteredData(res.data || []);
 
       // Extract IDs and store them separately
       const extractedIds = data.data?.map((person) => person._id) || [];
       setPeopleIds(extractedIds);
-
       setLoading(false);
     } catch (err) {
       setLoading(false);
       toast.error(err.message);
     }
   };
+
+  useEffect(() => console.log(filteredData), [filteredData]);
 
   const fetchAllDateWiseData = async () => {
     try {
@@ -381,6 +383,70 @@ const Renewals = () => {
     filterDataByDate(startDate, endDate);
   }, [startDate, endDate, data]);
 
+  const calculateLeadStatus = (filteredData) => {
+    const counts = {
+      LIFEINSURANCE: 0,
+      HEALTHINSURANCE: 0,
+      PERSONALLOAN: 0,
+      BUSINESSLOAN: 0,
+      CCLIMIT: 0,
+      other: 0,
+    };
+
+    filteredData.forEach((data) => {
+      if (data?.contractType === "LIFE INSURANCE") {
+        counts.LIFEINSURANCE++;
+      } else if (data?.contractType === "HEALTH INSURANCE") {
+        counts.HEALTHINSURANCE++;
+      } else if (data?.contractType === "PERSONAL LOAN") {
+        counts.PERSONALLOAN++;
+      } else if (data?.contractType === "BUSINESS LOAN") {
+        counts.BUSINESSLOAN++;
+      } else if (data?.contractType === "CC LIMIT") {
+        counts.CCLIMIT++;
+      } else {
+        counts.other++;  // For any contract type that is not one of the specified ones
+      }
+    });
+
+    return counts;
+  };
+
+  const [statusCounts, setStatusCounts] = useState({
+    LIFEINSURANCE: 0,
+    HEALTHINSURANCE: 0,
+    PERSONALLOAN: 0,
+    BUSINESSLOAN: 0,
+    CCLIMIT: 0,
+    other: 0,
+  });
+
+  useEffect(() => {
+    // Calculate lead counts when filteredData changes
+    const counts = calculateLeadStatus(filteredData);
+    setStatusCounts(counts);
+  }, [filteredData]);
+
+  const statusChartData = {
+    labels: ["LIFE INSURANCE", "HEALTH INSURANCE", "PERSONAL LOAN", "BUSINESS LOAN", "CC LIMIT", "other"],
+    data: [
+      statusCounts.LIFEINSURANCE,
+      statusCounts.HEALTHINSURANCE,
+      statusCounts.PERSONALLOAN,
+      statusCounts.BUSINESSLOAN,
+      statusCounts.CCLIMIT,
+      statusCounts.other,
+    ],
+    ChartColors: [
+      "#F57D6A",
+      "#F8D76A",
+      "#54CA21",
+      "#21CAC1",
+      "#2170CA",
+      "#C439EB",      
+    ],
+  };
+
   return (
     <>
       {!isAllowed && (
@@ -401,8 +467,7 @@ const Renewals = () => {
 
       {isAllowed && (
         <div
-          className="border-[1px] px-2 py-8 md:px-9 rounded"
-          style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+          className=" px-2 py-8 md:px-9 "
         >
           <>
             <AlertDialog
@@ -810,6 +875,16 @@ const Renewals = () => {
                 </div>
               )}
             </div>
+            
+          </div>
+
+          {/* graph */}
+          <div className="mx-auto mt-2 ">
+            <DynamicChart
+              labels={statusChartData.labels}
+              data={statusChartData.data}
+              ChartColors={statusChartData.ChartColors}
+            />
           </div>
         </div>
       )}
