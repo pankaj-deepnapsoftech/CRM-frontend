@@ -30,7 +30,20 @@ ChartJS.register(
 );
 
 const Reports = () => {
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const { role, ...auth } = useSelector((state) => state.auth);
   const { isAllowed, msg } = checkAccess(auth, "report");
   const [paymentStats, setPaymentStats] = useState(Array(12).fill(0));
@@ -50,30 +63,37 @@ const Reports = () => {
   const [totalOfferAmount, setTotalOfferAmount] = useState(0);
 
   const month = new Date().getMonth();
-  const [individualsSelectedMonth, setIndividualsSelectedMonth] = useState(
-    {value: month+1, label: months[month]}
-  );
+  const [individualsSelectedMonth, setIndividualsSelectedMonth] = useState({
+    value: month + 1,
+    label: months[month],
+  });
   const [individualsSelectedYear, setIndividualsSelectedYear] = useState(
     new Date().getFullYear()
   );
-  const [corporatesSelectedMonth, setCorporatesSelectedMonth] = useState(
-    {value: month+1, label: months[month]}
-  );
+  const [corporatesSelectedMonth, setCorporatesSelectedMonth] = useState({
+    value: month + 1,
+    label: months[month],
+  });
   const [corporatesSelectedYear, setCorporatesSelectedYear] = useState(
     new Date().getFullYear()
   );
-  const [leadsSelectedMonth, setLeadsSelectedMonth] = useState(
-    {value: month+1, label: months[month]}
-  );
+  const [leadsSelectedMonth, setLeadsSelectedMonth] = useState({
+    value: month + 1,
+    label: months[month],
+  });
   const [leadsSelectedYear, setLeadsSelectedYear] = useState(
     new Date().getFullYear()
   );
-  const [followupLeadsSelectedMonth, setFollowupLeadsSelectedMonth] = useState(
-    {value: month+1, label: months[month]}
-  );
+  const [followupLeadsSelectedMonth, setFollowupLeadsSelectedMonth] = useState({
+    value: month + 1,
+    label: months[month],
+  });
   const [followupLeadsSelectedYear, setFollowupLeadsSelectedYear] = useState(
     new Date().getFullYear()
   );
+
+  const [smsData, setSmsData] = useState([]);
+  const [totalSms, setTotalSms] = useState(0);
 
   const monthOptions = [
     { value: 1, label: "Jan" },
@@ -316,8 +336,8 @@ const Reports = () => {
     }
   };
 
-  const getIndividualsReport = async () => { 
-    if(!individualsSelectedMonth || !individualsSelectedYear)   {
+  const getIndividualsReport = async () => {
+    if (!individualsSelectedMonth || !individualsSelectedYear) {
       return;
     }
     const baseUrl = process.env.REACT_APP_BACKEND_URL;
@@ -330,7 +350,12 @@ const Reports = () => {
         },
         body: JSON.stringify({
           from: `${individualsSelectedMonth?.value}-01-${individualsSelectedYear}`,
-          to: `${individualsSelectedMonth?.value}-${(individualsSelectedMonth?.value === 8 ||  individualsSelectedMonth?.value % 2 !== 0) ? '31' : '30'}-${individualsSelectedYear}`,
+          to: `${individualsSelectedMonth?.value}-${
+            individualsSelectedMonth?.value === 8 ||
+            individualsSelectedMonth?.value % 2 !== 0
+              ? "31"
+              : "30"
+          }-${individualsSelectedYear}`,
         }),
       });
       const data = await response.json();
@@ -346,7 +371,7 @@ const Reports = () => {
   };
 
   const getCorporatesReport = async () => {
-    if(!corporatesSelectedMonth || !corporatesSelectedYear)   {
+    if (!corporatesSelectedMonth || !corporatesSelectedYear) {
       return;
     }
     const baseUrl = process.env.REACT_APP_BACKEND_URL;
@@ -359,7 +384,12 @@ const Reports = () => {
         },
         body: JSON.stringify({
           from: `${corporatesSelectedMonth?.value}-01-${corporatesSelectedYear}`,
-          to: `${corporatesSelectedMonth?.value}-${(corporatesSelectedMonth?.value === 8 ||  corporatesSelectedMonth?.value % 2 !== 0) ? '31' : '30'}-${corporatesSelectedYear}`,
+          to: `${corporatesSelectedMonth?.value}-${
+            corporatesSelectedMonth?.value === 8 ||
+            corporatesSelectedMonth?.value % 2 !== 0
+              ? "31"
+              : "30"
+          }-${corporatesSelectedYear}`,
         }),
       });
       const data = await response.json();
@@ -375,7 +405,7 @@ const Reports = () => {
   };
 
   const getLeadsReport = async () => {
-    if(!leadsSelectedMonth || !leadsSelectedYear)   {
+    if (!leadsSelectedMonth || !leadsSelectedYear) {
       return;
     }
     const baseUrl = process.env.REACT_APP_BACKEND_URL;
@@ -388,7 +418,12 @@ const Reports = () => {
         },
         body: JSON.stringify({
           from: `${leadsSelectedMonth?.value}-01-${leadsSelectedYear}`,
-          to: `${leadsSelectedMonth?.value}-${(leadsSelectedMonth?.value === 8 ||  leadsSelectedMonth?.value % 2 !== 0) ? '31' : '30'}-${leadsSelectedYear}`,
+          to: `${leadsSelectedMonth?.value}-${
+            leadsSelectedMonth?.value === 8 ||
+            leadsSelectedMonth?.value % 2 !== 0
+              ? "31"
+              : "30"
+          }-${leadsSelectedYear}`,
         }),
       });
       const data = await response.json();
@@ -404,7 +439,7 @@ const Reports = () => {
   };
 
   const getFollowupLeadsReport = async () => {
-    if(!followupLeadsSelectedMonth || !followupLeadsSelectedYear)   {
+    if (!followupLeadsSelectedMonth || !followupLeadsSelectedYear) {
       return;
     }
     const baseUrl = process.env.REACT_APP_BACKEND_URL;
@@ -419,7 +454,12 @@ const Reports = () => {
           },
           body: JSON.stringify({
             from: `${followupLeadsSelectedMonth?.value}-01-${followupLeadsSelectedYear}`,
-          to: `${followupLeadsSelectedMonth?.value}-${(followupLeadsSelectedMonth?.value === 8 ||  followupLeadsSelectedMonth?.value % 2 !== 0) ? '31' : '30'}-${followupLeadsSelectedYear}`,
+            to: `${followupLeadsSelectedMonth?.value}-${
+              followupLeadsSelectedMonth?.value === 8 ||
+              followupLeadsSelectedMonth?.value % 2 !== 0
+                ? "31"
+                : "30"
+            }-${followupLeadsSelectedYear}`,
           }),
         }
       );
@@ -465,17 +505,42 @@ const Reports = () => {
   };
 
   const fetchBulkSms = async () => {
-    const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}sms/get-bulk-sms/`, {
-      headers: {
-        authorization: `Bearer ${cookies?.access_token}`,
+    const res = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}sms/get-bulk-sms/`,
+      {
+        headers: {
+          authorization: `Bearer ${cookies?.access_token}`,
+        },
       }
-    })
-    
-    console.log(res);
+    );
+
+    setSmsData(res.data.logs);
+  };
+  useEffect(() => {
+    fetchBulkSms();
+  }, []);
+
+
+  console.log(smsData)
+
+  const countTotalMessages = () => {
+    return smsData.reduce((count, data) => count + data.mobiles.length, 0);
   };
 
-  fetchBulkSms();
+  // Function to count messages by date
+  // const countMessagesByDate = (date) => {
+  //   const filteredData = smsData.filter((data) => {
+  //     const messageDate = new Date(data.timestamp).toISOString().split('T')[0];
+  //     return messageDate === date;
+  //   });
 
+  //   return filteredData.reduce((count, data) => count + data.mobiles.length, 0);
+  // };
+
+  // Set total messages when smsData changes
+  useEffect(() => {
+    setTotalSms(countTotalMessages());
+  }, [smsData]);
 
   useEffect(() => {
     if (isAllowed) {
@@ -585,6 +650,19 @@ const Reports = () => {
                 </span>
               </div>
             </div>
+            <div
+              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
+              className="bg-white rounded-md text-center py-7"
+            >
+              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
+                Bulk SMS
+              </h1>
+              <div className="mt-4 font-bold text-[#595959]">
+                <span className="bg-[#ff6565] text-[#ffffff] rounded px-2 ml-1 py-1">
+                  {totalSms}
+                </span>
+              </div>
+            </div>
           </div>
 
           <div>
@@ -627,7 +705,7 @@ const Reports = () => {
               <div className="flex justify-between items-center mt-10">
                 <h1 className="text-2xl">Corporates Report</h1>
                 <div className="flex gap-2">
-                <Select
+                  <Select
                     className="w-[200px]"
                     options={monthOptions}
                     value={corporatesSelectedMonth}
@@ -662,7 +740,7 @@ const Reports = () => {
               <div className="flex justify-between items-center mt-10">
                 <h1 className="text-2xl">Leads Report</h1>
                 <div className="flex gap-2">
-                <Select
+                  <Select
                     className="w-[200px]"
                     options={monthOptions}
                     value={leadsSelectedMonth}
@@ -697,7 +775,7 @@ const Reports = () => {
               <div className="flex justify-between items-center mt-10">
                 <h1 className="text-2xl">Follow Up Leads Report</h1>
                 <div className="flex gap-2">
-                <Select
+                  <Select
                     className="w-[200px]"
                     options={monthOptions}
                     value={followupLeadsSelectedMonth}
@@ -710,7 +788,9 @@ const Reports = () => {
                     max="2099"
                     step="1"
                     value={followupLeadsSelectedYear}
-                    onChange={(e) => setFollowupLeadsSelectedYear(e.target.value)}
+                    onChange={(e) =>
+                      setFollowupLeadsSelectedYear(e.target.value)
+                    }
                   />
                   <Button
                     fontSize={{ base: "14px", md: "14px" }}

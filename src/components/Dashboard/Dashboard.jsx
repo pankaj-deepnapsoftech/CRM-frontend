@@ -9,6 +9,7 @@ import {
   Th,
   Td,
   Divider,
+  Text,
 } from "@chakra-ui/react";
 import Select from "react-select";
 import { useEffect, useState } from "react";
@@ -29,6 +30,7 @@ import Cards from "./Cards";
 import PieChart from "./PieChart";
 import ListCard from "./ListCard";
 import List2 from "./List2";
+import { FaSms } from "react-icons/fa";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -92,7 +94,6 @@ const Dashboard = () => {
   const [totalOffers, setTotalOffers] = useState(0);
   const [totalUnpaidInvoices, setTotalUnpaidInvoices] = useState(0);
 
-  
   const progressStyles = {
     draft: {
       bg: "#6a6a6a",
@@ -283,7 +284,6 @@ const Dashboard = () => {
       if (!data.success) {
         throw new Error(data.message);
       }
-
     } catch (err) {
       toast.error(err.message);
     }
@@ -418,13 +418,13 @@ const Dashboard = () => {
     setTotalInvoices(0);
     setTotalOffers(0);
     setTotalProformaInvoices(0);
-    setTotalLeads(0);   
+    setTotalLeads(0);
     setFollowupLeads(0);
     setCancelledLeads(0);
     setCompletedLeads(0);
     setTotalOffer(0);
     setTotalUnpaidInvoiceAmount(0);
-    setTotalOfferAmount(0);    
+    setTotalOfferAmount(0);
     setProducts(0);
     setTotalEmployees(0);
     setTotalPeople(0);
@@ -514,7 +514,6 @@ const Dashboard = () => {
 
   return (
     <>
-     
       {!isAllowed && (
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-3xl font-bold text-[#ff6f6f] flex gap-x-2">
           {/* {!isSubscribed ? 'Subscribe to unlock!' : 'You do not have access to this route. Contact your Super Admin for further action.'} */}
@@ -532,7 +531,6 @@ const Dashboard = () => {
         </div>
       )}
 
-   
       {isAllowed && (
         <div>
           <div className="flex flex-wrap gap-x-2 justify-between">
@@ -629,7 +627,7 @@ const Dashboard = () => {
                     type="submit"
                     color="white"
                     className="w-full sm:w-40"
-                  colorScheme="blue"
+                    colorScheme="blue"
                   >
                     Apply
                   </Button>
@@ -637,7 +635,7 @@ const Dashboard = () => {
                     type="submit"
                     color="white"
                     className="w-full sm:w-40"
-                   colorScheme="orange"
+                    colorScheme="orange"
                     onClick={() => setEmployeeEmail("")}
                   >
                     Admin Dashboard
@@ -647,7 +645,7 @@ const Dashboard = () => {
             </div>
           )}
           <Divider className="my-5" />
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
             <Link to="admins">
               <Cards
@@ -691,14 +689,12 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          
-               <PieChart
-               totalLeads={totalLeads}
-               canceledLeads={cancelledLeads}
-               completedLeads={completedLeads}
-               followupLeads={followupLeads}
-             />    
-           
+            <PieChart
+              totalLeads={totalLeads}
+              canceledLeads={cancelledLeads}
+              completedLeads={completedLeads}
+              followupLeads={followupLeads}
+            />
 
             {/* List Card */}
             <div className="col-span-1">
@@ -716,8 +712,10 @@ const Dashboard = () => {
             </div>
           </div>
 
-
-       
+          <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 mt-5">
+            
+           
+          </div>
         </div>
       )}
     </>
