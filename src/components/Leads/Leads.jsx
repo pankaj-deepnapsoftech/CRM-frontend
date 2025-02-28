@@ -935,12 +935,18 @@ const Leads = () => {
 
   const whatsappHandler = async (e) => {
     e.preventDefault();
-    console.log(selectedUsers);
+    console.log(selectedUsers)
+   if(selectedUsers.length === 0){
+    toast.error("Please select users first!")
+   }else{
     setComponents((prevComponents) => [
       { type: "text", text: "" },
       ...prevComponents,
     ]);
     setOpen(true);
+   }
+
+   
   };
   const handleComponentChange = (index, value) => {
     setComponents((prevComponents) =>
@@ -1755,7 +1761,7 @@ const Leads = () => {
               />
             ))}
             <Box className="flex items-center justify-center gap-2">
-              <Button onClick={addComponent}>Add Component</Button>
+              <Button onClick={addComponent} colorScheme="orange">Add Component</Button>
               <Button
                 onClick={(e) => sendMessages(e)}
                 isLoading={loading}
