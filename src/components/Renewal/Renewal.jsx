@@ -632,8 +632,9 @@ const Renewals = () => {
                             className="bg-blue-100  text-blue-800 px-4 py-2 m-2 rounded-lg shadow-md"
                           >
                             <p className="whitespace-pre-line text-center">
-                              📅 Due {item.lastRenewalDate.split("T")[0]} /{" "}
-                              {item.contractType} / {item.productName}
+                              📅 Due {item.lastRenewalDate.split("T")[0]} /{   " "}
+                              {item.contractType} / {item.productName} / {" "} 
+                              {item.custumerName}
                             </p>
                           </div>
                         ))}

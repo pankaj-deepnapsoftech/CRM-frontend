@@ -289,20 +289,28 @@ const Leads = () => {
       bg: "rgb(255, 20, 147)",
       text: "#fff",
     },
-    "Digital Marketing": {
+    "digital marketing": {
       bg: "rgb(255, 20, 147)",
       text: "#fff",
     },
-    Upwork: {
-      bg: "rgb(255, 20, 147)",
+    upwork: {
+      bg: "#636e72",
       text: "#fff",
     },
-    Gem: {
-      bg: "rgb(255, 20, 147)",
+    gem: {
+      bg: "#fdcb6e",
       text: "#fff",
     },
-    Freelancer: {
-      bg: "rgb(255, 20, 147)",
+    freelancer: {
+      bg: "#ff7675",
+      text: "#fff",
+    },
+    indiamart: {
+      bg: "#e17055",
+      text: "#fff",
+    },
+    fiverr: {
+      bg: "#00b894",
       text: "#fff",
     },
   };

@@ -300,6 +300,7 @@ const DataBank = () => {
       const filteredLeads = data.leads.filter((lead) => lead.dataBank === true);
       setData(filteredLeads);
       setFilteredData(filteredLeads);
+      setLeadLength(filteredLeads.length);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -511,7 +512,7 @@ const DataBank = () => {
                     Move to lead
                   </Button>
                   <Button colorScheme="blue">
-                    Total Data Bank list {leadLength}
+                    Total Data Bank list: {leadLength}
                   </Button>
                 </div>
               </div>

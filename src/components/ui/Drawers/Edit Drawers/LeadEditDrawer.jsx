@@ -72,6 +72,8 @@ const LeadEditDrawer = ({
     { value: "Upwork", label: "Upwork" },
     { value: "Gem", label: "Gem" },
     { value: "Freelancer", label: "Freelancer"},
+    { value: "IndiaMart", label: "IndiaMart"},
+    { value: "Fiverr", label: "Fiverr"},
   ];
 
   const getAllCompanies = async () => {
