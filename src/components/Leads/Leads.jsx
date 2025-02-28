@@ -972,6 +972,7 @@ const Leads = () => {
       );
       const payload = {
         phone: data.phone.trim(),
+        name: data.name.trim(),
         template_name: templateName,
         template_lang: templateLang,
         components: finalComponents,

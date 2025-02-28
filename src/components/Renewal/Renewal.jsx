@@ -178,8 +178,6 @@ const Renewals = () => {
     }
   };
 
-  useEffect(() => console.log(filteredData), [filteredData]);
-
   const fetchAllDateWiseData = async () => {
     try {
       const response = await fetch(baseURL + "renewal/date-wise", {
@@ -386,25 +384,32 @@ const Renewals = () => {
   const calculateLeadStatus = (filteredData) => {
     const counts = {
       LIFEINSURANCE: 0,
-      HEALTHINSURANCE: 0,
+      HealthIns: 0,
       PERSONALLOAN: 0,
       BUSINESSLOAN: 0,
       CCLIMIT: 0,
+      CarIns:0,
+      Lic:0,
       other: 0,
     };
 
     filteredData.forEach((data) => {
       if (data?.contractType === "LIFE INSURANCE") {
         counts.LIFEINSURANCE++;
-      } else if (data?.contractType === "HEALTH INSURANCE") {
-        counts.HEALTHINSURANCE++;
+      } else if (data?.contractType === "Health Ins") {
+        counts.HealthIns++;
       } else if (data?.contractType === "PERSONAL LOAN") {
         counts.PERSONALLOAN++;
       } else if (data?.contractType === "BUSINESS LOAN") {
         counts.BUSINESSLOAN++;
       } else if (data?.contractType === "CC LIMIT") {
         counts.CCLIMIT++;
-      } else {
+      } else if (data?.contractType === "Car Ins"){
+        counts.CarIns++;
+      } else if (data?.contractType === "Lic"){
+        counts.Lic++;
+      }
+      else {
         counts.other++;  // For any contract type that is not one of the specified ones
       }
     });
@@ -414,10 +419,12 @@ const Renewals = () => {
 
   const [statusCounts, setStatusCounts] = useState({
     LIFEINSURANCE: 0,
-    HEALTHINSURANCE: 0,
+    HealthIns: 0,
     PERSONALLOAN: 0,
     BUSINESSLOAN: 0,
     CCLIMIT: 0,
+    CarIns:0,
+    Lic:0,
     other: 0,
   });
 
@@ -428,13 +435,15 @@ const Renewals = () => {
   }, [filteredData]);
 
   const statusChartData = {
-    labels: ["LIFE INSURANCE", "HEALTH INSURANCE", "PERSONAL LOAN", "BUSINESS LOAN", "CC LIMIT", "other"],
+    labels: ["LIFE INSURANCE", "HEALTH INSURANCE", "PERSONAL LOAN", "BUSINESS LOAN", "CC LIMIT", "Car Ins","Lic", "other"],
     data: [
       statusCounts.LIFEINSURANCE,
-      statusCounts.HEALTHINSURANCE,
+      statusCounts.HealthIns,
       statusCounts.PERSONALLOAN,
       statusCounts.BUSINESSLOAN,
       statusCounts.CCLIMIT,
+      statusCounts.CarIns,
+      statusCounts.Lic,
       statusCounts.other,
     ],
     ChartColors: [
@@ -443,7 +452,9 @@ const Renewals = () => {
       "#54CA21",
       "#21CAC1",
       "#2170CA",
-      "#C439EB",      
+      "#C439EB",  
+      "#74b9ff",
+      "#b2bec3"
     ],
   };
 

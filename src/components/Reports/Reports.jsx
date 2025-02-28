@@ -18,6 +18,7 @@ import Loading from "../ui/Loading";
 import { checkAccess } from "../../utils/checkAccess";
 import { Link } from "react-router-dom";
 import Select from "react-select";
+import axios from "axios";
 
 ChartJS.register(
   CategoryScale,
@@ -463,6 +464,19 @@ const Reports = () => {
     }
   };
 
+  const fetchBulkSms = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}sms/get-bulk-sms/`, {
+      headers: {
+        authorization: `Bearer ${cookies?.access_token}`,
+      }
+    })
+    
+    console.log(res);
+  };
+
+  fetchBulkSms();
+
+
   useEffect(() => {
     if (isAllowed) {
       getPaymentReport();
@@ -526,7 +540,7 @@ const Reports = () => {
               <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
                 Invoices
               </h1>
-              <div className="mt-4 font-bold font-bold text-[#595959]">
+              <div className="mt-4 font-bold text-[#595959]">
                 <span className="bg-[#0095ff] text-[#ffffff] rounded px-2 ml-1 py-1">
                   Rs {totalInvoiceAmount.toFixed(2)}
                 </span>
