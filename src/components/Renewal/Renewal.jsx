@@ -267,7 +267,8 @@ const Renewals = () => {
           d?.contractNumber?.toLowerCase().includes(searchKey.toLowerCase()) ||
           d?.productName?.toLowerCase().includes(searchKey.toLowerCase()) ||
           d?.phnNumber?.includes(searchKey) ||
-          d?.renewalTimes?.toString().includes(searchKey)
+          d?.renewalTimes?.toString().includes(searchKey) ||
+          d?.status?.toString().includes(searchKey.toLowerCase())
       );
       setFilteredData(searchedData);
     } else {
