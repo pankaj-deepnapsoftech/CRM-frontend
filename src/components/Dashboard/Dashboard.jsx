@@ -97,8 +97,10 @@ const Dashboard = () => {
   const [totalUnpaidInvoices, setTotalUnpaidInvoices] = useState(0);
     const [smsData, setSmsData] = useState([]);
     const [emailData, setEmailData] = useState([]);
+    const [whatsappData, setWhatsappData] = useState([]);
     const [totalSms, setTotalSms] = useState(0);
     const [totalEmail, setTotalEmail] = useState(0);
+    const [totalWhatsapp, setTotalWhatsapp] = useState(0);
 
   const progressStyles = {
     draft: {
@@ -475,6 +477,7 @@ const Dashboard = () => {
 
     countMessagesByDateRange(fromDate, toDate);
     countTotalEmailSentByRange(fromDate, toDate);
+    countTotalWhatsappSentByRange(fromDate, toDate);
   };
 
   const filterBasedOnDuration = async () => {
@@ -547,15 +550,30 @@ const Dashboard = () => {
 
     setEmailData(res.data.data);
   }
+
+  const fetchBulkWhatsapp = async() => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}people/get-bulk-whatsapp`,
+      {
+        headers: {
+          authorization: `Bearer ${cookies?.access_token}`,
+        },
+      }
+    );
+
+    setWhatsappData(res.data.data);
+  }
   useEffect(() => {
     fetchBulkSms();
     fetchBulkEmail();
+    fetchBulkWhatsapp();
   }, []);
 
   useEffect(() => {
       setTotalSms(countTotalMessages());
       setTotalEmail(emailData.length);
-    }, [smsData, emailData]);
+      setTotalWhatsapp(whatsappData.length);
+    }, [smsData, emailData, whatsappData]);
   
 
 
@@ -583,6 +601,17 @@ const Dashboard = () => {
       return messageDate >= startDate && messageDate <= endDate;
     });
     setTotalEmail(filteredData.length);
+  };
+
+  const countTotalWhatsappSentByRange = (fromDate, toDate) => {
+    const startDate = new Date(fromDate).toISOString().split('T')[0];
+    const endDate = new Date(toDate).toISOString().split('T')[0];
+  
+    const filteredData = whatsappData.filter((data) => {
+      const messageDate = new Date(data.whatsappSentDate).toISOString().split('T')[0];
+      return messageDate >= startDate && messageDate <= endDate;
+    });
+    setTotalWhatsapp(filteredData.length);
   };
   
 
@@ -802,7 +831,7 @@ const Dashboard = () => {
             <Link to="leads">
               <Cards
                 label="Total Whatsapp"
-                content={totalCustomer}
+                content={totalWhatsapp}
                 bg="from-rose-400 to-rose-500"
                 Icon={FaWhatsapp}
                 iconColor="text-rose-500"
