@@ -990,7 +990,7 @@ const Leads = () => {
           }
         );
       } catch (error) {
-        //console.log(error)
+        console.log(error)
         toast.error(`Error while sending message: ${error}`);
       }
     }

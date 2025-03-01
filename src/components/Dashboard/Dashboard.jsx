@@ -96,7 +96,9 @@ const Dashboard = () => {
   const [totalOffers, setTotalOffers] = useState(0);
   const [totalUnpaidInvoices, setTotalUnpaidInvoices] = useState(0);
     const [smsData, setSmsData] = useState([]);
+    const [emailData, setEmailData] = useState([]);
     const [totalSms, setTotalSms] = useState(0);
+    const [totalEmail, setTotalEmail] = useState(0);
 
   const progressStyles = {
     draft: {
@@ -472,6 +474,7 @@ const Dashboard = () => {
     fetchAllData(fromDate, toDate);
 
     countMessagesByDateRange(fromDate, toDate);
+    countTotalEmailSentByRange(fromDate, toDate);
   };
 
   const filterBasedOnDuration = async () => {
@@ -531,15 +534,29 @@ const Dashboard = () => {
 
     setSmsData(res.data.logs);
   };
+
+  const fetchBulkEmail = async() => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}people/get-bulk-mail`,
+      {
+        headers: {
+          authorization: `Bearer ${cookies?.access_token}`,
+        },
+      }
+    );
+
+    setEmailData(res.data.data);
+  }
   useEffect(() => {
     fetchBulkSms();
+    fetchBulkEmail();
   }, []);
 
   useEffect(() => {
       setTotalSms(countTotalMessages());
-    }, [smsData]);
+      setTotalEmail(emailData.length);
+    }, [smsData, emailData]);
   
-
 
 
   const countTotalMessages = () => {
@@ -547,7 +564,6 @@ const Dashboard = () => {
   };
 
   const countMessagesByDateRange = (fromDate, toDate) => {
-    // Convert fromDate and toDate to ISO format for comparison
     const startDate = new Date(fromDate).toISOString().split('T')[0];
     const endDate = new Date(toDate).toISOString().split('T')[0];
   
@@ -555,10 +571,22 @@ const Dashboard = () => {
       const messageDate = new Date(data.timestamp).toISOString().split('T')[0];
       return messageDate >= startDate && messageDate <= endDate;
     });
-  
-    // Return the total count of mobiles for messages within the date range
     setTotalSms(filteredData.reduce((count, data) => count + data.mobiles.length, 0));
   };
+
+  const countTotalEmailSentByRange = (fromDate, toDate) => {
+    const startDate = new Date(fromDate).toISOString().split('T')[0];
+    const endDate = new Date(toDate).toISOString().split('T')[0];
+  
+    const filteredData = emailData.filter((data) => {
+      const messageDate = new Date(data.emailSentDate).toISOString().split('T')[0];
+      return messageDate >= startDate && messageDate <= endDate;
+    });
+    setTotalEmail(filteredData.length);
+  };
+  
+
+
 
   return (
     <>
@@ -783,7 +811,7 @@ const Dashboard = () => {
             <Link to="leads">
               <Cards
                 label="Total Email"
-                content={totalCustomer}
+                content={totalEmail}
                 bg="from-slate-400 to-slate-500"
                 Icon={AiOutlineMail  }
                 iconColor="text-slate-500"
