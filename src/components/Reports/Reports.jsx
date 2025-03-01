@@ -92,8 +92,6 @@ const Reports = () => {
     new Date().getFullYear()
   );
 
-  const [smsData, setSmsData] = useState([]);
-  const [totalSms, setTotalSms] = useState(0);
 
   const monthOptions = [
     { value: 1, label: "Jan" },
@@ -504,43 +502,6 @@ const Reports = () => {
     }
   };
 
-  const fetchBulkSms = async () => {
-    const res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}sms/get-bulk-sms/`,
-      {
-        headers: {
-          authorization: `Bearer ${cookies?.access_token}`,
-        },
-      }
-    );
-
-    setSmsData(res.data.logs);
-  };
-  useEffect(() => {
-    fetchBulkSms();
-  }, []);
-
-
-  console.log(smsData)
-
-  const countTotalMessages = () => {
-    return smsData.reduce((count, data) => count + data.mobiles.length, 0);
-  };
-
-  // Function to count messages by date
-  // const countMessagesByDate = (date) => {
-  //   const filteredData = smsData.filter((data) => {
-  //     const messageDate = new Date(data.timestamp).toISOString().split('T')[0];
-  //     return messageDate === date;
-  //   });
-
-  //   return filteredData.reduce((count, data) => count + data.mobiles.length, 0);
-  // };
-
-  // Set total messages when smsData changes
-  useEffect(() => {
-    setTotalSms(countTotalMessages());
-  }, [smsData]);
 
   useEffect(() => {
     if (isAllowed) {
@@ -650,19 +611,7 @@ const Reports = () => {
                 </span>
               </div>
             </div>
-            <div
-              style={{ boxShadow: "0 0 20px 3px #96beee26" }}
-              className="bg-white rounded-md text-center py-7"
-            >
-              <h1 className="text-xl border-b pb-4 font-bold text-[#22075e]">
-                Bulk SMS
-              </h1>
-              <div className="mt-4 font-bold text-[#595959]">
-                <span className="bg-[#ff6565] text-[#ffffff] rounded px-2 ml-1 py-1">
-                  {totalSms}
-                </span>
-              </div>
-            </div>
+            
           </div>
 
           <div>

@@ -19,8 +19,8 @@ import moment from "moment";
 import { useSelector } from "react-redux";
 import Loading from "../ui/Loading";
 import { RiArrowDropDownLine } from "react-icons/ri";
-import { FaChevronUp, FaChevronDown } from "react-icons/fa6";
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { FaChevronUp, FaChevronDown, FaWhatsapp } from "react-icons/fa6";
+import { MdKeyboardArrowRight, MdOutlineSms } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { checkAccess } from "../../utils/checkAccess";
 import { RiUserStarLine } from "react-icons/ri";
@@ -31,6 +31,8 @@ import PieChart from "./PieChart";
 import ListCard from "./ListCard";
 import List2 from "./List2";
 import { FaSms } from "react-icons/fa";
+import { AiOutlineMail } from "react-icons/ai";
+import axios from "axios";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -93,6 +95,8 @@ const Dashboard = () => {
   const [totalProformaInvoices, setTotalProformaInvoices] = useState(0);
   const [totalOffers, setTotalOffers] = useState(0);
   const [totalUnpaidInvoices, setTotalUnpaidInvoices] = useState(0);
+    const [smsData, setSmsData] = useState([]);
+    const [totalSms, setTotalSms] = useState(0);
 
   const progressStyles = {
     draft: {
@@ -466,6 +470,8 @@ const Dashboard = () => {
     })._d;
 
     fetchAllData(fromDate, toDate);
+
+    countMessagesByDateRange(fromDate, toDate);
   };
 
   const filterBasedOnDuration = async () => {
@@ -511,6 +517,48 @@ const Dashboard = () => {
       filterBasedOnDuration();
     }
   }, []);
+
+
+  const fetchBulkSms = async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}sms/get-bulk-sms/`,
+      {
+        headers: {
+          authorization: `Bearer ${cookies?.access_token}`,
+        },
+      }
+    );
+
+    setSmsData(res.data.logs);
+  };
+  useEffect(() => {
+    fetchBulkSms();
+  }, []);
+
+  useEffect(() => {
+      setTotalSms(countTotalMessages());
+    }, [smsData]);
+  
+
+
+
+  const countTotalMessages = () => {
+    return smsData.reduce((count, data) => count + data.mobiles.length, 0);
+  };
+
+  const countMessagesByDateRange = (fromDate, toDate) => {
+    // Convert fromDate and toDate to ISO format for comparison
+    const startDate = new Date(fromDate).toISOString().split('T')[0];
+    const endDate = new Date(toDate).toISOString().split('T')[0];
+  
+    const filteredData = smsData.filter((data) => {
+      const messageDate = new Date(data.timestamp).toISOString().split('T')[0];
+      return messageDate >= startDate && messageDate <= endDate;
+    });
+  
+    // Return the total count of mobiles for messages within the date range
+    setTotalSms(filteredData.reduce((count, data) => count + data.mobiles.length, 0));
+  };
 
   return (
     <>
@@ -686,8 +734,9 @@ const Dashboard = () => {
                 iconColor="text-indigo-500"
               />
             </Link>
+            
           </div>
-
+       
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <PieChart
               totalLeads={totalLeads}
@@ -712,10 +761,37 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 mt-5">
-            
-           
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-5 gap-y-2 gap-x-2">
+          <Link to="leads">
+              <Cards
+                label="Total Bulk SMS"
+                content={totalSms}
+                bg="from-cyan-500 to-cyan-700"
+                Icon={MdOutlineSms}
+                iconColor="text-cyan-500"
+              />
+            </Link>
+            <Link to="leads">
+              <Cards
+                label="Total Whatsapp"
+                content={totalCustomer}
+                bg="from-rose-400 to-rose-500"
+                Icon={FaWhatsapp}
+                iconColor="text-rose-500"
+              />
+            </Link>
+            <Link to="leads">
+              <Cards
+                label="Total Email"
+                content={totalCustomer}
+                bg="from-slate-400 to-slate-500"
+                Icon={AiOutlineMail  }
+                iconColor="text-slate-500"
+              />
+            </Link>
           </div>
+
+
         </div>
       )}
     </>
