@@ -77,12 +77,12 @@ import {
   AlertDialogCloseButton,
 } from "@chakra-ui/react";
 import { json, Link, useLocation } from "react-router-dom";
-import { DynamicChart, PieChart } from "../ui/Charts/PieChart";
 import { checkAccess } from "../../utils/checkAccess";
 import { IoLogoWhatsapp } from "react-icons/io";
 import sampleCSV from "../../assets/bulk-upload-sample.csv";
 import SMSDrawer from "../ui/Drawers/Add Drawers/SMSDrawer";
 import BulkAssignDrawer from "../ui/Drawers/Add Drawers/BulkAssignDrawer";
+import PieChart from "../ui/Charts/PieChart";
 
 const columns = [
   {
@@ -930,7 +930,7 @@ const Leads = () => {
     }
   };
 
-  const [selectedGraph, setSelectedGraph] = useState("dynamicChart");
+  const [selectedGraph, setSelectedGraph] = useState("PieChart");
 
   const handleGraphChange = (e) => {
     setSelectedGraph(e.target.value);
@@ -1699,7 +1699,7 @@ const Leads = () => {
                 onChange={handleGraphChange}
                 className="p-2 border border-gray-300 rounded-md"
               >
-                <option value="dynamicChart">Lead Status</option>
+                <option value="PieChart">Lead Status</option>
                 <option value="anotherGraph">Lead Category</option>
                 <option value="sourceGraph">Lead Source</option>
                 {/* Add more options as needed */}
@@ -1707,9 +1707,9 @@ const Leads = () => {
             </div>
 
             {!loading && statusChartData && (
-              <div className="mx-auto mt-2 ">
-                {selectedGraph === "dynamicChart" && (
-                  <DynamicChart
+             <div className="mx-auto mt-2  w-full p-10">
+                {selectedGraph === "PieChart" && (
+                  <PieChart
                     labels={statusChartData.labels}
                     data={statusChartData.data}
                     ChartColors={statusChartData.ChartColors}
@@ -1717,7 +1717,7 @@ const Leads = () => {
                 )}
 
                 {selectedGraph === "anotherGraph" && (
-                  <DynamicChart
+                  <PieChart
                     labels={chartData.labels}
                     data={chartData.data}
                     ChartColors={chartData.ChartColors}
@@ -1725,7 +1725,7 @@ const Leads = () => {
                 )}
 
                 {selectedGraph === "sourceGraph" && (
-                  <DynamicChart
+                  <PieChart
                     labels={sourceChartData.labels}
                     data={sourceChartData.data}
                     ChartColors={sourceChartData.ChartColors}

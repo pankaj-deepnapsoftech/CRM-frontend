@@ -55,7 +55,7 @@ import {
 import { checkAccess } from "../../utils/checkAccess";
 import axios from "axios";
 import { HStack } from "@chakra-ui/react";
-import { DynamicChart } from "../ui/Charts/PieChart";
+import PieChart from "../ui/Charts/PieChart";
 
 const columns = [
   {
@@ -890,8 +890,8 @@ const Renewals = () => {
           </div>
 
           {/* graph */}
-          <div className="mx-auto mt-2 ">
-            <DynamicChart
+          <div className="mx-auto mt-2  w-full p-10">
+            <PieChart
               labels={statusChartData.labels}
               data={statusChartData.data}
               ChartColors={statusChartData.ChartColors}

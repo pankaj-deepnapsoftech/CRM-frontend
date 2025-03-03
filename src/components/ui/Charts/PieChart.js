@@ -1,62 +1,54 @@
 import React, { useState } from "react";
-import { CChart } from "@coreui/react-chartjs";
+import { Line, Pie, Bar } from "react-chartjs-2";
+import { Chart as ChartJS, Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement } from "chart.js";
 
-export const DynamicChart = ({ labels, data, ChartColors }) => {
-  const [chartType, setChartType] = useState("pie"); 
+// Register the necessary chart.js components
+ChartJS.register(Title, Tooltip, Legend, CategoryScale, LinearScale, BarElement, PointElement, LineElement, ArcElement);
+
+const DynamicChart = ({ labels, data, ChartColors }) => {
+  const [chartType, setChartType] = useState("pie");
 
   const chartOptions = {
     pie: {
-      type: "pie",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            backgroundColor: ChartColors,
-            data: data,
-          },
-        ],
-      },
+      labels: labels,
+      datasets: [
+        {
+          backgroundColor: ChartColors,
+          data: data,
+        },
+      ],
     },
     line: {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Line Data", 
-            backgroundColor: ChartColors,
-            borderColor: ChartColors[0],
-            data: data,
-            fill: false, 
-          },
-        ],
-      },
+      labels: labels,
+      datasets: [
+        {
+          label: "Line Data",
+          backgroundColor: ChartColors[0],
+          borderColor: ChartColors[0],
+          data: data,
+          fill: false,
+        },
+      ],
     },
     bar: {
-      type: "bar",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Bar Data", 
-            backgroundColor: ChartColors,
-            data: data,
-          },
-        ],
-      },
+      labels: labels,
+      datasets: [
+        {
+          label: "Bar Data",
+          backgroundColor: ChartColors,
+          data: data,
+        },
+      ],
     },
-    area: {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: "Area Data", 
-            backgroundColor: ChartColors[3],
-            data: data,
-            fill: true,
-          },
-        ],
+   
+  };
+
+  const tooltipOptions = {
+    position: "nearest", // Ensures tooltip follows the cursor
+    intersect: false, // Tooltip shows when hovering over an area
+    callbacks: {
+      label: function (tooltipItem) {
+        return `${tooltipItem.label}: ${tooltipItem.raw}`;
       },
     },
   };
@@ -82,25 +74,17 @@ export const DynamicChart = ({ labels, data, ChartColors }) => {
         >
           Bar Chart
         </button>
-        <button
-          onClick={() => setChartType("area")}
-          className="text-blue-500 font-semibold hover:text-blue-600"
-        >
-          Area Chart
-        </button>
+       
       </div>
 
-   
-      <div
-        className="chart-container mx-auto"
-        style={{ width: "60%", height: "250px" }}
-      >
+      <div className={`chart-container flex  items-center justify-center  mx-auto ${chartType === "pie" ? "mr-20" : ""}`} style={{ width: "80%", height: "500px", position: "relative" }}>
         {chartType === "pie" && (
-          <CChart
-            type={chartOptions.pie.type}
-            data={chartOptions.pie.data}
+          <Pie
+            data={chartOptions.pie}
             options={{
+              responsive: true,
               plugins: {
+                tooltip: tooltipOptions,
                 legend: {
                   labels: {
                     color: "#0a2440",
@@ -112,11 +96,12 @@ export const DynamicChart = ({ labels, data, ChartColors }) => {
         )}
 
         {chartType === "line" && (
-          <CChart
-            type={chartOptions.line.type}
-            data={chartOptions.line.data}
+          <Line
+            data={chartOptions.line}
             options={{
+              responsive: true,
               plugins: {
+                tooltip: tooltipOptions,
                 legend: {
                   labels: {
                     color: "#0a2440",
@@ -128,11 +113,12 @@ export const DynamicChart = ({ labels, data, ChartColors }) => {
         )}
 
         {chartType === "bar" && (
-          <CChart
-            type={chartOptions.bar.type}
-            data={chartOptions.bar.data}
+          <Bar
+            data={chartOptions.bar}
             options={{
+              responsive: true,
               plugins: {
+                tooltip: tooltipOptions,
                 legend: {
                   labels: {
                     color: "#0a2440",
@@ -143,50 +129,10 @@ export const DynamicChart = ({ labels, data, ChartColors }) => {
           />
         )}
 
-        {chartType === "area" && (
-          <CChart
-            type={chartOptions.area.type}
-            data={chartOptions.area.data}
-            options={{
-              plugins: {
-                legend: {
-                  labels: {
-                    color: "#0a2440",
-                  },
-                },
-              },
-            }}
-          />
-        )}
+         
       </div>
     </div>
   );
 };
 
-export const PieChart = ({ labels, data, ChartColors }) => {
-  return (
-    <div className="chart-container h-48 w-48">
-      <CChart
-        type="pie"
-        data={{
-          labels: labels,
-          datasets: [
-            {
-              backgroundColor: ChartColors,
-              data: data,
-            },
-          ],
-        }}
-        options={{
-          plugins: {
-            legend: {
-              labels: {
-                color: "#0a2440",
-              },
-            },
-          },
-        }}
-      />
-    </div>
-  );
-};
+export default DynamicChart;
