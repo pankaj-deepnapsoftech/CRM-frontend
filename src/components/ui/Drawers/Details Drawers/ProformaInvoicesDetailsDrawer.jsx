@@ -38,29 +38,29 @@ const ProformaInvoicesDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
         proformainvoicename: data.proformaInvoice.offername,
         startdate: moment(data.proformaInvoice.startdate).format("DD/MM/YYYY"),
         // expiredate: moment(data.proformaInvoice.expiredate).format("DD/MM/YYYY"),
-        total: data.proformaInvoice.total,
-        subtotal: data.proformaInvoice.subtotal,
-        status: data.proformaInvoice.status,
+        total: data.proformaInvoice?.total,
+        subtotal: data.proformaInvoice?.subtotal,
+        status: data.proformaInvoice?.status,
         phone: data.proformaInvoice?.people
-          ? data.proformaInvoice.people.phone
-          : data.proformaInvoice?.company.phone,
+          ? data.proformaInvoice?.people?.phone
+          : data.proformaInvoice?.company?.phone,
         email: data.proformaInvoice?.people
-          ? data.proformaInvoice.people.email
-          : data.proformaInvoice?.company.email,
+          ? data.proformaInvoice?.people?.email
+          : data.proformaInvoice?.company?.email,
         customertype: data.proformaInvoice?.people ? "Individual" : "Corporate",
         customer: data.proformaInvoice?.people
-          ? data.proformaInvoice?.people.firstname +
+          ? data.proformaInvoice?.people?.firstname +
             " " +
-            data.proformaInvoice?.people.lastname
-          : data.proformaInvoice?.company.companyname,
-        products: data.proformaInvoice.products,
-        remarks: data.proformaInvoice.remarks,
-        taxamount: data.proformaInvoice?.tax[0].taxamount,
-        taxname: data.proformaInvoice?.tax[0].taxname,
-        taxpercentage: data.proformaInvoice?.tax[0].taxpercentage,
-        createdByName: data.proformaInvoice?.createdBy.name,
-        createdByDesignation: data.proformaInvoice?.createdBy.designation,
-        createdByPhone: data.proformaInvoice?.createdBy.phone,
+            data.proformaInvoice?.people?.lastname
+          : data.proformaInvoice?.company?.companyname,
+        products: data.proformaInvoice?.products,
+        remarks: data.proformaInvoice?.remarks,
+        taxamount: data.proformaInvoice?.tax[0]?.taxamount,
+        taxname: data.proformaInvoice?.tax[0]?.taxname,
+        taxpercentage: data.proformaInvoice?.tax[0]?.taxpercentage,
+        createdByName: data.proformaInvoice?.createdBy?.name,
+        createdByDesignation: data.proformaInvoice?.createdBy?.designation,
+        createdByPhone: data.proformaInvoice?.createdBy?.phone,
       });
 
       setIsLoading(false);

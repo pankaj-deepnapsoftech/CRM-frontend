@@ -3,6 +3,7 @@ import { BiX } from "react-icons/bi";
 import { toast } from "react-toastify";
 import Loading from "../../Loading";
 import { useCookies } from "react-cookie";
+import { Badge } from "@chakra-ui/react";
 
 const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
   const [cookies] = useCookies();
@@ -26,7 +27,6 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
       });
 
       const data = await response.json();
-
 
       if (!data.success) {
         throw new Error(data.message);
@@ -100,6 +100,18 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
               </div>
             )}
 
+            {details.status && (
+              <div className="font-bold text-lg text-gray-700">
+                <DetailItem label="Renewal Status" value={details.status} />
+              </div>
+            )}
+
+            {details.remarks && (
+              <div className="font-bold text-lg text-gray-700">
+                <DetailItem label="Remarks" value={details.remarks} />
+              </div>
+            )}
+
             {details.contractAttachment && (
               <div className="font-bold text-lg text-gray-700">
                 <p>Contract Attachment</p>
@@ -107,6 +119,7 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
                   href={details.contractAttachment}
                   download="Contract_Attachment.pdf" // Optional: specify a filename
                   target="_blank"
+                  className="text-blue-700 hover:text-blue-800 underline"
                   rel="noopener noreferrer" // Recommended for security
                 >
                   See Attachment
@@ -134,9 +147,15 @@ const ExcelDetailsDrawer = ({ dataId, closeDrawerHandler }) => {
 const DetailItem = ({ label, value }) => (
   <div className="font-bold text-lg text-gray-700">
     <p>{label}</p>
-    <p className="font-normal text-indigo-800">
-      {value ? value : "Not Available"}
-    </p>
+    {label === "Renewal Status" ? (
+      <Badge colorScheme={value === "pending" ? "orange" : "green"}>
+        {value ? value : "Not Available"}
+      </Badge>
+    ) : (
+      <p className="font-normal text-indigo-800">
+        {value ? value : "Not Available"}
+      </p>
+    )}
   </div>
 );
 

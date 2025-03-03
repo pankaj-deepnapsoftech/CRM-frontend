@@ -67,8 +67,8 @@ const DynamicChart = ({ labels, data, ChartColors }) => {
   };
 
   const tooltipOptions = {
-    position: "nearest", // Ensures tooltip follows the cursor
-    intersect: false, // Tooltip shows when hovering over an area
+    position: "nearest", 
+    intersect: false, 
     callbacks: {
       label: function (tooltipItem) {
         return `${tooltipItem.label}: ${tooltipItem.raw}`;

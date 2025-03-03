@@ -229,10 +229,10 @@ const ProformaInvoices = () => {
         if (!data.success) {
           throw new Error(data.message);
         }
-        const filename = response.headers
-          .get("content-disposition")
-          .split("filename=")[1]
-          .replace(/"/g, "");
+        const filename = response?.headers
+          ?.get("content-disposition")
+          ?.split("filename=")[1]
+          ?.replace(/"/g, "");
         return response.blob().then((blob) => ({ filename, blob }));
       })
       .then(({ filename, blob }) => {
@@ -272,14 +272,14 @@ const ProformaInvoices = () => {
               .reverse()
               .join("")
               ?.includes(searchKey.replaceAll("/", ""))) ||
-          d?.total.toString().includes(searchKey.toLowerCase()) ||
-          d?.subtotal.toString().includes(searchKey.toLowerCase()) ||
+          d?.total?.toString().includes(searchKey.toLowerCase()) ||
+          d?.subtotal?.toString().includes(searchKey.toLowerCase()) ||
           d?.status?.toLowerCase().includes(searchKey.toLowerCase()) ||
           (d?.people
-            ? (d.people.firstname + " " + d.people.lastname)
+            ? (d?.people?.firstname + " " + d?.people?.lastname)
                 .toLowerCase()
                 .includes(searchKey.toLowerCase())
-            : d.company.companyname
+            : d?.company?.companyname
                 .toLowerCase()
                 .includes(searchKey.toLowerCase()))
       );
@@ -562,17 +562,17 @@ const ProformaInvoices = () => {
                                     cell.column.id !== "creator" &&
                                     cell.render("Cell")}
                                   {cell.column.id === "total" && (
-                                    <span>&#8377;{row.original.total}</span>
+                                    <span>&#8377;{row.original?.total}</span>
                                   )}
                                   {cell.column.id === "subtotal" && (
-                                    <span>&#8377;{row.original.subtotal}</span>
+                                    <span>&#8377;{row.original?.subtotal}</span>
                                   )}
                                   {cell.column.id === "creator" && (
-                                    <span>{row.original.creator.name}</span>
+                                    <span>{row.original?.creator?.name}</span>
                                   )}
                                   {cell.column.id === "created_on" && (
                                     <span>
-                                      {moment(row.original.createdAt).format(
+                                      {moment(row.original?.createdAt).format(
                                         "DD/MM/YYYY"
                                       )}
                                     </span>
@@ -586,11 +586,11 @@ const ProformaInvoices = () => {
                                             .firstname +
                                           " " +
                                           row.original.customer.people.lastname} */}
-                                      {row.original.company
-                                        ? row.original.company.companyname
-                                        : row.original.people?.firstname +
+                                      {row.original?.company
+                                        ? row.original?.company?.companyname
+                                        : row.original?.people?.firstname +
                                           " " +
-                                          (row.original.people?.lastname || "")}
+                                          (row.original?.people?.lastname || "")}
                                     </span>
                                   )}
                                   {cell.column.id === "number" && (
@@ -598,7 +598,7 @@ const ProformaInvoices = () => {
                                   )}
                                   {cell.column.id === "startdate" && (
                                     <span>
-                                      {moment(row.original.startdate).format(
+                                      {moment(row.original?.startdate).format(
                                         "DD/MM/YYYY"
                                       )}
                                     </span>
@@ -616,18 +616,18 @@ const ProformaInvoices = () => {
                                       style={{
                                         backgroundColor: `${
                                           statusStyles[
-                                            row.original.status.toLowerCase()
+                                            row.original?.status.toLowerCase()
                                           ].bg
                                         }`,
 
                                         color: `${
                                           statusStyles[
-                                            row.original.status.toLowerCase()
+                                            row.original?.status.toLowerCase()
                                           ].text
                                         }`,
                                       }}
                                     >
-                                      {row.original.status}
+                                      {row.original?.status}
                                     </span>
                                   )}
 
@@ -637,18 +637,18 @@ const ProformaInvoices = () => {
                                       style={{
                                         backgroundColor: `${
                                           statusStyles[
-                                            row.original.status.toLowerCase()
+                                            row.original?.status?.toLowerCase()
                                           ].bg
                                         }`,
 
                                         color: `${
                                           statusStyles[
-                                            row.original.status.toLowerCase()
+                                            row.original?.status?.toLowerCase()
                                           ].text
                                         }`,
                                       }}
                                     >
-                                      {row.original.status}
+                                      {row.original?.status}
                                     </span>
                                   )}
                                 </Td>

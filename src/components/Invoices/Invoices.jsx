@@ -245,10 +245,10 @@ const Invoices = () => {
       }),
     })
       .then((response) => {
-        const filename = response.headers
-          .get("content-disposition")
-          .split("filename=")[1]
-          .replace(/"/g, "");
+        const filename = response?.headers
+          ?.get("content-disposition")
+          ?.split("filename=")[1]
+          ?.replace(/"/g, "");
         return response.blob().then((blob) => ({ filename, blob }));
       })
       .then(({ filename, blob }) => {

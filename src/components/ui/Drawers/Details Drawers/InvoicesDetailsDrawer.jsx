@@ -33,33 +33,33 @@ const ProformaInvoicesDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
 
       setDetails({
         invoicename: data.invoice.inovicename,
-        startdate: moment(data.invoice.startdate).format("DD/MM/YYYY"),
-        expiredate: moment(data.invoice.expiredate).format("DD/MM/YYYY"),
-        total: data.invoice.total,
-        subtotal: data.invoice.subtotal,
-        status: data.invoice.status,
+        startdate: moment(data.invoice?.startdate).format("DD/MM/YYYY"),
+        expiredate: moment(data.invoice?.expiredate).format("DD/MM/YYYY"),
+        total: data.invoice?.total,
+        subtotal: data.invoice?.subtotal,
+        status: data.invoice?.status,
         phone: data.invoice?.customer.people
-          ? data.invoice.customer.people.phone
-          : data.invoice?.customer.company.phone,
-        email: data.invoice?.customer.people
-          ? data.invoice.customer.people.email
-          : data.invoice?.customer.company.email,
-        customertype: data.invoice.customer?.people
+          ? data.invoice?.customer?.people?.phone
+          : data.invoice?.customer?.company?.phone,
+        email: data.invoice?.customer?.people
+          ? data.invoice.customer?.people?.email
+          : data.invoice?.customer?.company?.email,
+        customertype: data.invoice?.customer?.people
           ? "Individual"
           : "Corporate",
         customer: data.invoice.customer?.people
-          ? data.invoice.customer?.people.firstname +
+          ? data.invoice.customer?.people?.firstname +
             " " +
-            data.invoice.customer?.people.lastname
-          : data.invoice.customer?.company.companyname,
-        products: data.invoice.products,
-        remarks: data.invoice.remarks,
-        taxamount: data.invoice?.tax[0].taxamount,
-        taxname: data.invoice?.tax[0].taxname,
-        taxpercentage: data.invoice?.tax[0].taxpercentage,
-        createdByName: data.invoice?.createdBy.name,
-        createdByDesignation: data.invoice?.createdBy.designation,
-        createdByPhone: data.invoice?.createdBy.phone,
+            data.invoice.customer?.people?.lastname
+          : data.invoice.customer?.company?.companyname,
+        products: data.invoice?.products,
+        remarks: data.invoice?.remarks,
+        taxamount: data.invoice?.tax[0]?.taxamount,
+        taxname: data.invoice?.tax[0]?.taxname,
+        taxpercentage: data.invoice?.tax[0]?.taxpercentage,
+        createdByName: data.invoice?.createdBy?.name,
+        createdByDesignation: data.invoice?.createdBy?.designation,
+        createdByPhone: data.invoice?.createdBy?.phone,
       });
 
       setIsLoading(false);

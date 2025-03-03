@@ -84,9 +84,9 @@ const InvoicesEditDrawer = ({
     const products = items.map((prod) => {
       return {
         product: prod.item,
-        quantity: parseInt(prod.quantity),
-        price: parseInt(prod.price),
-        total: parseInt(prod.total),
+        quantity: parseInt(prod?.quantity),
+        price: parseInt(prod?.price),
+        total: parseInt(prod?.total),
       };
     });
 
@@ -155,36 +155,36 @@ const InvoicesEditDrawer = ({
       setSelectedCustomer({
         value: data.invoice.customer._id,
         label: data.invoice.customer?.company
-          ? data.invoice.customer?.company.companyname
-          : data.invoice.customer?.people.firstname +
+          ? data.invoice.customer?.company?.companyname
+          : data.invoice.customer?.people?.firstname +
             " " +
-            (data.invoice.customer?.people.lastname || ""),
+            (data.invoice.customer?.people?.lastname || ""),
       });
       setSelectedStatus({
-        value: data.invoice.status,
-        label: data.invoice.status,
+        value: data.invoice?.status,
+        label: data.invoice?.status,
       });
-      setDate(new Date(data.invoice.startdate).toISOString().substring(0, 10));
+      setDate(new Date(data.invoice?.startdate).toISOString().substring(0, 10));
       setExpiryDate(
-        new Date(data.invoice.expiredate).toISOString().substring(0, 10)
+        new Date(data.invoice?.expiredate).toISOString().substring(0, 10)
       );
-      setRemarks(data.invoice.remarks);
-      setSubTotal(data.invoice.subtotal);
-      setTotal(data.invoice.total);
+      setRemarks(data.invoice?.remarks);
+      setSubTotal(data.invoice?.subtotal);
+      setTotal(data.invoice?.total);
       setTaxes({
-        value: data.invoice.tax[0].taxpercentage,
-        label: data.invoice.tax[0].taxname,
+        value: data.invoice?.tax[0]?.taxpercentage,
+        label: data.invoice?.tax[0]?.taxname,
       });
 
-      const products = data.invoice.products.map((prod) => {
-        return { value: prod.product._id, label: prod.product.name };
+      const products = data.invoice?.products?.map((prod) => {
+        return { value: prod?.product._id, label: prod?.product.name };
       });
-      const items = data.invoice.products.map((prod) => {
+      const items = data.invoice?.products?.map((prod) => {
         return {
-          item: prod.product._id,
-          quantity: prod.quantity,
-          price: prod.price,
-          total: prod.total,
+          item: prod?.product._id,
+          quantity: prod?.quantity,
+          price: prod?.price,
+          total: prod?.total,
         };
       });
       setItems(items);
@@ -202,7 +202,7 @@ const InvoicesEditDrawer = ({
   useEffect(() => {
     // let options = [{ value: "Add ", label: "+ Add Lead" }];
     let options = allCustomers?.map((customer) => {
-      return { value: customer._id, label: customer.name };
+      return { value: customer?._id, label: customer?.name };
     });
     setCustomerOptionsList(options);
   }, [allCustomers]);

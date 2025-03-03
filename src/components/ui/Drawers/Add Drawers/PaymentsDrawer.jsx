@@ -53,14 +53,14 @@ const PaymentsDrawer = ({ closeDrawerHandler, dataId: invoiceId, getAllInvoices 
       });
       const data = await response.json();
       if (!data.success) {
-        throw new Error(data.message);
+        throw new Error(data?.message);
       }
       setLoading(false);
-      toast.success(data.message);
+      toast.success(data?.message);
       closeDrawerHandler();
       getAllInvoices();
     } catch (err) {
-      toast.error(err.message);
+      toast.error(err?.message);
     }
     finally{
       setLoading(false);
@@ -84,31 +84,31 @@ const PaymentsDrawer = ({ closeDrawerHandler, dataId: invoiceId, getAllInvoices 
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error(data.message);
+        throw new Error(data?.message);
       }
 
       setDetails({
-        invoicename: data.invoice.invoicename,
-        total: data.invoice.total,
-        subtotal: data.invoice.subtotal,
-        status: data.invoice.status,
-        phone: data.invoice?.customer.people
-          ? data.invoice.customer.people.phone
-          : data.invoice?.customer.company.phone,
-        email: data.invoice?.customer.people
-          ? data.invoice.customer.people.email
-          : data.invoice?.customer.company.email,
-        customertype: data.invoice.customer?.people
+        invoicename: data.invoice?.invoicename,
+        total: data.invoice?.total,
+        subtotal: data.invoice?.subtotal,
+        status: data.invoice?.status,
+        phone: data.invoice?.customer?.people
+          ? data.invoice.customer?.people?.phone
+          : data.invoice?.customer?.company?.phone,
+        email: data.invoice?.customer?.people
+          ? data.invoice.customer?.people?.email
+          : data.invoice?.customer?.company?.email,
+        customertype: data.invoice?.customer?.people
           ? "Individual"
           : "Corporate",
-        customer: data.invoice.customer?.people
-          ? data.invoice.customer?.people.firstname +
+        customer: data.invoice?.customer?.people
+          ? data.invoice.customer?.people?.firstname +
             " " +
-            (data.invoice.customer?.people.lastname || '')
-          : data.invoice.customer?.company.companyname,
-        taxamount: data.invoice?.tax[0].taxamount,
-        taxname: data.invoice?.tax[0].taxname,
-        taxpercentage: data.invoice?.tax[0].taxpercentage,
+            (data.invoice.customer?.people?.lastname || '')
+          : data.invoice.customer?.company?.companyname,
+        taxamount: data.invoice?.tax[0]?.taxamount,
+        taxname: data.invoice?.tax[0]?.taxname,
+        taxpercentage: data.invoice?.tax[0]?.taxpercentage,
         paymentstatus: data.invoice?.paymentstatus,
         paid: data.invoice?.paid,
         balance: data.invoice?.balance,
@@ -127,81 +127,88 @@ const PaymentsDrawer = ({ closeDrawerHandler, dataId: invoiceId, getAllInvoices 
 
   return (
     <>
-      {loading && <Loading />}
-      {!loading && (
-        <div
-          className="overflow-auto overflow-auto h-[100vh] w-[90vw] md:w-[450px] bg-white right-0 top-0 z-10 py-3"
-          style={{
-            boxShadow:
-              "rgba(0, 0, 0, 0.08) 0px 6px 16px 0px, rgba(0, 0, 0, 0.12) 0px 3px 6px -4px, rgba(0, 0, 0, 0.05) 0px 9px 28px 8px",
-          }}
-        >
-          <h1 className="px-4 flex gap-x-2 items-center text-xl py-3 border-b">
-            <BiX onClick={closeDrawerHandler} size="26px" />
-            Payment
-          </h1>
-
-          <div className="mt-8 px-5">
-            <h2 className="text-2xl font-semibold py-5 text-center mb-6 border-y bg-[#f9fafc]">
-              Payment for invoice #{details?.invoicename}
-            </h2>
-            <div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Customer Name :</p>
-                <p className="font-normal">{details?.customer}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Phone :</p>
-                <p className="font-normal">{details?.phone}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Email :</p>
-                <p className="font-normal">{details?.email}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Payment status :</p>
-                <p className="font-normal">{details?.paymentstatus}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Subtotal :</p>
-                <p className="font-normal">&#8377;{details?.subtotal}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Tax :</p>
-                <p className="font-normal">{details?.taxname}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Tax Amount :</p>
-                <p className="font-normal">&#8377;{details?.taxamount}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Total :</p>
-                <p className="font-normal">&#8377;{details?.total}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Paid :</p>
-                <p className="font-normal">&#8377;{details?.paid}</p>
-              </div>
-              <div className="mt-2 mb-2 font-bold flex gap-x-2">
-                <p>Balance :</p>
-                <p className="font-normal">&#8377;{details?.balance}</p>
-              </div>
+    {loading && <Loading />}
+    {!loading && (
+      <div
+        className="overflow-auto h-[100vh] w-[90vw] md:w-[450px] bg-white right-0 top-0 z-10 py-6 px-4"
+        style={{
+          boxShadow:
+            "rgba(0, 0, 0, 0.1) 0px 6px 16px 0px, rgba(0, 0, 0, 0.1) 0px 3px 6px -4px, rgba(0, 0, 0, 0.05) 0px 9px 28px 8px",
+          borderRadius: '8px',
+        }}
+      >
+        <h1 className="px-4 flex gap-x-2 items-center text-2xl font-bold text-gray-700 py-4 border-b-2 border-gray-200">
+          <BiX onClick={closeDrawerHandler} size="26px" />
+          <span>Payment</span>
+        </h1>
+  
+        <div className="mt-8 px-5">
+          <h2 className="text-2xl font-bold py-5 text-center mb-6 border-y bg-blue-200 rounded-lg shadow-md">
+            Payment for invoice #{details?.invoicename}
+          </h2>
+  
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <p className="font-bold">Customer Name:</p>
+              <p className="font-normal text-gray-600">{details?.customer}</p>
             </div>
-
-            {details?.balance > 0  && <form onSubmit={addPaymentHandler}>
-              <FormControl className="mt-3 mb-5" isRequired>
-                <FormLabel fontWeight="bold">Amount</FormLabel>
+            <div className="flex justify-between">
+              <p className="font-bold">Phone:</p>
+              <p className="font-normal text-gray-600">{details?.phone}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">Email:</p>
+              <p className="font-normal text-gray-600">{details?.email}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">Payment status:</p>
+              <p className="font-normal text-gray-600">{details?.paymentstatus}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">Subtotal:</p>
+              <p className="font-normal text-gray-600">&#8377;{details?.subtotal}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">Tax:</p>
+              <p className="font-normal text-gray-600">{details?.taxname}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">Tax Amount:</p>
+              <p className="font-normal text-gray-600">&#8377;{details?.taxamount}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">Total:</p>
+              <p className="font-normal text-gray-600">&#8377;{details?.total}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">Paid:</p>
+              <p className="font-normal text-gray-600">&#8377;{details?.paid}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">Balance:</p>
+              <p className="font-normal text-gray-600">&#8377;{details?.balance}</p>
+            </div>
+          </div>
+  
+          {details?.balance > 0 && (
+            <form onSubmit={addPaymentHandler} className="mt-6">
+              <FormControl className="mb-6" isRequired>
+                <FormLabel fontWeight="bold" className="text-gray-700">
+                  Amount
+                </FormLabel>
                 <Input
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   type="number"
                   placeholder="Amount"
+                  className="py-2 px-4 border rounded-lg shadow-sm w-full"
                 />
               </FormControl>
-              <div className="mt-2 mb-5">
-                <label className="font-bold">Mode</label>
+  
+              <div className="mt-2 mb-6">
+                <label className="font-bold text-gray-700">Mode</label>
                 <Select
-                  className="rounded mt-2"
+                  className="rounded-lg mt-2 shadow-sm react-select-container"
                   options={paymentOptionsList}
                   placeholder="Select mode"
                   value={payment}
@@ -211,38 +218,46 @@ const PaymentsDrawer = ({ closeDrawerHandler, dataId: invoiceId, getAllInvoices 
                   isSearchable={true}
                 />
               </div>
-              <FormControl className="mt-3 mb-5">
-                <FormLabel fontWeight="bold">Description</FormLabel>
+  
+              <FormControl className="mb-6" isRequired>
+                <FormLabel fontWeight="bold" className="text-gray-700">
+                  Description
+                </FormLabel>
                 <Input
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   type="text"
                   placeholder="Description"
+                  className="py-2 px-4 border rounded-lg shadow-sm w-full"
                 />
               </FormControl>
-              <FormControl className="mt-3 mb-5">
-                <FormLabel fontWeight="bold">Reference</FormLabel>
+  
+              <FormControl className="mb-6" isRequired>
+                <FormLabel fontWeight="bold" className="text-gray-700">
+                  Reference
+                </FormLabel>
                 <Input
                   value={reference}
                   onChange={(e) => setReference(e.target.value)}
                   type="text"
                   placeholder="Reference"
+                  className="py-2 px-4 border rounded-lg shadow-sm w-full"
                 />
               </FormControl>
-
+  
               <Button
                 type="submit"
-                className="mt-1"
-                color="white"
-                backgroundColor="#1640d6"
+                className="mt-4 w-full py-2 bg-[#1640d6] text-white font-bold rounded-lg hover:bg-[#1236b1] transition"
               >
-                Submit
+                Submit Payment
               </Button>
-            </form>}
-          </div>
+            </form>
+          )}
         </div>
-      )}
-    </>
+      </div>
+    )}
+  </>
+  
   );
 };
 

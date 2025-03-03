@@ -144,10 +144,10 @@ const ProformaInvoicesEditDrawer = ({
     // const products = selectedProducts.map((prod) => prod?.value);
     const products = items.map((prod) => {
       return {
-        product: prod.item,
-        quantity: parseInt(prod.quantity),
-        price: parseInt(prod.price),
-        total: parseInt(prod.total),
+        product: prod?.item,
+        quantity: parseInt(prod?.quantity),
+        price: parseInt(prod?.price),
+        total: parseInt(prod?.total),
       };
     });
 
@@ -228,42 +228,42 @@ const ProformaInvoicesEditDrawer = ({
       setProformaInvoiceId(data.proformaInvoice._id);
       setSelectedCustomer({
         value: data.proformaInvoice?.company
-          ? data.proformaInvoice?.company._id
-          : data.proformaInvoice?.people._id,
+          ? data.proformaInvoice?.company?._id
+          : data.proformaInvoice?.people?._id,
         label: data.proformaInvoice?.company
-          ? data.proformaInvoice?.company.companyname
-          : data.proformaInvoice?.people.firstname +
+          ? data.proformaInvoice?.company?.companyname
+          : data.proformaInvoice?.people?.firstname +
             " " +
             (data.proformaInvoice?.people?.lastname || ""),
         type: data.proformaInvoice?.people ? "People" : "Company",
       });
       setSelectedStatus({
-        value: data.proformaInvoice.status,
-        label: data.proformaInvoice.status,
+        value: data.proformaInvoice?.status,
+        label: data.proformaInvoice?.status,
       });
       setDate(
-        new Date(data.proformaInvoice.startdate).toISOString().substring(0, 10)
+        new Date(data.proformaInvoice?.startdate).toISOString().substring(0, 10)
       );
       // setExpiryDate(
       //   new Date(data.proformaInvoice.expiredate).toISOString().substring(0, 10)
       // );
-      setRemarks(data.proformaInvoice.remarks);
-      setSubTotal(data.proformaInvoice.subtotal);
-      setTotal(data.proformaInvoice.total);
+      setRemarks(data.proformaInvoice?.remarks);
+      setSubTotal(data.proformaInvoice?.subtotal);
+      setTotal(data.proformaInvoice?.total);
       setTaxes({
-        value: data.proformaInvoice.tax[0].taxpercentage,
-        label: data.proformaInvoice.tax[0].taxname,
+        value: data.proformaInvoice?.tax[0]?.taxpercentage,
+        label: data.proformaInvoice?.tax[0]?.taxname,
       });
 
-      const products = data.proformaInvoice.products.map((prod) => {
-        return { value: prod.product._id, label: prod.product.name };
+      const products = data.proformaInvoice?.products.map((prod) => {
+        return { value: prod.product?._id, label: prod?.product.name };
       });
-      const items = data.proformaInvoice.products.map((prod) => {
+      const items = data.proformaInvoice?.products.map((prod) => {
         return {
-          item: prod.product._id,
-          quantity: prod.quantity,
-          price: prod.price,
-          total: prod.total,
+          item: prod?.product?._id,
+          quantity: prod?.quantity,
+          price: prod?.price,
+          total: prod?.total,
         };
       });
       setItems(items);
@@ -284,11 +284,11 @@ const ProformaInvoicesEditDrawer = ({
     // let options = [{ value: "Add ", label: "+ Add Lead" }];
     let options = allCustomers?.map((customer) => {
       return {
-        value: customer._id,
+        value: customer?._id,
         label:
           customer?.companyname ||
           customer?.firstname + " " + (customer?.lastname || ""),
-        type: customer.type,
+        type: customer?.type,
       };
     });
     setCustomerOptionsList(options);
