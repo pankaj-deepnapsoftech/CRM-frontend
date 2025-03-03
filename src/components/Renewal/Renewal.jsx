@@ -90,6 +90,10 @@ const columns = [
     Header: "Status",
     accessor: "status",
   },
+  {
+    Header: "Remarks",
+    accessor: "remarks",
+  },
 ];
 
 const Renewals = () => {
@@ -268,7 +272,8 @@ const Renewals = () => {
           d?.productName?.toLowerCase().includes(searchKey.toLowerCase()) ||
           d?.phnNumber?.includes(searchKey) ||
           d?.renewalTimes?.toString().includes(searchKey) ||
-          d?.status?.toString().includes(searchKey.toLowerCase())
+          d?.status?.toString().includes(searchKey.toLowerCase()) ||
+          d?.remarks?.toLowerCase().includes(searchKey.toLowerCase())
       );
       setFilteredData(searchedData);
     } else {
@@ -457,6 +462,8 @@ const Renewals = () => {
       "#b2bec3"
     ],
   };
+
+
 
   return (
     <>

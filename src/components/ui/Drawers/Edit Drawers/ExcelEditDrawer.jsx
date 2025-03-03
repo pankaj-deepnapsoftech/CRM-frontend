@@ -50,6 +50,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
   const [years, setYears] = useState(0);
   const [months, setMonths] = useState(0);
   const [status, setStatus] = useState("");
+  const [remarks, setRemarks] = useState("");
 
   const fetchPeopleDetails = async () => {
     setIsLoading(true);
@@ -74,6 +75,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
       setMonths(personData.months);
       setDoc(personData.doc);
       setStatus(personData.status);
+      setRemarks(personData.remarks);
 
       const isContractOther = !contractOptions.some(
         (opt) => opt.value === personData.contractType
@@ -127,6 +129,7 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
       formData.append("months", months);
       formData.append("doc", doc);
       formData.append("status", status);
+      formData.append("remarks", remarks);
 
       if (contractAttachment)
         formData.append("contractAttachment", contractAttachment);
@@ -331,6 +334,15 @@ const ExcelEditDrawer = ({ dataId: id, closeDrawerHandler }) => {
                 ))}
               </Select>
             </FormControl>
+
+            <FormControl >
+            <FormLabel>Remarks</FormLabel>
+            <Input
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              type="text"
+            />
+          </FormControl>
 
             {/* Add other form fields similarly */}
 

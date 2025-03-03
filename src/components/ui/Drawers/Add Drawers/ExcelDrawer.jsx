@@ -56,6 +56,7 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
   const [years, setYears] = useState(0);
   const [months, setMonths] = useState(0);
   const [status, setStatus] = useState("");
+  const [remarks, setRemarks] = useState("");
 
   const addPeopleHandler = async (e) => {
     e.preventDefault();
@@ -80,6 +81,7 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
       formData.append("years", years);
       formData.append("months", months);
       formData.append("status", status);
+      formData.append("remarks", remarks);
 
 
 
@@ -251,6 +253,15 @@ const ExcelDrawer = ({ closeDrawerHandler, fetchAllPeople }) => {
                 ))}
             </Select>
             
+          </FormControl>
+
+          <FormControl >
+            <FormLabel>Remarks</FormLabel>
+            <Input
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              type="text"
+            />
           </FormControl>
 
           <Button
