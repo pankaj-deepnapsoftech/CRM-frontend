@@ -245,7 +245,7 @@ const Customer = () => {
           (d?.customertype === "People"
             ? "individual".includes(searchKey.toLowerCase())
             : "corporate".includes(searchKey.toLowerCase())) ||
-          d?.status.toLowerCase().includes(searchKey.toLowerCase()) ||
+          d?.status?.toLowerCase().includes(searchKey.toLowerCase()) ||
           d?.phone?.includes(searchKey) ||
           d?.email?.toLowerCase().includes(searchKey.toLowerCase())
       );

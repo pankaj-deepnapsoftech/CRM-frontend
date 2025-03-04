@@ -339,15 +339,15 @@ const DataBank = () => {
         "#55DCB8",
       ]);
 
-      const labels = Object.keys(data.leads[0].statusCount).map((status) => {
+      const labels = Object.keys(data.leads[0]?.statusCount).map((status) => {
         return `${status} ${(
-          (data.leads[0].statusCount[status] / data.leads[0].totalCount) *
+          (data.leads[0]?.statusCount[status] / data.leads[0]?.totalCount) *
           100
         ).toFixed(2)}%`;
       });
 
       setLeadSummaryLabels(labels);
-      setLeadSummaryData(Object.values(data.leads[0].statusCount));
+      setLeadSummaryData(Object.values(data.leads[0]?.statusCount));
     } catch (err) {
       setLoading(false);
       toast.error(err.message);
