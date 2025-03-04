@@ -486,6 +486,7 @@ const Expenses = () => {
                                   >
                                     {cell.column.id !== "price" &&
                                       cell.column.id !== "description" &&
+                                      cell.column.id !== "creator" &&
                                       cell.column.id !== "created_on" &&
                                       cell.render("Cell")}
                                     {cell.column.id === "created_on" && (
@@ -494,6 +495,10 @@ const Expenses = () => {
                                           "DD/MM/YYYY"
                                         )}
                                       </span>
+                                    )}
+
+                                    {cell.column.id === "creator" && (
+                                      <span className="text-blue-500">{row.original?.creator}</span>
                                     )}
                                     {cell.column.id === "price" && (
                                       <span className="text-green-600 font-bold">

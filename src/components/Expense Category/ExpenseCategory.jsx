@@ -491,7 +491,7 @@ const ExpenseCategory = () => {
                                       cell.column.id !== "created_on" &&
                                       cell.render("Cell")}
                                     {cell.column.id === "creator" && (
-                                      <span>{row.original.creator.name}</span>
+                                      <span className="text-blue-500">{row.original?.creator?.name}</span>
                                     )}
                                     {cell.column.id === "created_on" && (
                                       <span className="text-gray-600">
@@ -500,6 +500,9 @@ const ExpenseCategory = () => {
                                         )}
                                       </span>
                                     )}
+
+                                    
+
                                     {cell.column.id === "description" && (
                                       <span className="text-gray-600">
                                         {row.original.description.substr(0, 50)}

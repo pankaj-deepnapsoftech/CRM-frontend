@@ -564,7 +564,7 @@ const Offers = () => {
                                     </span>
                                   )}
                                   {cell.column.id === "creator" && (
-                                    <span>{row.original.creator.name}</span>
+                                    <span className="text-blue-500">{row.original.creator.name}</span>
                                   )}
                                   {cell.column.id === "total" && (
                                     <span>&#8377;{row.original.total}</span>
