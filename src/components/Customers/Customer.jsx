@@ -564,19 +564,19 @@ const Customer = () => {
 
                               <Td className="flex justify-center items-center gap-x-3 p-3">
                                 <MdOutlineVisibility
-                                  className="hover:text-blue-500 hover:scale-110 transition-transform duration-200"
+                                  className="hover:text-blue-600 text-blue-500 hover:scale-110 transition-transform duration-200"
                                   size={20}
                                   onClick={() =>
                                     showDetailsHandler(row.original?._id)
                                   }
                                 />
                                 <MdEdit
-                                  className="hover:text-yellow-500 hover:scale-110 transition-transform duration-200"
+                                  className="hover:text-yellow-600 text-yellow-500 hover:scale-110 transition-transform duration-200"
                                   size={20}
                                   onClick={() => editHandler(row.original?._id)}
                                 />
                                 <MdDeleteOutline
-                                  className="hover:text-red-500 hover:scale-110 transition-transform duration-200"
+                                  className="hover:text-red-600 text-red-500 hover:scale-110 transition-transform duration-200"
                                   size={20}
                                   onClick={() => {
                                     setCustomerDeleteId(row.original?._id);

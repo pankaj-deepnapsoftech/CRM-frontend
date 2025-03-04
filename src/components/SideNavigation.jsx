@@ -290,7 +290,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
         )}
 
-        <NavLink
+        {/* <NavLink
           to="customers"
           className={({ isActive }) =>
             isActive ? "text-[#1640d6]" : "text-black"
@@ -310,7 +310,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
               </span>
             )}
           </li>
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="offers"

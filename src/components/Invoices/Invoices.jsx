@@ -560,7 +560,7 @@ const Invoices = () => {
                                     <span>&#8377;{row.original.subtotal}</span>
                                   )}
                                   {cell?.column?.id === "creator" && (
-                                    <span>{row.original.creator.name}</span>
+                                    <span className="text-blue-500">{row.original.creator.name}</span>
                                   )}
                                   {cell?.column?.id === "created_on" && (
                                     <span>
@@ -641,26 +641,26 @@ const Invoices = () => {
                             })}
                             <Td className="flex gap-x-3 py-3 px-4">
                               <MdDownload
-                                className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
+                                className="hover:scale-110 text-green-500 hover:text-green-600 transition-all duration-300 ease-in-out "
                                 size={20}
                                 onClick={() =>
                                   downloadHandler(row?.original?._id)
                                 }
                               />
                               <MdOutlineVisibility
-                                className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
+                                className="hover:scale-110 transition-all duration-300 ease-in-out text-blue-500 hover:text-blue-600"
                                 size={20}
                                 onClick={() =>
                                   showDetailsHandler(row?.original?._id)
                                 }
                               />
                               <MdEdit
-                                className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
+                                className="hover:scale-110 transition-all duration-300 ease-in-out text-orange-500 hover:text-orange-600"
                                 size={20}
                                 onClick={() => editHandler(row?.original?._id)}
                               />
                               <MdPayment
-                                className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
+                                className="hover:scale-110 transition-all duration-300 ease-in-out text-red-500 hover:text-red-600"
                                 size={20}
                                 onClick={() =>
                                   paymentHandler(row?.original?._id)

@@ -492,13 +492,14 @@ const Products = () => {
                                   <Td
                                     className={`${
                                       cell.column.id === "name"
-                                        ? "sticky top-0 left-[-2px] bg-white"
+                                        ? "sticky top-0 left-[-2px] bg-white z-10" 
                                         : ""
                                     } font-semibold text-sm text-gray-700 px-4 py-3 border-l border-r border-[#e0e0e0] transition duration-300 ease-in-out`}
                                     {...cell.getCellProps()}
                                   >
                                     {cell.column.id !== "imageUrl" &&
                                       cell.column.id !== "price" &&
+                                      cell.column.id !== "creator" &&
                                       cell.column.id !== "description" &&
                                       cell.column.id !== "created_on" &&
                                       cell.column.id !== "stock" &&
@@ -509,11 +510,18 @@ const Products = () => {
                                         src={row.original.imageUrl}
                                       />
                                     )}
+
                                     {cell.column.id === "created_on" && (
                                       <span className="text-gray-600">
                                         {moment(row.original.createdAt).format(
                                           "DD/MM/YYYY"
                                         )}
+                                      </span>
+                                    )}
+
+                                    {cell.column.id === "creator" && (
+                                      <span className="text-blue-500">
+                                        {row.original.creator}
                                       </span>
                                     )}
                                     {cell.column.id === "price" && (

@@ -393,8 +393,8 @@ const Renewals = () => {
       PERSONALLOAN: 0,
       BUSINESSLOAN: 0,
       CCLIMIT: 0,
-      CarIns:0,
-      Lic:0,
+      CarIns: 0,
+      Lic: 0,
       other: 0,
     };
 
@@ -409,13 +409,12 @@ const Renewals = () => {
         counts.BUSINESSLOAN++;
       } else if (data?.contractType === "CC LIMIT") {
         counts.CCLIMIT++;
-      } else if (data?.contractType === "Car Ins"){
+      } else if (data?.contractType === "Car Ins") {
         counts.CarIns++;
-      } else if (data?.contractType === "Lic"){
+      } else if (data?.contractType === "Lic") {
         counts.Lic++;
-      }
-      else {
-        counts.other++;  // For any contract type that is not one of the specified ones
+      } else {
+        counts.other++; // For any contract type that is not one of the specified ones
       }
     });
 
@@ -428,8 +427,8 @@ const Renewals = () => {
     PERSONALLOAN: 0,
     BUSINESSLOAN: 0,
     CCLIMIT: 0,
-    CarIns:0,
-    Lic:0,
+    CarIns: 0,
+    Lic: 0,
     other: 0,
   });
 
@@ -440,7 +439,16 @@ const Renewals = () => {
   }, [filteredData]);
 
   const statusChartData = {
-    labels: ["LIFE INSURANCE", "HEALTH INSURANCE", "PERSONAL LOAN", "BUSINESS LOAN", "CC LIMIT", "Car Ins","Lic", "other"],
+    labels: [
+      "LIFE INSURANCE",
+      "HEALTH INSURANCE",
+      "PERSONAL LOAN",
+      "BUSINESS LOAN",
+      "CC LIMIT",
+      "Car Ins",
+      "Lic",
+      "other",
+    ],
     data: [
       statusCounts.LIFEINSURANCE,
       statusCounts.HealthIns,
@@ -457,13 +465,11 @@ const Renewals = () => {
       "#54CA21",
       "#21CAC1",
       "#2170CA",
-      "#C439EB",  
+      "#C439EB",
       "#74b9ff",
-      "#b2bec3"
+      "#b2bec3",
     ],
   };
-
-
 
   return (
     <>
@@ -484,9 +490,7 @@ const Renewals = () => {
       )}
 
       {isAllowed && (
-        <div
-          className=" px-2 py-8 md:px-9 "
-        >
+        <div className=" px-2 py-8 md:px-9 ">
           <>
             <AlertDialog
               isOpen={isOpen}
@@ -835,7 +839,9 @@ const Renewals = () => {
                                       >
                                         {row.original?.status}
                                       </Badge>
-                                    ) : (
+                                    ) :  cell.column.id === "custumerName" ? (
+                                      <span className="text-blue-500">{row.original?.custumerName}</span>
+                                    ):(
                                       cell.render("Cell")
                                     )}
                                   </Td>
@@ -893,7 +899,6 @@ const Renewals = () => {
                 </div>
               )}
             </div>
-            
           </div>
 
           {/* graph */}
