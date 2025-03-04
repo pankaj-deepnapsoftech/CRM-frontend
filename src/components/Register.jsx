@@ -242,7 +242,7 @@ const Register = () => {
                     value={organizationEmail}
                     required={true}
                     onChange={(e) => setOrganizationEmail(e.target.value)}
-                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
+                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9]  hover:border-[#1640d6] cursor-pointer"
                     type="text"
                     placeholder="Company Email"
                   />
@@ -263,7 +263,7 @@ const Register = () => {
                     value={name}
                     required={true}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
+                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border  mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
                     type="text"
                     placeholder="Name"
                   />
@@ -284,7 +284,7 @@ const Register = () => {
                     value={phone}
                     required={true}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
+                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9]  hover:border-[#1640d6] cursor-pointer"
                     type="number"
                     placeholder="Phone"
                   />
@@ -305,7 +305,7 @@ const Register = () => {
                     value={designation}
                     required={true}
                     onChange={(e) => setDesignation(e.target.value)}
-                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
+                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9]  hover:border-[#1640d6] cursor-pointer"
                     type="text"
                     placeholder="Designation"
                   />
@@ -326,7 +326,7 @@ const Register = () => {
                     required={true}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
+                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] hover:border-[#1640d6] cursor-pointer"
                     type="email"
                     placeholder="Email"
                   />
@@ -347,7 +347,7 @@ const Register = () => {
                     value={password}
                     required={true}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
+                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9]  hover:border-[#1640d6] cursor-pointer"
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                   />
