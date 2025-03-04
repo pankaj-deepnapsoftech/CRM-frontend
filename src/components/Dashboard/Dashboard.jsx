@@ -751,7 +751,7 @@ const Dashboard = () => {
           )}
           <Divider className="my-5" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-2 gap-x-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-2 gap-x-2">
             <Link to="admins">
               <Cards
                 label="Total Employees"
@@ -782,42 +782,8 @@ const Dashboard = () => {
               />
             </Link>
 
-            <Link to="customers">
-              <Cards
-                label="Total Customers"
-                content={totalCustomer}
-                bg="from-blue-400 to-blue-600"
-                Icon={FiUsers}
-                iconColor="text-indigo-500"
-              />
-            </Link>
-            
+          
           </div>
-       
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <PieChart
-              totalLeads={totalLeads}
-              canceledLeads={cancelledLeads}
-              completedLeads={completedLeads}
-              followupLeads={followupLeads}
-            />
-
-            {/* List Card */}
-            <div className="col-span-1">
-              <ListCard
-                totalOffers={totalOffers}
-                OfferAmount={totalOfferAmount.toFixed(2)}
-                totalInvoices={totalInvoices}
-                InvoiceAmount={totalInvoiceAmount.toFixed(2)}
-                totalProformaInvoices={totalProformaInvoices}
-                ProformaInvoiceAmount={totalProformaInvoiceAmount.toFixed(2)}
-                totalUnpaidInvoices={totalUnpaidInvoices}
-                UnpaidInvoiceAmount={totalUnpaidInvoiceAmount.toFixed(2)}
-                products={products.length}
-              />
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-5 gap-y-2 gap-x-2">
           <Link to="leads">
               <Cards
@@ -848,6 +814,32 @@ const Dashboard = () => {
             </Link>
           </div>
 
+       
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <PieChart
+              totalLeads={totalLeads}
+              canceledLeads={cancelledLeads}
+              completedLeads={completedLeads}
+              followupLeads={followupLeads}
+            />
+
+            {/* List Card */}
+            <div className="col-span-1">
+              <ListCard
+                totalOffers={totalOffers}
+                OfferAmount={totalOfferAmount.toFixed(2)}
+                totalInvoices={totalInvoices}
+                InvoiceAmount={totalInvoiceAmount.toFixed(2)}
+                totalProformaInvoices={totalProformaInvoices}
+                ProformaInvoiceAmount={totalProformaInvoiceAmount.toFixed(2)}
+                totalUnpaidInvoices={totalUnpaidInvoices}
+                UnpaidInvoiceAmount={totalUnpaidInvoiceAmount.toFixed(2)}
+                products={products.length}
+              />
+            </div>
+          </div>
+
+          
 
         </div>
       )}

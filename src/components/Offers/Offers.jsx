@@ -63,7 +63,7 @@ import { Link } from "react-router-dom";
 
 const columns = [
   {
-    Header: "Number",
+    Header: "S No.",
     accessor: "number",
   },
   {
@@ -535,7 +535,7 @@ const Offers = () => {
                                 <Td
                                   className={`${
                                     cell.column.id === "lead"
-                                      ? "sticky top-0 left-[-2px] bg-[#f9fafc]"
+                                      ? "sticky top-0 left-[-2px]"
                                       : ""
                                   } font-semibold text-sm text-gray-700 px-4 py-3 border-l border-r border-[#e0e0e0]`}
                                   {...cell.getCellProps()}
