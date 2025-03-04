@@ -43,7 +43,7 @@ import { Link } from "react-router-dom";
 
 const columns = [
   {
-    Header: "Number",
+    Header: "S No.",
     accessor: "number",
   },
   {

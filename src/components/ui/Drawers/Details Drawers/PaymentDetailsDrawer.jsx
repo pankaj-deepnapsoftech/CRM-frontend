@@ -29,13 +29,13 @@ const PaymentDetailsDrawer = ({ dataId: id, closeDrawerHandler }) => {
       }
 
       setDetails({
-        invoicename: data.payment?.invoice.invoicename,
+        invoicename: data.payment?.invoice?.invoicename,
         id: data.payment?._id,
         amount: data.payment?.amount,
         mode: data.payment?.mode,
-        createdByName: data.payment?.createdBy.name,
-        createdByDesignation: data.payment?.createdBy.designation,
-        createdByPhone: data.payment?.createdBy.phone,
+        createdByName: data.payment?.createdBy?.name,
+        createdByDesignation: data.payment?.createdBy?.designation,
+        createdByPhone: data.payment?.createdBy?.phone,
         description: data.payment?.description,
         reference: data.payment?.reference,
       });
