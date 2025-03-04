@@ -172,7 +172,7 @@ const LeadEditDrawer = ({
         assigned: assigned?.value,
         prc_qt: prcQt,
         location: location,
-        leadCategory: category.value,
+        leadCategory: category?.value,
       });
     } else if (
       statusId?.value === "Follow Up" &&
@@ -189,7 +189,7 @@ const LeadEditDrawer = ({
         followup_reason: followupReason,
         prc_qt: prcQt,
         location: location,
-        leadCategory: category.value,
+        leadCategory: category?.value,
       });
     } else {
       body = JSON.stringify({
@@ -200,7 +200,7 @@ const LeadEditDrawer = ({
         assigned: undefined,
         prc_qt: prcQt,
         location: location,
-        leadCategory: category.value,
+        leadCategory: category?.value,
       });
     }
 
@@ -257,7 +257,7 @@ const LeadEditDrawer = ({
       setStatusId({ value: data.lead?.status, label: data.lead?.status });
       if (data?.lead?.status === "Assigned") {
         setAssigned({
-          value: data.lead?.assigned._id,
+          value: data.lead?.assigned?._id,
           label: data.lead?.assigned?.name,
         });
       }
