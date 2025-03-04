@@ -79,7 +79,7 @@ const Register = () => {
       toast.success(data.message);
       setIsRegistered(true);
       setCanResend(false);
-      setSecondsLeft(30);
+      setSecondsLeft(60);
 
       // dispatch(
       //   userExists({
@@ -121,7 +121,7 @@ const Register = () => {
       }
       toast.success(data.message);
       setCanResend(false);
-      setSecondsLeft(30);
+      setSecondsLeft(60);
       setGotOTP(true);
     } catch (err) {
       toast.error(err.message);
@@ -421,7 +421,7 @@ const Register = () => {
                       }
                       setOtp(e.target.value);
                     }}
-                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] rounded-[10px] hover:border-[#1640d6] cursor-pointer"
+                    className="w-[100%] outline-none text-base pl-7 pr-2 py-2 border rounded mt-2 border-[#d9d9d9] hover:border-[#1640d6] cursor-pointer"
                     type="text"
                     placeholder="OTP"
                   />
