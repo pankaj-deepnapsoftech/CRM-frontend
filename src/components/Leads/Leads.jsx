@@ -1371,7 +1371,6 @@ const Leads = () => {
                     }
                   >
                     <LeadEditDrawer
-                      fetchLeadSummary={fetchLeadSummary}
                       dataId={dataId}
                       fetchAllLeads={fetchAllLeads}
                       closeDrawerHandler={() =>

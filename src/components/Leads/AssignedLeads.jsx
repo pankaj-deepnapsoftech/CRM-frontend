@@ -240,6 +240,8 @@ const AssignedLeads = () => {
 
       const data = await response.json();
 
+      console.log(data);
+
       if (!data.success) {
         throw new Error(data.message);
       }
@@ -357,6 +359,9 @@ const AssignedLeads = () => {
       setFilteredData(data);
     }
   }, [searchKey]);
+
+
+
 
   return (
     <>
@@ -708,7 +713,7 @@ const AssignedLeads = () => {
                               })}
                               <Td className="flex gap-x-2 py-3 px-4">
                                 <MdOutlineVisibility
-                                  className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
+                                  className="hover:scale-110 transition-all duration-300 ease-in-out text-blue-600"
                                   size={20}
                                   onClick={() =>
                                     showDetailsHandler(
@@ -719,7 +724,7 @@ const AssignedLeads = () => {
                                   }
                                 />
                                 <MdEdit
-                                  className="hover:scale-110 transition-all duration-300 ease-in-out text-gray-600"
+                                  className="hover:scale-110 transition-all duration-300 ease-in-out text-orange-600"
                                   size={20}
                                   onClick={() =>
                                     editHandler(

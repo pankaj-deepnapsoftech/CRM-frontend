@@ -20,7 +20,6 @@ const LeadEditDrawer = ({
   dataId: id,
   closeDrawerHandler,
   fetchAllLeads,
-  fetchLeadSummary,
 }) => {
   const [companies, setCompanies] = useState([]);
   const [peoples, setPeoples] = useState([]);
@@ -224,7 +223,6 @@ const LeadEditDrawer = ({
 
       closeDrawerHandler();
       fetchAllLeads();
-      fetchLeadSummary();
       toast.success(data.message);
     } catch (err) {
       toast.error(err.message);
