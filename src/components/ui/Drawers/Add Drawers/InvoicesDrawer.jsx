@@ -12,7 +12,8 @@ const InvoicesDrawer = ({ closeDrawerHandler, getAllInvoices }) => {
   const [cookies] = useCookies();
   const navigate = useNavigate();
 
-  const [allCustomers, setAllCustomers] = useState([]);
+  const [allCustomers, setAllCustomers] = useState();
+
   const [selectedCustomer, setSelectedCustomer] = useState();
   const [customerOptionsList, setCustomerOptionsList] = useState();
 
@@ -49,11 +50,11 @@ const InvoicesDrawer = ({ closeDrawerHandler, getAllInvoices }) => {
     // {value: 1, label: ''}
   ]);
 
-  const getAllIndividuals = async () => {
+  const getAllCustomers  = async () => {
     try {
       const baseURL = process.env.REACT_APP_BACKEND_URL;
 
-      const response = await fetch(baseURL + "people/all-persons", {
+      const response = await fetch(baseURL + "customer/all-customers", {
         method: "POST",
         headers: {
           authorization: `Bearer ${cookies?.access_token}`,
@@ -66,13 +67,7 @@ const InvoicesDrawer = ({ closeDrawerHandler, getAllInvoices }) => {
         throw new Error(data.message);
       }
 
-      const people = data.people.map((people) => {
-        return {
-          ...people,
-          type: "People",
-        };
-      });
-      setAllCustomers((prev) => [...prev, ...people]);
+      setAllCustomers(data.customers);
     } catch (err) {
       toast(err.message);
     }
@@ -132,19 +127,13 @@ const InvoicesDrawer = ({ closeDrawerHandler, getAllInvoices }) => {
   };
 
   useEffect(() => {
-    getAllIndividuals();
+    getAllCustomers();
   }, []);
 
   useEffect(() => {
 
     let options = allCustomers?.map((customer) => {
-      return {
-        value: customer._id,
-        label:
-          customer?.companyname ||
-          customer?.firstname + " " + (customer?.lastname || ""),
-        type: customer.type,
-      };
+      return { value: customer._id, label: customer.name };
     });
     setCustomerOptionsList(options);
   }, [allCustomers]);

@@ -789,7 +789,7 @@ const Leads = () => {
       "Freelancer",
     ],
     data: [
-      sourceCounts.linkedin,
+      sourceCounts.Linkedin,
       sourceCounts.SocialMedia,
       sourceCounts.Website,
       sourceCounts.Advertising,

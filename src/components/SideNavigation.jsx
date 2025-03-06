@@ -290,7 +290,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
           </div>
         )}
 
-        {/* <NavLink
+        <NavLink
           to="customers"
           className={({ isActive }) =>
             isActive ? "text-[#1640d6]" : "text-black"
@@ -310,7 +310,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
               </span>
             )}
           </li>
-        </NavLink> */}
+        </NavLink>
 
         <NavLink
           to="offers"
@@ -561,7 +561,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
             </span>
             <span>Email Database</span>
                         
-            {!checkAccess(auth, "website configuration")?.isAllowed && (
+            {!checkAccess(auth, "emails")?.isAllowed && (
               <span className="mt-1">
                 <FaLock size="12" color="#b1b1b1" />
               </span>
@@ -583,7 +583,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
             </span>
             <span>Renewals</span>
 
-            {!checkAccess(auth, "website configuration")?.isAllowed && (
+            {!checkAccess(auth, "renewals")?.isAllowed && (
               <span className="mt-1">
                 <FaLock size="12" color="#b1b1b1" />
               </span>
@@ -605,7 +605,7 @@ const SideNavigation = ({ isMenuOpen, setIsMenuOpen }) => {
             </span>
             <span>Data Bank</span>
 
-            {!checkAccess(auth, "website configuration")?.isAllowed && (
+            {!checkAccess(auth, "databank")?.isAllowed && (
               <span className="mt-1">
                 <FaLock size="12" color="#b1b1b1" />
               </span>

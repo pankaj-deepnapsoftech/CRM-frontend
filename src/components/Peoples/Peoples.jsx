@@ -596,7 +596,7 @@ const Peoples = () => {
                                     className={`
                     ${
                       column.id === "firstname"
-                        ? "sticky top-0 left-[-2px]"
+                        ? "sticky top-0 left-[-2px] z-10 bg-blue-400"
                         : ""
                     }
                     text-transform: capitalize
@@ -650,7 +650,7 @@ const Peoples = () => {
                                     className={`
                     ${
                       cell.column.id === "firstname"
-                        ? "sticky top-0 left-[-2px] "
+                        ? "sticky top-0 left-[-2px] z-20 bg-gray-50"
                         : ""
                     }
                     text-center

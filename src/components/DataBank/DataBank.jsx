@@ -198,7 +198,7 @@ const DataBank = () => {
   } = useSelector((state) => state.misc);
 
   const { role, ...auth } = useSelector((state) => state.auth);
-  const { isAllowed, msg } = checkAccess(auth, "lead");
+  const { isAllowed, msg } = checkAccess(auth, "databank");
 
   const statusStyles = {
     draft: {

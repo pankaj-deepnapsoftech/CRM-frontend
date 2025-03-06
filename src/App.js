@@ -94,7 +94,7 @@ function App() {
           <Route path="/crm" element={<CRMPanel />}>
             <Route index element={<Dashboard />} />
             <Route path="admins" element={<Admins />} />
-            {/* <Route path="customers" element={<Customers />} /> */}
+            <Route path="customers" element={<Customers />} />
             <Route path="individuals" element={<Peoples />} />
             {/* <Route path="customers" element={<Companies />} /> */}
             <Route path="corporates" element={<Companies />} />

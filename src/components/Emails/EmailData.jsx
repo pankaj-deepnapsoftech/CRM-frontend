@@ -98,6 +98,7 @@ const EmailData = () => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
+
   const [peopleDeleteId, setPeopleDeleteId] = useState();
 
   const dispatch = useDispatch();
@@ -123,7 +124,7 @@ const EmailData = () => {
     showDetailsPeoplesDrawerIsOpened,
   } = useSelector((state) => state.misc);
   const { role, ...auth } = useSelector((state) => state.auth);
-  const { isAllowed, msg } = checkAccess(auth, "people");
+  const { isAllowed, msg } = checkAccess(auth, "emails");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
