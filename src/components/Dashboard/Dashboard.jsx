@@ -349,7 +349,6 @@ const Dashboard = () => {
       toast.error(err.message);
     }
   };
-
   const fetchEmployeeStats = async (from, to) => {
     try {
       const response = await fetch(
@@ -553,7 +552,7 @@ const Dashboard = () => {
 
   const fetchBulkWhatsapp = async() => {
     const res = await axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}people/get-bulk-whatsapp`,
+      `${process.env.REACT_APP_BACKEND_URL}totalWhatsapp`,
       {
         headers: {
           authorization: `Bearer ${cookies?.access_token}`,
@@ -561,8 +560,11 @@ const Dashboard = () => {
       }
     );
 
-    setWhatsappData(res.data.data);
+    console.log(res.data.total)
+    setWhatsappData(res.data.total);
   }
+
+ 
   useEffect(() => {
     fetchBulkSms();
     fetchBulkEmail();
@@ -608,7 +610,7 @@ const Dashboard = () => {
     const endDate = new Date(toDate).toISOString().split('T')[0];
   
     const filteredData = whatsappData.filter((data) => {
-      const messageDate = new Date(data.whatsappSentDate).toISOString().split('T')[0];
+      const messageDate = new Date(data.date).toISOString().split('T')[0];
       return messageDate >= startDate && messageDate <= endDate;
     });
     setTotalWhatsapp(filteredData.length);

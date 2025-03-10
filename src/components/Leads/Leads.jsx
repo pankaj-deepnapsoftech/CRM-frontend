@@ -994,7 +994,8 @@ const Leads = () => {
         toast.error(`Error while sending message: ${error}`);
       }
     }
-    toast.success("whatsapp Message sent successfully.");
+
+    toast.success("Messages sent successfully!")
     setOpen(false);
     setSelectedUsers([]);
 
@@ -1250,7 +1251,7 @@ const Leads = () => {
                 >
                   Add to data bank
                 </Button>
-                {role === "Super Admin" && (
+                {/* {role === "Super Admin" && (
                   <Button
                     fontSize={{ base: "12px", md: "14px" }}
                     paddingX={{ base: "8px", md: "12px" }}
@@ -1265,7 +1266,7 @@ const Leads = () => {
                   >
                     <MdDelete size={28} />
                   </Button>
-                )}
+                )} */}
                 <Select
                   onChange={(e) => {
                     const newSize = Number(e.target.value);

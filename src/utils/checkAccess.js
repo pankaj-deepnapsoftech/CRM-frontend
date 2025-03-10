@@ -1,6 +1,5 @@
 export const checkAccess = (auth, route)=>{
     const {allowedroutes, isSubscribed, isSubscriptionEnded, isTrial, isTrialEnded, account} = auth;
-
     let isAllowed = false;
     let msg = '';
 
