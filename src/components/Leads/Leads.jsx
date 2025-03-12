@@ -453,15 +453,32 @@ const Leads = () => {
       );
       const bulkSMSMobilesArr = reqData.map((data) => data.phone);
       setBulkSMSMobiles(bulkSMSMobilesArr);
+      const selectedUsersArr = reqData.map(({ phone, name }) => ({ phone, name }));
+
+      setSelectedUsers((prevSelected) => [...prevSelected, ...selectedUsersArr]);
     } else {
       setBulkSMSMobiles([]);
+      const reqData = filteredData.slice(
+        pageIndex * pageSize,
+        pageIndex * pageSize + pageSize
+      );
+      const deselectedPhones = reqData.map((data) => data.phone);
+      setSelectedUsers((prevSelected) =>
+        prevSelected.filter((user) => !deselectedPhones.includes(user.phone))
+      );
+      
     }
   };
 
   const selectOneHandler = (e, phone, name) => {
     if (e.target.checked) {
       setBulkSMSMobiles((prev) => [...prev, phone]);
+      setSelectedUsers((prevSelected) => [...prevSelected, { phone, name }]);
       setBulkName((prev) => [...prev, name]);
+    }else{
+      setSelectedUsers((prevSelected) =>
+        prevSelected.filter((user) => user.phone !== phone)
+      );
     }
   };
 
@@ -895,10 +912,11 @@ const Leads = () => {
   const handleSelection = (e, id, phone, name) => {
     if (e.target.checked) {
       setDataInfo([...dataInfo, id]);
-      setSelectedUsers([...selectedUsers, { phone, name }]);
+      // setSelectedUsers([...selectedUsers, { phone, name }]);
     } else {
       const filter = dataInfo.filter((item) => item !== id);
       setDataInfo(filter);
+      // setSelectedUsers([]);
     }
   };
 
@@ -938,14 +956,13 @@ const Leads = () => {
 
   const whatsappHandler = async (e) => {
     e.preventDefault();
-    console.log(selectedUsers);
+    //  console.log(selectedUsers);
     if (selectedUsers.length === 0) {
       toast.error("Please select users first!");
     } else {
-      setComponents((prevComponents) => [
-        { type: "text", text: "" },
-        ...prevComponents,
-      ]);
+      setComponents([{ type: "text", text: "" }]);
+      setTemplateName("");
+      setTemplateLang("en");
       setOpen(true);
     }
   };
@@ -967,19 +984,19 @@ const Leads = () => {
   const sendMessages = async (e) => {
     e.preventDefault();
     setLoading(true);
-    for (const data of selectedUsers) {
-      const finalComponents = components.map((comp, index) =>
-        index === 0 ? { type: "text", text: data.name } : comp.text && comp
-      );
-      const payload = {
-        phone: data.phone.trim(),
-        template_name: templateName,
-        template_lang: templateLang,
-        components: finalComponents,
-      };
-
-      //console.log(payload);
-      try {
+  
+    try {
+      for (const data of selectedUsers) {
+        const finalComponents = components.map((comp, index) =>
+          index === 0 ? { type: "text", text: data.name } : comp.text && comp
+        );
+        const payload = {
+          phone: data.phone.trim(),
+          template_name: templateName,
+          template_lang: templateLang,
+          components: finalComponents,
+        };
+  
         const res = await axios.post(
           `${process.env.REACT_APP_BACKEND_URL}send-builk-Whatsapp/`,
           payload,
@@ -989,17 +1006,25 @@ const Leads = () => {
             },
           }
         );
-      } catch (error) {
-        console.log(error)
-        toast.error(`Error while sending message: ${error}`);
       }
+  
+      toast.success("Messages sent successfully!");
+    } catch (error) {
+      console.log(error);
+      toast.error(`Error while sending message: ${error}`);
+    } finally {
+      // Uncheck all checkboxes
+      const checkboxes = document.querySelectorAll('input[name="select"]');
+      checkboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+  
+      // Reset states
+      setSelectedUsers([]);
+      setIsAllSelected(false);
+      setOpen(false);
+      setLoading(false);
     }
-
-    toast.success("Messages sent successfully!")
-    setOpen(false);
-    setSelectedUsers([]);
-
-    setLoading(false);
   };
 
   return (
@@ -1767,7 +1792,7 @@ const Leads = () => {
               />
             ))}
             <Box className="flex items-center justify-center gap-2">
-              <Button onClick={addComponent} colorScheme="orange">
+              <Button onClick={(e)=> {e.preventDefault() , addComponent}} colorScheme="orange">
                 Add Component
               </Button>
               <Button

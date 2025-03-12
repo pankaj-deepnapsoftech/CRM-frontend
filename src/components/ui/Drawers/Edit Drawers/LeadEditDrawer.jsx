@@ -16,11 +16,7 @@ import Select from "react-select";
 import Loading from "../../Loading";
 import { notificationContext } from "../../../ctx/notificationContext";
 
-const LeadEditDrawer = ({
-  dataId: id,
-  closeDrawerHandler,
-  fetchAllLeads,
-}) => {
+const LeadEditDrawer = ({ dataId: id, closeDrawerHandler, fetchAllLeads }) => {
   const [companies, setCompanies] = useState([]);
   const [peoples, setPeoples] = useState([]);
   const [prcQt, setPrcQt] = useState();
@@ -64,15 +60,15 @@ const LeadEditDrawer = ({
     { value: "Website", label: "Website" },
     { value: "Advertising", label: "Advertising" },
     { value: "Friend", label: "Friend" },
-    { value: "Professionals Network", label: "Professionals Network"},
-    { value: "Customer Referarral", label: "Customer Referarral"},
+    { value: "Professionals Network", label: "Professionals Network" },
+    { value: "Customer Referarral", label: "Customer Referarral" },
     { value: "Sales", label: "Sales" },
-    { value: "Digital Marketing", label: "Digital Marketing"},
+    { value: "Digital Marketing", label: "Digital Marketing" },
     { value: "Upwork", label: "Upwork" },
     { value: "Gem", label: "Gem" },
-    { value: "Freelancer", label: "Freelancer"},
-    { value: "IndiaMart", label: "IndiaMart"},
-    { value: "Fiverr", label: "Fiverr"},
+    { value: "Freelancer", label: "Freelancer" },
+    { value: "IndiaMart", label: "IndiaMart" },
+    { value: "Fiverr", label: "Fiverr" },
   ];
 
   const getAllCompanies = async () => {
@@ -196,7 +192,7 @@ const LeadEditDrawer = ({
         status: statusId?.value,
         source: sourceId?.value,
         notes,
-        assigned: undefined,
+        assigned: assigned?.value,
         prc_qt: prcQt,
         location: location,
         leadCategory: category?.value,
@@ -253,12 +249,12 @@ const LeadEditDrawer = ({
       setNotes(data.lead?.notes);
       setSourceId({ value: data.lead?.source, label: data.lead?.source });
       setStatusId({ value: data.lead?.status, label: data.lead?.status });
-      if (data?.lead?.status === "Assigned") {
-        setAssigned({
-          value: data.lead?.assigned?._id,
-          label: data.lead?.assigned?.name,
-        });
-      }
+
+      setAssigned({
+        value: data.lead?.assigned?._id,
+        label: data.lead?.assigned?.name,
+      });
+
       if (data.lead?.followup_date) {
         setFollowupDate(
           new Date(data.lead?.followup_date).toISOString().substring(0, 10)
@@ -278,7 +274,6 @@ const LeadEditDrawer = ({
       toast.error(err.message);
     }
   };
-
 
   useEffect(() => {
     let options = [];
@@ -343,22 +338,21 @@ const LeadEditDrawer = ({
             </div>
 
             {/* Assigned Employee Selection (conditionally shown) */}
-            {statusId?.value === "Assigned" && (
-              <div className="mt-2 mb-5">
-                <label className="font-bold text-[#4B5563]">Assigned</label>
-                <Select
-                  required={statusId?.value === "Assigned"}
-                  className="rounded mt-2 border p-3 focus:ring-2 focus:ring-blue-400"
-                  options={employeeOptionsList}
-                  placeholder="Select employee"
-                  value={assigned}
-                  onChange={(d) => {
-                    setAssigned(d);
-                  }}
-                  isSearchable={true}
-                />
-              </div>
-            )}
+
+            <div className="mt-2 mb-5">
+              <label className="font-bold text-[#4B5563]">Assigned</label>
+              <Select
+                required={statusId?.value === "Assigned"}
+                className="rounded mt-2 border p-3 focus:ring-2 focus:ring-blue-400"
+                options={employeeOptionsList}
+                placeholder="Select employee"
+                value={assigned}
+                onChange={(d) => {
+                  setAssigned(d);
+                }}
+                isSearchable={true}
+              />
+            </div>
 
             {/* Source Selection */}
             <div className="mt-2 mb-5">
