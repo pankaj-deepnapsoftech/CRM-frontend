@@ -5,7 +5,7 @@ import { BiX } from "react-icons/bi";
 import { toast } from "react-toastify";
 
 const SMSDrawer = ({ fetchAllLeads, closeDrawerHandler, mobiles, names }) => {
-
+   
     const [templateId, setTemplateId] = useState();
     const [message, setMessage] = useState();
     const [cookies] = useCookies();
@@ -73,7 +73,7 @@ const SMSDrawer = ({ fetchAllLeads, closeDrawerHandler, mobiles, names }) => {
               placeholder="Name"
             />
           </FormControl>
-          <FormControl className="mt-3 mb-5" isRequired>
+          <FormControl className="mt-3 mb-5" >
             <FormLabel fontWeight="bold">Message</FormLabel>
             <Textarea
               value={message}

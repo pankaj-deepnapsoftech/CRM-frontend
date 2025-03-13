@@ -452,17 +452,31 @@ const Leads = () => {
         pageIndex * pageSize + pageSize
       );
       const bulkSMSMobilesArr = reqData.map((data) => data.phone);
-      setBulkSMSMobiles(bulkSMSMobilesArr);
+    setBulkSMSMobiles((prev) => [...prev, ...bulkSMSMobilesArr]);
+
+    const bulkSMSNameArr = reqData.map((data) => data.name);
+    setBulkName((prev) => [...prev, ...bulkSMSNameArr]);
+
       const selectedUsersArr = reqData.map(({ phone, name }) => ({ phone, name }));
 
       setSelectedUsers((prevSelected) => [...prevSelected, ...selectedUsersArr]);
     } else {
-      setBulkSMSMobiles([]);
+
+
       const reqData = filteredData.slice(
         pageIndex * pageSize,
         pageIndex * pageSize + pageSize
       );
       const deselectedPhones = reqData.map((data) => data.phone);
+      setBulkSMSMobiles((prev) =>
+        prev.filter((mobile) => !deselectedPhones.includes(mobile))
+      );
+      setBulkName((prev) =>
+        prev.filter((userName) =>
+          !reqData.some((data) => data.name === userName)
+        )
+      );
+     
       setSelectedUsers((prevSelected) =>
         prevSelected.filter((user) => !deselectedPhones.includes(user.phone))
       );
@@ -476,6 +490,8 @@ const Leads = () => {
       setSelectedUsers((prevSelected) => [...prevSelected, { phone, name }]);
       setBulkName((prev) => [...prev, name]);
     }else{
+      setBulkSMSMobiles((prev) => prev.filter((mobile) => mobile !== phone));
+      setBulkName((prev) => prev.filter((userName) => userName !== name));
       setSelectedUsers((prevSelected) =>
         prevSelected.filter((user) => user.phone !== phone)
       );
@@ -996,7 +1012,8 @@ const Leads = () => {
           template_lang: templateLang,
           components: finalComponents,
         };
-  
+
+       
         const res = await axios.post(
           `${process.env.REACT_APP_BACKEND_URL}send-builk-Whatsapp/`,
           payload,
